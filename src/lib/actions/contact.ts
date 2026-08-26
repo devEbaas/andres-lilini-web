@@ -11,16 +11,16 @@ export async function submitContact(input: {
   consent: boolean;
 }): Promise<ActionResult> {
   if (!input.consent) {
-    return { ok: false, error: "Necesitamos tu consentimiento para responderte." };
+    return { ok: false, error: "Se requiere el consentimiento para poder responder." };
   }
   if (!input.nombre.trim()) {
-    return { ok: false, error: "Dinos cómo te llamas." };
+    return { ok: false, error: "Indique su nombre completo." };
   }
   if (!isEmail(input.email)) {
-    return { ok: false, error: "Necesitamos un correo válido para responderte." };
+    return { ok: false, error: "Se requiere un correo electrónico válido." };
   }
   if (input.message.trim().length < 10) {
-    return { ok: false, error: "Cuéntanos un poco más: al menos diez caracteres." };
+    return { ok: false, error: "Describa el asunto con al menos diez caracteres." };
   }
 
   const supabase = createAdminClient();

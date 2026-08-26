@@ -1,15 +1,15 @@
 import { Hero } from "@/components/home/Hero";
+import { Method } from "@/components/home/Method";
 import { Metrics } from "@/components/home/Metrics";
-import { Timeline } from "@/components/home/Timeline";
-import { Pillars } from "@/components/home/Pillars";
+import { Accesos } from "@/components/home/Accesos";
 
 export default function HomePage() {
   return (
     <>
       <Hero />
+      <Method />
       <Metrics />
-      <Timeline />
-      <Pillars />
+      <Accesos />
     </>
   );
 }

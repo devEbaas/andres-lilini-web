@@ -1,8 +1,9 @@
+/** Anillo de carga sobre botón de tinta. */
 export function Spinner() {
   return (
     <span
       aria-hidden
-      className="block size-[13px] animate-spin-fast rounded-full border-2 border-on-accent/35 border-t-on-accent"
+      className="block size-3 animate-spin-fast rounded-full border-[1.5px] border-white/40 border-t-paper"
     />
   );
 }

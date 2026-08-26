@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { motion, AnimatePresence } from "motion/react";
 import { subscribe } from "@/lib/actions/newsletter";
 
 export function NewsletterForm() {
@@ -20,54 +19,43 @@ export function NewsletterForm() {
     });
   };
 
+  if (done) {
+    return (
+      <div className="flex min-h-[46px] items-center gap-2.5 border border-accent px-4 py-3 text-sm text-ink-soft">
+        <span className="text-accent">✓</span>
+        Registrado. El primer envío llega el próximo lunes.
+      </div>
+    );
+  }
+
   return (
-    <AnimatePresence mode="wait" initial={false}>
-      {done ? (
-        <motion.div
-          key="done"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex min-h-12 items-center gap-3 rounded-full border border-accent bg-[color-mix(in_oklab,var(--accent)_10%,transparent)] px-5 py-[13px] text-sm"
+    <form onSubmit={onSubmit} noValidate>
+      <div className="flex flex-wrap gap-2.5">
+        <label className="sr-only" htmlFor="newsletter-email">
+          Correo electrónico
+        </label>
+        <input
+          id="newsletter-email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="tucorreo@dominio.com"
+          aria-invalid={Boolean(error)}
+          className="field flex-1 basis-[200px]"
+        />
+        <button
+          type="submit"
+          disabled={pending}
+          className="min-h-[46px] cursor-pointer border-0 bg-ink px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-paper transition-colors duration-250 hover:bg-accent disabled:opacity-60"
         >
-          <span className="font-extrabold text-accent">✓</span>
-          Listo, te escribimos el primer lunes del mes.
-        </motion.div>
-      ) : (
-        <motion.form
-          key="form"
-          onSubmit={onSubmit}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          noValidate
-        >
-          <div className="flex flex-wrap gap-2.5">
-            <label className="sr-only" htmlFor="newsletter-email">
-              Correo electrónico
-            </label>
-            <input
-              id="newsletter-email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="tucorreo@dominio.com"
-              aria-invalid={Boolean(error)}
-              className="field flex-1 basis-[200px] rounded-full !bg-bg px-4"
-            />
-            <button
-              type="submit"
-              disabled={pending}
-              className="min-h-12 cursor-pointer rounded-full border-0 bg-gradient-accent px-[26px] py-[13px] text-[11px] font-extrabold uppercase tracking-[0.16em] text-on-accent disabled:opacity-60"
-            >
-              {pending ? "Enviando" : "Suscribirme"}
-            </button>
-          </div>
-          {error && (
-            <p className="m-0 mt-2 text-[13px] text-danger-text" role="alert">
-              {error}
-            </p>
-          )}
-        </motion.form>
+          {pending ? "Enviando" : "Suscribirme"}
+        </button>
+      </div>
+      {error && (
+        <p className="m-0 mt-2 text-[13px] text-danger" role="alert">
+          {error}
+        </p>
       )}
-    </AnimatePresence>
+    </form>
   );
 }

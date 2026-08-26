@@ -6,9 +6,10 @@ import { useState, useTransition } from "react";
 import { submitApplication, type ApplyPayload } from "@/lib/actions/apply";
 import { APPLY_STEPS, type ApplyField } from "@/lib/content/programa";
 import { Spinner } from "@/components/ui/Spinner";
-import { btnQuiet } from "@/components/ui/styles";
+import { btnSecondary, checkBox, checkRow } from "@/components/ui/styles";
 
 const TOTAL = APPLY_STEPS.length;
+const pad = (n: number) => String(n).padStart(2, "0");
 
 export function ApplyForm() {
   const [step, setStep] = useState(0);
@@ -65,27 +66,25 @@ export function ApplyForm() {
   if (folio) {
     return (
       <motion.div
-        initial={{ opacity: 0, y: 14 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.2, 0.7, 0.2, 1] }}
-        className="rounded-[26px] border border-hairline bg-panel p-[clamp(34px,5vw,64px)] text-center shadow-deep"
+        transition={{ duration: 0.5, ease: [0.22, 0.7, 0.25, 1] }}
+        className="border border-rule bg-surface p-[clamp(32px,5vw,58px)] text-center"
       >
-        <div className="mx-auto mb-[26px] grid size-16 place-items-center rounded-full bg-gradient-accent text-[28px] font-extrabold text-on-accent">
-          ✓
-        </div>
-        <h2 className="m-0 mb-3.5 font-display text-[clamp(30px,4vw,52px)] uppercase leading-[0.95]">
+        <div className="eyebrow mb-4">Acuse de recibo</div>
+        <h2 className="m-0 mb-3.5 font-display text-[clamp(26px,3.4vw,40px)] font-normal">
           Postulación recibida
         </h2>
-        <p className="mx-auto m-0 mb-6 max-w-[46ch] leading-[1.7] text-muted">
-          Un evaluador revisa el video en los próximos 15 días hábiles. Si avanza, recibirás una
-          invitación a sesión presencial con fecha y sede.
+        <p className="m-0 mx-auto mb-[26px] max-w-[48ch] leading-[1.8] text-ink-soft">
+          Un evaluador del programa revisa el material en un plazo de quince días hábiles. Si la
+          solicitud avanza, recibirás una invitación a sesión presencial con fecha y sede.
         </p>
-        <div className="inline-block rounded-[14px] border border-dashed border-hairline-strong p-4 font-mono text-[13px] tracking-[0.14em]">
-          FOLIO · AL-2026-{folio}
+        <div className="inline-block border border-rule px-5 py-3.5 font-mono text-[13px] tracking-[0.1em]">
+          FOLIO AL-2026-{folio}
         </div>
-        <div className="mt-[30px]">
-          <button type="button" onClick={reset} className={btnQuiet}>
-            Enviar otra postulación
+        <div className="mt-7">
+          <button type="button" onClick={reset} className={btnSecondary}>
+            Registrar otra postulación
           </button>
         </div>
       </motion.div>
@@ -93,41 +92,39 @@ export function ApplyForm() {
   }
 
   return (
-    <div className="overflow-hidden rounded-[26px] border border-hairline bg-white/[0.03] shadow-deep backdrop-blur-[16px]">
-      <div className="flex flex-wrap items-center justify-between gap-[18px] border-b border-hairline p-[clamp(22px,3vw,32px)]">
+    <div className="border border-rule bg-surface">
+      <div className="flex flex-wrap items-end justify-between gap-4 border-b border-rule p-[clamp(22px,3vw,32px)]">
         <div>
-          <div className="font-mono text-[10px] uppercase tracking-[0.26em] text-muted">
-            Sección {String(step + 1).padStart(2, "0")} de {String(TOTAL).padStart(2, "0")}
+          <div className="font-mono text-[11px] tracking-[0.12em] text-ink-faint">
+            Sección {pad(step + 1)} de {pad(TOTAL)}
           </div>
-          <h2 className="m-0 mt-2 font-display text-[clamp(22px,3vw,34px)] uppercase leading-none">
+          <h2 className="m-0 mt-2 font-display text-[clamp(22px,2.8vw,32px)] font-normal leading-[1.2]">
             {current.title}
           </h2>
         </div>
-        <div className="font-display text-[34px] text-muted">{pct}%</div>
+        <div className="font-mono text-xs text-ink-soft">{pct}% completado</div>
       </div>
 
-      <div className="h-[3px] bg-hairline">
+      <div className="h-0.5 bg-rule-soft">
         <motion.div
-          className="h-full bg-gradient-accent"
+          className="h-full bg-accent"
           animate={{ width: `${pct}%` }}
-          transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
         />
       </div>
 
-      <div className="flex gap-1.5 overflow-x-auto border-b border-hairline px-[clamp(22px,3vw,32px)] py-[18px]">
+      <div className="flex overflow-x-auto border-b border-rule">
         {APPLY_STEPS.map((s, i) => (
           <button
             key={s.short}
             type="button"
             onClick={() => goTo(i)}
             aria-current={i === step ? "step" : undefined}
-            className={`shrink-0 cursor-pointer rounded-full border px-3.5 py-2.5 text-[10px] font-extrabold uppercase tracking-[0.14em] transition-all duration-300 ${
-              i === step
-                ? "border-accent text-ink"
-                : "border-hairline text-muted hover:text-ink"
-            } ${i < step ? "bg-panel-2" : "bg-transparent"}`}
+            className={`min-h-[46px] flex-[1_0_auto] cursor-pointer whitespace-nowrap border-0 border-b-2 border-r border-r-rule-soft px-[clamp(12px,1.6vw,20px)] py-3.5 text-[10px] font-semibold uppercase tracking-[0.12em] transition-colors duration-200 ${
+              i === step ? "border-b-accent text-ink" : "border-b-transparent text-ink-soft"
+            } ${i < step ? "bg-surface-2" : "bg-transparent"}`}
           >
-            {String(i + 1).padStart(2, "0")} · {s.short}
+            {pad(i + 1)} · {s.short}
           </button>
         ))}
       </div>
@@ -136,10 +133,10 @@ export function ApplyForm() {
           formulario nunca queda vacío si la animación se interrumpe. */}
       <motion.div
         key={step}
-        initial={{ opacity: 0, x: 18 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.3, ease: [0.2, 0.7, 0.2, 1] }}
-        className="grid gap-[22px] p-[clamp(24px,3.5vw,40px)] [grid-template-columns:repeat(auto-fit,minmax(230px,1fr))]"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.28 }}
+        className="grid gap-[clamp(16px,2vw,22px)] p-[clamp(18px,3.2vw,38px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,215px),1fr))]"
       >
         {current.fields.map((f) => (
           <Field
@@ -155,31 +152,31 @@ export function ApplyForm() {
       {formError && (
         <p
           role="alert"
-          className="mx-[clamp(24px,3.5vw,40px)] mb-2 rounded-[14px] border border-danger/50 bg-danger/10 px-4 py-3.5 text-sm text-danger-text"
+          className="mx-[clamp(18px,3.2vw,38px)] mb-4 border border-danger/40 px-4 py-3 text-sm text-danger"
         >
           {formError}
         </p>
       )}
 
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-hairline p-[clamp(20px,3vw,32px)]">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-rule p-[clamp(20px,3vw,30px)]">
         <button
           type="button"
           onClick={() => goTo(Math.max(0, step - 1))}
           disabled={step === 0}
-          className={`min-h-11 cursor-pointer rounded-full border border-hairline bg-transparent px-[26px] py-[15px] text-[11px] font-extrabold uppercase tracking-[0.18em] ${
-            step === 0 ? "text-muted" : "text-ink"
-          } disabled:cursor-default`}
+          className={`min-h-[46px] cursor-pointer border border-rule bg-transparent px-6 py-3.5 text-[11px] font-semibold uppercase tracking-[0.16em] disabled:cursor-default ${
+            step === 0 ? "text-ink-faint" : "text-ink"
+          }`}
         >
-          ← Anterior
+          Sección anterior
         </button>
         <button
           type="button"
           onClick={next}
           disabled={pending}
-          className="flex min-h-11 cursor-pointer items-center gap-2.5 rounded-full border-0 bg-gradient-accent px-[30px] py-4 text-[11px] font-extrabold uppercase tracking-[0.18em] text-on-accent disabled:opacity-60"
+          className="flex min-h-[46px] cursor-pointer items-center gap-2.5 border-0 bg-ink px-7 py-[15px] text-[11px] font-semibold uppercase tracking-[0.16em] text-paper transition-colors duration-250 hover:bg-accent disabled:opacity-60"
         >
           {pending && <Spinner />}
-          {pending ? "Enviando" : step === TOTAL - 1 ? "Enviar postulación" : "Siguiente →"}
+          {pending ? "Enviando" : step === TOTAL - 1 ? "Enviar postulación" : "Siguiente sección"}
         </button>
       </div>
     </div>
@@ -202,9 +199,7 @@ function Field({
   const invalid = Boolean(error);
 
   return (
-    <div
-      className={`flex flex-col gap-[9px] ${field.wide ? "col-span-full" : ""}`}
-    >
+    <div className={`flex flex-col gap-2 ${field.wide ? "col-span-full" : ""}`}>
       {field.label && (
         <label htmlFor={id} className="label-caps">
           {field.label}
@@ -220,7 +215,7 @@ function Field({
           aria-invalid={invalid}
           className="field appearance-none"
         >
-          <option value="">Elige una opción</option>
+          <option value="">Elija una opción</option>
           {field.options?.map((o) => (
             <option key={o} value={o}>
               {o}
@@ -240,8 +235,8 @@ function Field({
                 role="radio"
                 aria-checked={on}
                 onClick={() => onChange(o)}
-                className={`min-h-11 cursor-pointer rounded-[14px] border px-4 py-3 text-xs font-bold tracking-[0.06em] transition-all duration-[250ms] ${
-                  on ? "border-accent bg-panel-2 text-ink" : "border-hairline bg-panel text-muted"
+                className={`min-h-[46px] cursor-pointer border px-[18px] py-3 text-[13px] font-medium transition-colors duration-200 ${
+                  on ? "border-ink bg-ink text-paper" : "border-rule bg-paper text-ink-soft"
                 }`}
               >
                 {o}
@@ -259,7 +254,7 @@ function Field({
           onChange={(e) => onChange(e.target.value)}
           placeholder={field.ph}
           aria-invalid={invalid}
-          className="field resize-y leading-[1.6]"
+          className="field resize-y leading-[1.7]"
         />
       )}
 
@@ -269,17 +264,15 @@ function Field({
           role="checkbox"
           aria-checked={value === true}
           onClick={() => onChange(!value)}
-          className={`flex min-h-11 cursor-pointer items-start gap-3.5 rounded-2xl border p-4 text-left ${
-            invalid ? "border-danger" : "border-hairline"
-          } bg-panel`}
+          className={`${checkRow} ${invalid ? "border-danger" : "border-rule"}`}
         >
           <span
-            className="grid size-[22px] shrink-0 place-items-center rounded-[7px] border border-hairline-strong text-[13px] font-extrabold text-on-accent"
+            className={checkBox}
             style={{ background: value ? "var(--accent)" : "transparent" }}
           >
             {value ? "✓" : ""}
           </span>
-          <span className="text-sm leading-[1.6] text-muted">{field.ph}</span>
+          <span className="text-sm leading-[1.7] text-ink-soft">{field.ph}</span>
         </button>
       )}
 
@@ -296,10 +289,10 @@ function Field({
       )}
 
       {field.hint && !error && (
-        <span className="font-mono text-[10px] text-muted">{field.hint}</span>
+        <span className="font-mono text-[10px] text-ink-faint">{field.hint}</span>
       )}
       {error && (
-        <span className="text-xs font-semibold text-danger-text" role="alert">
+        <span className="text-xs text-danger" role="alert">
           {error}
         </span>
       )}

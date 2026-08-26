@@ -9,22 +9,19 @@ export function FaqList() {
   const [open, setOpen] = useState(0);
 
   return (
-    <div className="grid gap-2.5">
+    <div>
       {FAQ.map((q, i) => {
         const isOpen = open === i;
         return (
-          <div
-            key={q.q}
-            className="overflow-hidden rounded-[18px] border border-hairline bg-panel"
-          >
+          <div key={q.q} className="border-b border-rule-soft">
             <button
               type="button"
               onClick={() => setOpen(isOpen ? -1 : i)}
               aria-expanded={isOpen}
-              className="flex min-h-11 w-full cursor-pointer items-center justify-between gap-4 border-0 bg-transparent p-[22px] px-[22px] py-5 text-left"
+              className="flex min-h-11 w-full cursor-pointer items-baseline justify-between gap-4 border-0 bg-transparent px-0 py-5 text-left"
             >
-              <span className="text-base font-bold leading-[1.4]">{q.q}</span>
-              <span aria-hidden className="shrink-0 text-xl text-accent">
+              <span className="font-display text-[19px] font-medium leading-[1.4]">{q.q}</span>
+              <span aria-hidden className="shrink-0 font-mono text-base text-accent">
                 {isOpen ? "−" : "+"}
               </span>
             </button>
@@ -34,11 +31,10 @@ export function FaqList() {
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.32, ease: [0.2, 0.7, 0.2, 1] }}
+                  transition={{ duration: 0.3, ease: [0.22, 0.7, 0.25, 1] }}
+                  className="overflow-hidden"
                 >
-                  <p className="m-0 max-w-[60ch] px-[22px] pb-[22px] leading-[1.75] text-muted">
-                    {q.a}
-                  </p>
+                  <p className="m-0 max-w-[60ch] pb-[22px] leading-[1.8] text-ink-soft">{q.a}</p>
                 </motion.div>
               )}
             </AnimatePresence>

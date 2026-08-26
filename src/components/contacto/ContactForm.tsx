@@ -6,7 +6,7 @@ import { useState, useTransition } from "react";
 import { submitContact } from "@/lib/actions/contact";
 import { CONTACT_TOPICS } from "@/lib/content/site";
 import { Spinner } from "@/components/ui/Spinner";
-import { btnQuiet } from "@/components/ui/styles";
+import { btnSecondary, checkBox, checkRow } from "@/components/ui/styles";
 
 const MAX = 800;
 
@@ -33,15 +33,15 @@ export function ContactForm() {
   if (sent) {
     return (
       <motion.div
-        initial={{ opacity: 0, y: 12 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         className="py-5 text-center"
       >
-        <div className="mx-auto mb-5 grid size-14 place-items-center rounded-full bg-gradient-accent text-2xl font-extrabold text-on-accent">
-          ✓
-        </div>
-        <h3 className="m-0 mb-2.5 font-display text-[28px] uppercase">Mensaje enviado</h3>
-        <p className="m-0 mb-5 leading-[1.7] text-muted">Respondemos en 3 a 5 días hábiles.</p>
+        <div className="eyebrow mb-3.5">Acuse de recibo</div>
+        <h3 className="m-0 mb-2.5 font-display text-[28px] font-normal">Mensaje enviado</h3>
+        <p className="m-0 mb-[22px] leading-[1.8] text-ink-soft">
+          Se responde en un plazo de tres a cinco días hábiles.
+        </p>
         <button
           type="button"
           onClick={() => {
@@ -49,9 +49,9 @@ export function ContactForm() {
             setMessage("");
             setConsent(false);
           }}
-          className={btnQuiet}
+          className={btnSecondary}
         >
-          Enviar otro
+          Enviar otro mensaje
         </button>
       </motion.div>
     );
@@ -59,33 +59,33 @@ export function ContactForm() {
 
   return (
     <form onSubmit={onSubmit} noValidate className="grid gap-[18px]">
-      <label className="flex flex-col gap-[9px]">
+      <label className="flex flex-col gap-2">
         <span className="label-caps">Nombre</span>
         <input
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
-          placeholder="Tu nombre"
-          className="field !bg-bg"
+          placeholder="Nombre y apellidos"
+          className="field"
         />
       </label>
 
-      <label className="flex flex-col gap-[9px]">
-        <span className="label-caps">Correo</span>
+      <label className="flex flex-col gap-2">
+        <span className="label-caps">Correo electrónico</span>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="tucorreo@dominio.com"
-          className="field !bg-bg"
+          className="field"
         />
       </label>
 
-      <label className="flex flex-col gap-[9px]">
+      <label className="flex flex-col gap-2">
         <span className="label-caps">Tema</span>
         <select
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
-          className="field !bg-bg appearance-none"
+          className="field appearance-none"
         >
           {CONTACT_TOPICS.map((t) => (
             <option key={t} value={t}>
@@ -95,16 +95,16 @@ export function ContactForm() {
         </select>
       </label>
 
-      <label className="flex flex-col gap-[9px]">
+      <label className="flex flex-col gap-2">
         <span className="label-caps">Mensaje</span>
         <textarea
           rows={5}
           value={message}
           onChange={(e) => setMessage(e.target.value.slice(0, MAX))}
-          placeholder="Cuéntanos con detalle"
-          className="field !bg-bg resize-y leading-[1.6]"
+          placeholder="Exponga el asunto con el detalle necesario"
+          className="field resize-y leading-[1.7]"
         />
-        <span className="text-right font-mono text-[10px] text-muted">
+        <span className="text-right font-mono text-[10px] text-ink-faint">
           {message.length} / {MAX}
         </span>
       </label>
@@ -117,24 +117,21 @@ export function ContactForm() {
           setConsent((c) => !c);
           setError("");
         }}
-        className="flex min-h-11 cursor-pointer items-start gap-3.5 rounded-2xl border border-hairline bg-bg p-[15px] text-left"
+        className={`${checkRow} border-rule`}
       >
         <span
-          className="grid size-[22px] shrink-0 place-items-center rounded-[7px] border border-hairline-strong text-[13px] font-extrabold text-on-accent"
+          className={checkBox}
           style={{ background: consent ? "var(--accent)" : "transparent" }}
         >
           {consent ? "✓" : ""}
         </span>
-        <span className="text-sm leading-[1.6] text-muted">
-          Acepto el tratamiento de mis datos según el aviso de privacidad.
+        <span className="text-sm leading-[1.7] text-ink-soft">
+          Acepto el tratamiento de mis datos conforme al aviso de privacidad.
         </span>
       </button>
 
       {error && (
-        <div
-          role="alert"
-          className="rounded-[14px] border border-danger/50 bg-danger/10 px-4 py-3.5 text-sm text-danger-text"
-        >
+        <div role="alert" className="border border-danger/40 px-4 py-3 text-sm text-danger">
           {error}
         </div>
       )}
@@ -142,7 +139,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={pending}
-        className="flex min-h-[52px] cursor-pointer items-center justify-center gap-2.5 rounded-full border-0 bg-gradient-accent text-xs font-extrabold uppercase tracking-[0.18em] text-on-accent disabled:opacity-60"
+        className="flex min-h-[50px] cursor-pointer items-center justify-center gap-2.5 border-0 bg-ink text-[11px] font-semibold uppercase tracking-[0.16em] text-paper transition-colors duration-250 hover:bg-accent disabled:opacity-60"
       >
         {pending && <Spinner />}
         {pending ? "Enviando" : "Enviar mensaje"}

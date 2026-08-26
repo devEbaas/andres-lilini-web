@@ -5,7 +5,7 @@ import { GENERIC_ERROR, isEmail, type ActionResult } from "./types";
 
 export async function subscribe(email: string): Promise<ActionResult> {
   if (!isEmail(email)) {
-    return { ok: false, error: "Escribe un correo válido." };
+    return { ok: false, error: "Escriba un correo electrónico válido." };
   }
 
   const supabase = createAdminClient();

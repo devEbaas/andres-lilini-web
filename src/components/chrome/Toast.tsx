@@ -12,13 +12,12 @@ export function Toast() {
         <motion.div
           role="status"
           aria-live="polite"
-          initial={{ opacity: 0, y: 18, x: "-50%" }}
+          initial={{ opacity: 0, y: 14, x: "-50%" }}
           animate={{ opacity: 1, y: 0, x: "-50%" }}
-          exit={{ opacity: 0, y: 12, x: "-50%" }}
-          transition={{ duration: 0.28, ease: [0.2, 0.7, 0.2, 1] }}
-          className="fixed bottom-6 left-1/2 z-[140] flex items-center gap-2.5 rounded-full border border-accent bg-panel-2 px-6 py-[15px] text-[13px] font-semibold shadow-deep"
+          exit={{ opacity: 0, y: 10, x: "-50%" }}
+          transition={{ duration: 0.26, ease: [0.22, 0.7, 0.25, 1] }}
+          className="fixed bottom-6 left-1/2 z-[140] flex items-center gap-2.5 bg-ink px-[22px] py-3.5 text-[13px] text-paper"
         >
-          <span className="font-extrabold text-accent">✓</span>
           {toast}
         </motion.div>
       )}

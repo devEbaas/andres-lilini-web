@@ -1,6 +1,6 @@
 export const PROGRAMA_INTRO = [
-  { n: "01", title: "Qué evaluamos", body: "Quince atributos técnicos, físicos y mentales, más el contexto familiar y académico del jugador." },
-  { n: "02", title: "Cuánto tarda", body: "Diez minutos llenar el formulario. Respuesta con dictamen en 15 días hábiles." },
+  { n: "01", title: "Qué se evalúa", body: "Quince atributos técnicos, físicos y mentales, más el contexto familiar y académico del jugador." },
+  { n: "02", title: "Cuánto tarda", body: "Diez minutos completar el formulario. Dictamen por escrito en quince días hábiles." },
   { n: "03", title: "Menores de edad", body: "Toda postulación de menores de 18 años requiere consentimiento firmado del tutor legal." },
 ];
 
@@ -10,16 +10,16 @@ export const RUBRIC: [string, string][] = [
   ["Precisión de pase", "Calidad del envío corto y largo bajo presión, con las dos piernas."],
   ["Golpeo", "Potencia y dirección en remate, centro y balón parado."],
   ["Atletismo", "Coordinación, salto, cambio de dirección y resistencia repetida."],
-  ["IQ de juego", "Lectura del espacio, toma de decisión y anticipación sin balón."],
+  ["Lectura de juego", "Interpretación del espacio, toma de decisión y anticipación sin balón."],
   ["Defensa", "Presión, coberturas, marca individual y recuperación tras pérdida."],
   ["Mecánica", "Técnica base: control, conducción, perfil de recepción y postura."],
   ["Poder ofensivo", "Capacidad de generar y definir situaciones de gol."],
   ["Consistencia", "Rendimiento sostenido a lo largo de una temporada completa."],
   ["Liderazgo", "Influencia sobre el grupo dentro y fuera del campo."],
-  ["Capacidad de aprender", "Velocidad para incorporar una corrección y repetirla."],
-  ["Pasión", "Vínculo real con el juego más allá del contrato y la vitrina."],
+  ["Capacidad de aprender", "Rapidez para incorporar una corrección y repetirla."],
+  ["Vínculo con el juego", "Relación real con el fútbol más allá del contrato y la vitrina."],
   ["Fortaleza mental", "Respuesta al error, a la suplencia y a la crítica pública."],
-  ["Ética de trabajo", "Lo que hace el jugador cuando nadie lo está evaluando."],
+  ["Ética de trabajo", "Conducta del jugador cuando nadie lo está evaluando."],
 ];
 
 export type FieldType = "text" | "email" | "tel" | "date" | "number" | "select" | "radio" | "area" | "check";
@@ -72,11 +72,11 @@ export const APPLY_STEPS: ApplyStep[] = [
     short: "Video",
     title: "Rendimiento y video",
     fields: [
-      { key: "video", label: "URL del video de highlights", type: "text", ph: "YouTube, Vimeo o Drive público", wide: true, hint: "Cinco a ocho minutos de juego real, no solo goles.", required: true },
+      { key: "video", label: "URL del video de juego", type: "text", ph: "YouTube, Vimeo o Drive público", wide: true, hint: "Cinco a ocho minutos de juego real, no solo goles.", required: true },
       { key: "premios", label: "Premios y reconocimientos", type: "area", ph: "Torneos, distinciones individuales, convocatorias", wide: true },
-      { key: "stats", label: "Estadísticas recientes", type: "area", ph: "Partidos, minutos, goles, asistencias de la última temporada", wide: true },
-      { key: "fortalezas", label: "Tus tres fortalezas", type: "text", ph: "Ej. cambio de ritmo, pase filtrado, presión tras pérdida", wide: true },
-      { key: "links", label: "Enlaces adicionales", type: "text", ph: "Perfil en plataformas de scouting, redes", wide: true },
+      { key: "stats", label: "Estadísticas recientes", type: "area", ph: "Partidos, minutos, goles y asistencias de la última temporada", wide: true },
+      { key: "fortalezas", label: "Tres fortalezas principales", type: "text", ph: "Ej. cambio de ritmo, pase filtrado, presión tras pérdida", wide: true },
+      { key: "links", label: "Enlaces adicionales", type: "text", ph: "Perfil en plataformas de scouting o redes", wide: true },
     ],
   },
   {
@@ -97,7 +97,7 @@ export const APPLY_STEPS: ApplyStep[] = [
     short: "Consentimientos",
     title: "Consentimientos",
     fields: [
-      { key: "tutor", label: "Nombre del tutor (si eres menor)", type: "text", ph: "Nombre completo del padre, madre o tutor", wide: true },
+      { key: "tutor", label: "Nombre del tutor (si el jugador es menor)", type: "text", ph: "Nombre completo del padre, madre o tutor", wide: true },
       { key: "tutorTel", label: "Contacto del tutor", type: "tel", ph: "+52 55 0000 0000" },
       { key: "parentesco", label: "Parentesco", type: "select", options: ["Padre", "Madre", "Tutor legal", "No aplica"] },
       { key: "okPriv", label: "", type: "check", ph: "He leído y acepto el aviso de privacidad y el tratamiento de los datos deportivos aquí incluidos.", wide: true },

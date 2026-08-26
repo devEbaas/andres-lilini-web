@@ -1,27 +1,34 @@
-/** Clases compartidas: el equivalente Tailwind de los estilos del canvas. */
+/** Clases compartidas: el equivalente Tailwind de los estilos del canvas formal. */
 
+/** Bloque sólido de tinta; vira al acento al pasar el cursor. */
 export const btnPrimary =
-  "inline-flex min-h-[48px] items-center justify-center gap-2.5 rounded-full bg-gradient-accent px-[30px] py-[17px] text-[12px] font-extrabold uppercase tracking-[0.18em] text-on-accent shadow-soft transition duration-300 hover:-translate-y-[3px] hover:text-on-accent hover:shadow-deep disabled:pointer-events-none disabled:opacity-60";
+  "inline-flex min-h-[46px] cursor-pointer items-center justify-center gap-2.5 border-0 bg-ink px-[26px] py-[15px] text-[11px] font-semibold uppercase tracking-[0.16em] text-paper transition-colors duration-250 hover:bg-accent hover:text-paper disabled:pointer-events-none disabled:opacity-60";
 
+/** Filete de 1px sobre papel. */
 export const btnSecondary =
-  "inline-flex min-h-[48px] items-center justify-center rounded-full border border-hairline-strong bg-white/[0.04] px-[30px] py-[17px] text-[12px] font-extrabold uppercase tracking-[0.18em] text-ink backdrop-blur-[10px] transition duration-300 hover:-translate-y-[3px] hover:border-accent hover:text-ink";
+  "inline-flex min-h-[46px] cursor-pointer items-center justify-center gap-2.5 border border-rule bg-transparent px-[26px] py-[15px] text-[11px] font-semibold uppercase tracking-[0.16em] text-ink transition-colors duration-250 hover:border-accent hover:text-accent";
 
-export const btnGhost =
-  "inline-flex min-h-[48px] items-center justify-center rounded-full border border-hairline px-[30px] py-[17px] text-[12px] font-extrabold uppercase tracking-[0.18em] text-muted transition duration-300 hover:border-hairline-strong hover:text-ink";
+/** Sólo subrayado: la jerarquía más baja. */
+export const btnTertiary =
+  "inline-flex min-h-[46px] cursor-pointer items-center border-b border-rule bg-transparent px-1 py-[15px] text-[11px] font-semibold uppercase tracking-[0.16em] text-ink-soft transition-colors duration-250 hover:border-accent hover:text-accent";
 
-export const btnQuiet =
-  "inline-flex min-h-[44px] items-center justify-center rounded-full border border-hairline-strong bg-transparent px-[26px] py-[15px] text-[11px] font-extrabold uppercase tracking-[0.18em] text-ink transition hover:border-accent";
+/** Pestañas subrayadas: catálogo, documentos, secciones del formulario. */
+export const tab =
+  "min-h-[38px] shrink-0 cursor-pointer border-0 border-b bg-transparent px-0 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors duration-200";
 
-export const chip =
-  "min-h-[44px] shrink-0 cursor-pointer rounded-full border px-[18px] py-3 text-[11px] font-extrabold uppercase tracking-[0.14em] transition duration-300";
+export const tabOn = "border-ink text-ink";
+export const tabOff = "border-transparent text-ink-soft hover:text-accent";
 
-export const chipOn = "border-accent bg-panel-2 text-ink";
-export const chipOff = "border-hairline bg-transparent text-muted hover:text-ink";
-
+/** Título de sección en serif; el peso es siempre regular. */
 export const h2Display =
-  "m-0 font-display text-[clamp(34px,6vw,86px)] uppercase leading-[0.9]";
+  "m-0 font-display text-[clamp(26px,3.4vw,44px)] font-normal leading-[1.15]";
 
-export const sectionPad = "py-[clamp(70px,9vw,120px)]";
+/** Ritmo vertical estándar entre secciones. */
+export const sectionPad = "py-[clamp(50px,6vw,90px)]";
 
-export const card =
-  "rounded-[22px] border border-hairline bg-panel transition duration-[350ms] hover:-translate-y-[6px] hover:border-accent";
+/** Casilla cuadrada de 20px usada por todos los consentimientos. */
+export const checkBox =
+  "grid size-5 shrink-0 place-items-center border border-ink-faint text-xs text-paper";
+
+export const checkRow =
+  "flex min-h-[46px] cursor-pointer items-start gap-3.5 border bg-paper p-4 text-left";

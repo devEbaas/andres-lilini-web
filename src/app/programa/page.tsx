@@ -4,36 +4,26 @@ import Link from "next/link";
 import { PROGRAMA_INTRO, RUBRIC } from "@/lib/content/programa";
 import { ApplyForm } from "@/components/programa/ApplyForm";
 import { Reveal } from "@/components/ui/Reveal";
-import { btnPrimary } from "@/components/ui/styles";
+import { btnPrimary, h2Display } from "@/components/ui/styles";
 
 export const metadata: Metadata = {
   title: "Programa de atletas",
   description:
-    "Un formulario, quince atributos y un informe real. Evaluamos jugadores de 12 a 21 años en cualquier posición y liga.",
+    "Cinco secciones, quince atributos evaluados y un dictamen por escrito. Jugadores de 12 a 21 años, cualquier posición y categoría.",
 };
 
 export default function ProgramaPage() {
   return (
     <>
-      <section className="relative overflow-hidden pb-[clamp(50px,6vw,80px)] pt-[clamp(70px,9vw,130px)]">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(80% 70% at 70% 0%, oklch(0.79 0.175 138 / 0.12), transparent 70%)",
-          }}
-        />
-        <div className="shell relative">
-          <p className="m-0 mb-[22px] font-mono text-[11px] uppercase tracking-[0.38em] text-accent">
-            Programa de atletas · convocatoria abierta
-          </p>
-          <h1 className="m-0 max-w-[16ch] font-display text-[clamp(42px,9vw,138px)] uppercase leading-[0.86]">
-            Si juega, queremos verlo
+      <section className="border-b border-rule pb-[clamp(38px,4vw,58px)] pt-[clamp(48px,6vw,86px)]">
+        <div className="shell">
+          <p className="eyebrow m-0 mb-[18px]">Programa de atletas · convocatoria abierta</p>
+          <h1 className="m-0 max-w-[20ch] font-display text-[clamp(34px,5vw,64px)] font-normal leading-[1.1]">
+            Solicitud de evaluación deportiva
           </h1>
-          <p className="m-0 my-7 mb-[34px] max-w-[58ch] text-[17px] leading-[1.7] text-pretty text-muted">
-            Un formulario, quince atributos y un informe real. Evaluamos jugadores de 12 a 21 años
-            en cualquier posición y liga; el video pesa más que el currículum.
+          <p className="m-0 mb-[30px] mt-6 max-w-[58ch] text-[17px] leading-[1.8] text-pretty text-ink-soft">
+            Cinco secciones, quince atributos evaluados y un dictamen por escrito. Jugadores de 12 a
+            21 años, cualquier posición y categoría. El video de juego pesa más que el currículum.
           </p>
           <Link href="#form" className={btnPrimary}>
             Ir al formulario
@@ -41,49 +31,57 @@ export default function ProgramaPage() {
         </div>
       </section>
 
-      <section className="border-t border-hairline py-[clamp(40px,5vw,64px)]">
-        <div className="shell grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]">
+      <section className="border-b border-rule bg-surface">
+        <div className="shell grid gap-[clamp(22px,3vw,40px)] py-[clamp(28px,3.4vw,44px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))]">
           {PROGRAMA_INTRO.map((it, i) => (
-            <Reveal key={it.n} index={i} className="border-l border-hairline pl-[22px]">
-              <span className="font-mono text-[11px] tracking-[0.2em] text-accent">{it.n}</span>
-              <h3 className="m-0 my-2.5 mb-2 text-[17px] font-bold">{it.title}</h3>
-              <p className="m-0 text-[15px] leading-[1.7] text-muted">{it.body}</p>
+            <Reveal key={it.n} index={i} className="border-t border-ink pt-[18px]">
+              <span className="font-mono text-[11px] tracking-[0.1em] text-accent">{it.n}</span>
+              <h3 className="m-0 mb-2 mt-2.5 font-display text-xl font-medium">{it.title}</h3>
+              <p className="m-0 text-[15px] leading-[1.75] text-ink-soft">{it.body}</p>
             </Reveal>
           ))}
         </div>
       </section>
 
-      <section id="form" className="scroll-mt-[90px] py-[clamp(50px,6vw,90px)]">
-        <div className="mx-auto max-w-[920px] px-[clamp(18px,4vw,44px)]">
-          <ApplyForm />
-        </div>
-      </section>
-
-      <section className="border-t border-hairline bg-panel py-[clamp(60px,8vw,110px)]">
+      <section className="border-b border-rule bg-surface py-[clamp(46px,5.5vw,84px)]">
         <div className="shell">
-          <Reveal className="eyebrow mb-4">Rúbrica de evaluación</Reveal>
-          <Reveal
-            as="h2"
-            index={1}
-            className="m-0 mb-[clamp(36px,4vw,56px)] max-w-[18ch] font-display text-[clamp(32px,5.5vw,78px)] uppercase leading-[0.9]"
-          >
-            Quince atributos, uno por uno
+          <Reveal className="eyebrow mb-3.5">Rúbrica de evaluación</Reveal>
+          <Reveal as="h2" index={1} className={`${h2Display} mb-5 max-w-[22ch]`}>
+            Quince atributos, calificados uno por uno
           </Reveal>
-          <div className="grid gap-px bg-hairline [grid-template-columns:repeat(auto-fill,minmax(260px,1fr))]">
+          <Reveal
+            as="p"
+            index={2}
+            className="m-0 mb-[clamp(28px,3.6vw,46px)] max-w-[56ch] text-[17px] leading-[1.8] text-ink-soft"
+          >
+            Conviene leer la rúbrica antes de llenar la solicitud: el formulario pide exactamente el
+            material con el que se califica cada uno de estos apartados.
+          </Reveal>
+
+          <div className="grid gap-px border border-rule bg-rule [grid-template-columns:repeat(auto-fill,minmax(min(100%,258px),1fr))]">
             {RUBRIC.map(([name, body], i) => (
               <Reveal
                 key={name}
                 index={i}
-                className="bg-panel px-[22px] py-[26px] transition-colors duration-300 hover:bg-panel-2"
+                className="bg-surface px-[clamp(16px,2vw,24px)] py-[clamp(18px,2.2vw,26px)]"
               >
-                <span className="block font-display text-[30px] leading-none text-hairline-strong">
+                <span className="font-mono text-[11px] text-accent">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <h3 className="m-0 my-3 mb-2 text-base font-bold tracking-[0.01em]">{name}</h3>
-                <p className="m-0 text-sm leading-[1.65] text-muted">{body}</p>
+                <h3 className="m-0 my-2 font-display text-[19px] font-medium">{name}</h3>
+                <p className="m-0 text-sm leading-[1.7] text-ink-soft">{body}</p>
               </Reveal>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section
+        id="form"
+        className="scroll-mt-[80px] border-b border-rule py-[clamp(44px,5vw,80px)]"
+      >
+        <div className="mx-auto max-w-[900px] px-[clamp(20px,5vw,56px)]">
+          <ApplyForm />
         </div>
       </section>
     </>

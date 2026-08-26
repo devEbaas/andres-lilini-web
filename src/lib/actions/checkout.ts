@@ -14,7 +14,7 @@ export type CartLineInput = { id: string; qty: number };
 export async function createOrder(
   lines: CartLineInput[],
 ): Promise<ActionResult<{ orderId: string | null; total: number }>> {
-  if (!lines.length) return { ok: false, error: "Tu bolsa está vacía." };
+  if (!lines.length) return { ok: false, error: "El pedido está vacío." };
 
   const catalog = await getProducts();
   const items = lines.flatMap((l) => {
@@ -25,7 +25,7 @@ export async function createOrder(
   });
 
   if (!items.length) {
-    return { ok: false, error: "Los artículos de tu bolsa ya no están disponibles." };
+    return { ok: false, error: "Los artículos del pedido ya no están disponibles." };
   }
 
   const subtotal = items.reduce((a, i) => a + i.price * i.qty, 0);

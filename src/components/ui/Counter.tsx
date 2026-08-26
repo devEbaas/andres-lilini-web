@@ -12,8 +12,8 @@ export function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
   useEffect(() => {
     if (!inView) return;
     const controls = animate(0, to, {
-      duration: reduced ? 0 : 1.4,
-      ease: [0, 0, 0.2, 1],
+      duration: reduced ? 0 : 1.2,
+      ease: [0.33, 1, 0.68, 1],
       onUpdate: (v) => setValue(Math.round(v)),
       onComplete: () => setValue(to),
     });

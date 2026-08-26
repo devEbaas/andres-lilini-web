@@ -15,29 +15,29 @@ export function ProductActions({ product }: { product: Product }) {
     if (product.out) return;
     add({ id: product.id, name: product.name, price: product.price }, qty);
     setAdded(true);
-    flash("Producto añadido a la bolsa");
+    flash("Artículo añadido al pedido");
     open();
   };
 
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <div className="flex items-center overflow-hidden rounded-full border border-hairline">
+      <div className="flex items-center border border-rule">
         <button
           type="button"
           aria-label="Quitar una unidad"
           onClick={() => setQty((q) => Math.max(1, q - 1))}
-          className="h-12 w-[46px] cursor-pointer border-0 bg-transparent text-lg"
+          className="h-12 w-11 cursor-pointer border-0 bg-transparent text-[17px]"
         >
           −
         </button>
-        <span aria-live="polite" className="min-w-[38px] text-center font-bold">
+        <span aria-live="polite" className="min-w-9 text-center font-mono text-sm">
           {qty}
         </span>
         <button
           type="button"
           aria-label="Agregar una unidad"
           onClick={() => setQty((q) => Math.min(99, q + 1))}
-          className="h-12 w-[46px] cursor-pointer border-0 bg-transparent text-lg"
+          className="h-12 w-11 cursor-pointer border-0 bg-transparent text-[17px]"
         >
           +
         </button>
@@ -46,9 +46,9 @@ export function ProductActions({ product }: { product: Product }) {
         type="button"
         onClick={onAdd}
         disabled={product.out}
-        className="min-h-12 flex-1 basis-[200px] cursor-pointer rounded-full border-0 bg-gradient-accent px-7 py-4 text-xs font-extrabold uppercase tracking-[0.18em] text-on-accent disabled:cursor-not-allowed disabled:opacity-50"
+        className="min-h-12 flex-1 basis-[200px] cursor-pointer border-0 bg-ink px-[26px] py-[15px] text-[11px] font-semibold uppercase tracking-[0.16em] text-paper transition-colors duration-250 hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {product.out ? "Agotado" : added ? "Añadido ✓" : "Añadir a la bolsa"}
+        {product.out ? "Agotado" : added ? "Añadido al pedido" : "Añadir al pedido"}
       </button>
     </div>
   );

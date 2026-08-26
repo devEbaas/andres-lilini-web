@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { DOCS, DOCS_UPDATED, getDoc } from "@/lib/content/docs";
 import { FaqList } from "@/components/contenido/FaqList";
 import { Reveal } from "@/components/ui/Reveal";
-import { chip, chipOff, chipOn } from "@/components/ui/styles";
+import { tab, tabOff, tabOn } from "@/components/ui/styles";
 
 type Params = { params: Promise<{ doc: string }> };
 
@@ -26,32 +26,30 @@ export default async function DocPage({ params }: Params) {
   if (!current) notFound();
 
   return (
-    <section className="pb-[clamp(70px,9vw,120px)] pt-[clamp(50px,7vw,100px)]">
+    <section className="border-b border-rule pb-[clamp(56px,7vw,96px)] pt-[clamp(40px,5vw,72px)]">
       <div className="shell">
         <nav
           aria-label="Secciones de contenido"
-          className="mb-[clamp(34px,5vw,56px)] flex gap-2 overflow-x-auto border-b border-hairline pb-[26px]"
+          className="mb-[clamp(34px,4vw,54px)] flex gap-[26px] overflow-x-auto border-b border-rule pb-4"
         >
           {DOCS.map((d) => (
             <Link
               key={d.slug}
               href={`/contenido/${d.slug}`}
               aria-current={d.slug === current.slug ? "page" : undefined}
-              className={`${chip} ${d.slug === current.slug ? chipOn : chipOff}`}
+              className={`${tab} ${d.slug === current.slug ? tabOn : tabOff}`}
             >
               {d.label}
             </Link>
           ))}
         </nav>
 
-        <div className="mx-auto max-w-[760px]">
-          <p className="m-0 mb-4 font-mono text-[10px] uppercase tracking-[0.32em] text-accent">
-            {current.meta}
-          </p>
-          <h1 className="m-0 mb-[18px] font-display text-[clamp(34px,6vw,80px)] uppercase leading-[0.9]">
+        <div className="max-w-[720px]">
+          <p className="eyebrow m-0 mb-4">{current.meta}</p>
+          <h1 className="m-0 mb-[18px] font-display text-[clamp(30px,4.2vw,54px)] font-normal leading-[1.1]">
             {current.title}
           </h1>
-          <p className="m-0 mb-[clamp(30px,4vw,48px)] text-[18px] leading-[1.7] text-pretty text-muted">
+          <p className="m-0 mb-[clamp(30px,4vw,46px)] border-b border-rule pb-[clamp(26px,3vw,38px)] text-[18px] leading-[1.8] text-pretty text-ink-soft">
             {current.lead}
           </p>
 
@@ -60,14 +58,14 @@ export default async function DocPage({ params }: Params) {
           ) : (
             <div>
               {current.body?.map((b, i) => (
-                <Reveal key={b.h} index={i} className="mb-[30px]">
-                  <h2 className="m-0 mb-3 text-[clamp(19px,2.2vw,26px)] font-bold tracking-[-0.01em]">
+                <Reveal key={b.h} index={i} className="mb-[34px] grid gap-2.5">
+                  <h2 className="m-0 font-display text-[clamp(20px,2.2vw,25px)] font-medium leading-[1.3]">
                     {b.h}
                   </h2>
-                  <p className="m-0 text-base leading-[1.8] text-pretty text-muted">{b.p}</p>
+                  <p className="m-0 text-base leading-[1.85] text-pretty text-ink-soft">{b.p}</p>
                 </Reveal>
               ))}
-              <p className="m-0 mt-10 border-t border-hairline pt-5 font-mono text-[11px] text-muted">
+              <p className="m-0 mt-10 border-t border-rule pt-5 font-mono text-[11px] text-ink-faint">
                 Última actualización: {DOCS_UPDATED}
               </p>
             </div>

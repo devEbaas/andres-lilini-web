@@ -3,7 +3,7 @@ export type ActionResult<T = undefined> =
   | { ok: false; error: string; fieldErrors?: Record<string, string> };
 
 export const GENERIC_ERROR =
-  "No pudimos registrar el envío. Inténtalo de nuevo en un momento.";
+  "No fue posible registrar el envío. Inténtelo de nuevo en un momento.";
 
 export function randomFolio(): string {
   return String(Math.floor(1000 + Math.random() * 9000));

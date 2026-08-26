@@ -19,12 +19,12 @@ export async function submitApplication(
     }
   }
   const email = String(payload.email ?? "").trim();
-  if (email && !isEmail(email)) fieldErrors.email = "Revisa el formato del correo.";
-  if (!payload.okPriv) fieldErrors.okPriv = "Necesitamos tu consentimiento para continuar.";
-  if (!payload.okVerdad) fieldErrors.okVerdad = "Confirma que la información es verídica.";
+  if (email && !isEmail(email)) fieldErrors.email = "Revise el formato del correo.";
+  if (!payload.okPriv) fieldErrors.okPriv = "Se requiere el consentimiento para continuar.";
+  if (!payload.okVerdad) fieldErrors.okVerdad = "Confirme que la información es verídica.";
 
   if (Object.keys(fieldErrors).length) {
-    return { ok: false, error: "Revisa los campos marcados.", fieldErrors };
+    return { ok: false, error: "Revise los campos marcados.", fieldErrors };
   }
 
   const folio = randomFolio();

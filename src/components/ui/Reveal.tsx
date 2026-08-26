@@ -6,6 +6,7 @@ import type { CSSProperties, ReactNode } from "react";
 const TAGS = {
   div: motion.div,
   section: motion.section,
+  h1: motion.h1,
   h2: motion.h2,
   h3: motion.h3,
   p: motion.p,
@@ -17,7 +18,7 @@ const TAGS = {
 export type RevealTag = keyof typeof TAGS;
 
 type RevealProps = {
-  /** Posición dentro del grupo; escalona la entrada hasta 8 elementos. */
+  /** Posición dentro del grupo; escalona la entrada hasta 6 elementos. */
   index?: number;
   as?: RevealTag;
   id?: string;
@@ -26,8 +27,9 @@ type RevealProps = {
   children?: ReactNode;
 };
 
-const EASE = [0.2, 0.7, 0.2, 1] as const;
+const EASE = [0.22, 0.7, 0.25, 1] as const;
 
+/** Entrada sobria del canvas formal: 10px de desplazamiento y nada de desenfoque. */
 export function Reveal({ index = 0, as = "div", children, ...rest }: RevealProps) {
   const reduced = useReducedMotion();
 
@@ -40,10 +42,10 @@ export function Reveal({ index = 0, as = "div", children, ...rest }: RevealProps
 
   return (
     <Tag
-      initial={{ opacity: 0, y: 22, filter: "blur(6px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      viewport={{ once: true, margin: "-40px 0px -10% 0px" }}
-      transition={{ duration: 0.8, ease: EASE, delay: Math.min(index, 8) * 0.075 }}
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-30px 0px -8% 0px" }}
+      transition={{ duration: 0.7, ease: EASE, delay: Math.min(index, 6) * 0.06 }}
       {...rest}
     >
       {children}

@@ -1,42 +1,34 @@
 import Link from "next/link";
-import { FOOTER_COLS, SOCIAL } from "@/lib/content/site";
+import { EMAILS, FOOTER_COLS } from "@/lib/content/site";
 import { NewsletterForm } from "./NewsletterForm";
 
 export function Footer() {
   return (
-    <footer className="border-t border-hairline bg-panel pb-[30px] pt-[clamp(50px,7vw,90px)]">
+    <footer className="bg-surface pb-7 pt-[clamp(46px,6vw,80px)]">
       <div className="shell">
-        <div className="grid gap-[clamp(30px,4vw,50px)] [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))] nav:[grid-template-columns:1.6fr_repeat(4,1fr)]">
-          <div className="col-span-2 min-w-0 nav:col-span-1">
-            <div className="flex items-center gap-3">
-              <span className="grid size-[38px] place-items-center rounded-[11px] bg-gradient-accent font-display text-xl text-on-accent">
-                AL
-              </span>
-              <span className="font-display text-[22px] uppercase tracking-[0.05em]">
-                Andrés Lillini
-              </span>
-            </div>
-            <p className="m-0 my-[18px] mb-[22px] max-w-[34ch] leading-[1.7] text-muted">
-              Formación, detección y desarrollo de futbolistas. México · Argentina.
+        <div className="grid gap-[clamp(28px,4vw,48px)] [grid-template-columns:repeat(auto-fit,minmax(190px,1fr))]">
+          <div className="min-w-0 sm:col-span-2">
+            <div className="font-display text-[26px] font-medium">Andrés Lillini</div>
+            <p className="m-0 mb-5 mt-3.5 max-w-[34ch] text-[15px] leading-[1.8] text-ink-soft">
+              Formación, detección y desarrollo de futbolistas. Ciudad de México · Buenos Aires.
             </p>
-            <div className="flex flex-wrap gap-2">
-              {SOCIAL.map((s) => (
-                <span
-                  key={s}
-                  className="grid size-11 cursor-pointer place-items-center rounded-full border border-hairline text-[9px] font-extrabold tracking-[0.08em] text-muted transition-colors duration-300 hover:border-accent hover:text-accent"
-                >
-                  {s}
-                </span>
+            <div className="flex flex-col gap-2 font-mono text-xs text-ink-soft">
+              {EMAILS.map((e) => (
+                <a key={e} href={`mailto:${e}`} className="text-ink-soft">
+                  {e}
+                </a>
               ))}
             </div>
           </div>
 
           {FOOTER_COLS.map((col) => (
             <div key={col.title}>
-              <div className="label-caps mb-4">{col.title}</div>
-              <div className="flex flex-col gap-[11px]">
+              <div className="mb-3.5 border-b border-rule pb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-faint">
+                {col.title}
+              </div>
+              <div className="flex flex-col gap-2.5">
                 {col.links.map((l) => (
-                  <Link key={l.href} href={l.href} className="text-sm text-ink hover:text-accent">
+                  <Link key={l.href} href={l.href} className="text-sm text-ink-soft">
                     {l.label}
                   </Link>
                 ))}
@@ -45,25 +37,23 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-[clamp(40px,5vw,64px)] grid items-center gap-[26px] border-t border-hairline pt-8 [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))]">
+        <div className="mt-[clamp(38px,5vw,58px)] grid items-start gap-6 border-t border-rule pt-7 [grid-template-columns:repeat(auto-fit,minmax(270px,1fr))]">
           <div>
-            <div className="mb-2.5 text-[11px] font-extrabold uppercase tracking-[0.18em]">
-              Boletín de cantera
-            </div>
-            <p className="m-0 text-sm leading-[1.6] text-muted">
+            <div className="mb-2 font-display text-xl font-medium">Boletín de cantera</div>
+            <p className="m-0 text-sm leading-[1.7] text-ink-soft">
               Convocatorias, informes y fechas de visorías. Un correo al mes.
             </p>
           </div>
           <NewsletterForm />
         </div>
 
-        <div className="mt-[34px] flex flex-wrap justify-between gap-x-[22px] gap-y-2 font-mono text-[11px] text-muted">
+        <div className="mt-[30px] flex flex-wrap justify-between gap-x-[22px] gap-y-2 font-mono text-[11px] text-ink-faint">
           <span>© 2026 Andrés Lillini. Todos los derechos reservados.</span>
           <span className="flex gap-5">
-            <Link href="/contenido/privacidad" className="text-muted hover:text-accent">
-              Privacidad
+            <Link href="/contenido/privacidad" className="text-ink-faint">
+              Aviso de privacidad
             </Link>
-            <Link href="/contenido/terminos" className="text-muted hover:text-accent">
+            <Link href="/contenido/terminos" className="text-ink-faint">
               Términos
             </Link>
           </span>

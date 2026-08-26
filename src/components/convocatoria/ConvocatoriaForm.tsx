@@ -4,12 +4,9 @@ import { motion } from "motion/react";
 import { useRef, useState, useTransition } from "react";
 
 import { submitConvocatoria } from "@/lib/actions/convocatoria";
-import {
-  CONVOCATORIA_CHECKS,
-  UPLOAD_ACCEPT,
-  UPLOAD_MAX_BYTES,
-} from "@/lib/content/fundacion";
+import { CONVOCATORIA_CHECKS, UPLOAD_ACCEPT, UPLOAD_MAX_BYTES } from "@/lib/content/fundacion";
 import { bytesToMb } from "@/lib/format";
+import { checkBox, checkRow } from "@/components/ui/styles";
 
 export function ConvocatoriaForm() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -27,7 +24,7 @@ export function ConvocatoriaForm() {
       return;
     }
     if (!UPLOAD_ACCEPT.includes(f.type)) {
-      setError("Formato no admitido. Usa PDF, JPG, PNG o MP4.");
+      setError("Formato no admitido. Use PDF, JPG, PNG o MP4.");
       return;
     }
     setError("");
@@ -54,23 +51,21 @@ export function ConvocatoriaForm() {
   if (folio) {
     return (
       <motion.div
-        initial={{ opacity: 0, y: 14 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.2, 0.7, 0.2, 1] }}
-        className="rounded-[26px] border border-hairline bg-panel p-[clamp(34px,5vw,56px)] text-center shadow-deep"
+        transition={{ duration: 0.5, ease: [0.22, 0.7, 0.25, 1] }}
+        className="border border-rule bg-surface p-[clamp(32px,5vw,54px)] text-center"
       >
-        <div className="mx-auto mb-[22px] grid size-[60px] place-items-center rounded-full bg-gradient-accent text-[26px] font-extrabold text-on-accent">
-          ✓
-        </div>
-        <h2 className="m-0 mb-3 font-display text-[clamp(26px,4vw,44px)] uppercase">
+        <div className="eyebrow mb-4">Acuse de recibo</div>
+        <h2 className="m-0 mb-3 font-display text-[clamp(24px,3.2vw,38px)] font-normal">
           Participación registrada
         </h2>
-        <p className="mx-auto m-0 mb-[22px] max-w-[44ch] leading-[1.7] text-muted">
-          El jurado publica la lista corta el 15 de diciembre. Te avisamos por correo pase lo que
-          pase.
+        <p className="m-0 mx-auto mb-6 max-w-[46ch] leading-[1.8] text-ink-soft">
+          El jurado publica la lista corta el 15 de diciembre de 2026. Se notifica por correo
+          electrónico el resultado en todos los casos.
         </p>
-        <div className="inline-block rounded-[14px] border border-dashed border-hairline-strong p-[15px] font-mono text-[13px] tracking-[0.14em]">
-          FOLIO · CV-2026-{folio}
+        <div className="inline-block border border-rule px-5 py-3.5 font-mono text-[13px] tracking-[0.1em]">
+          FOLIO CV-2026-{folio}
         </div>
       </motion.div>
     );
@@ -80,19 +75,19 @@ export function ConvocatoriaForm() {
     <form
       onSubmit={onSubmit}
       noValidate
-      className="rounded-[26px] border border-hairline bg-white/[0.03] p-[clamp(24px,3.5vw,44px)] shadow-deep backdrop-blur-[14px]"
+      className="border border-rule bg-surface p-[clamp(24px,3.5vw,42px)]"
     >
-      <h2 className="m-0 mb-[26px] font-display text-[clamp(24px,3.4vw,40px)] uppercase">
-        Tu propuesta
+      <h2 className="m-0 mb-[26px] border-b border-rule pb-[18px] font-display text-[clamp(22px,3vw,34px)] font-normal">
+        Ficha de participación
       </h2>
 
       <div className="grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(220px,1fr))]">
-        <label className="flex flex-col gap-[9px]">
+        <label className="flex flex-col gap-2">
           <span className="label-caps">Nombre completo</span>
           <input name="nombre" placeholder="Nombre y apellidos" className="field" required />
         </label>
-        <label className="flex flex-col gap-[9px]">
-          <span className="label-caps">Correo</span>
+        <label className="flex flex-col gap-2">
+          <span className="label-caps">Correo electrónico</span>
           <input
             name="email"
             type="email"
@@ -101,18 +96,22 @@ export function ConvocatoriaForm() {
             required
           />
         </label>
-        <label className="col-span-full flex flex-col gap-[9px]">
+        <label className="col-span-full flex flex-col gap-2">
           <span className="label-caps">Enlace de apoyo (opcional)</span>
-          <input name="link" placeholder="Video, portafolio o redes" className="field" />
+          <input
+            name="link"
+            placeholder="Video, portafolio o perfil de scouting"
+            className="field"
+          />
         </label>
-        <label className="col-span-full flex flex-col gap-[9px]">
-          <span className="label-caps">Describe tu propuesta</span>
+        <label className="col-span-full flex flex-col gap-2">
+          <span className="label-caps">Exposición del caso</span>
           <textarea
             name="propuesta"
             rows={4}
             maxLength={600}
             placeholder="Máximo 600 caracteres"
-            className="field resize-y leading-[1.6]"
+            className="field resize-y leading-[1.7]"
             required
           />
         </label>
@@ -146,31 +145,31 @@ export function ConvocatoriaForm() {
           setDragging(false);
           takeFile(e.dataTransfer.files?.[0]);
         }}
-        className="mt-[22px] cursor-pointer rounded-[20px] border-[1.5px] border-dashed p-[clamp(28px,4vw,44px)] text-center transition-all duration-300"
+        className="mt-[22px] cursor-pointer border border-dashed p-[clamp(26px,4vw,40px)] text-center transition-[border-color,background] duration-250"
         style={{
-          borderColor: dragging ? "var(--accent)" : "var(--border-strong)",
-          background: dragging ? "color-mix(in oklab, var(--accent) 8%, transparent)" : "var(--panel)",
+          borderColor: dragging ? "var(--accent)" : "var(--ink-faint)",
+          background: dragging ? "var(--surface-2)" : "var(--paper)",
         }}
       >
         {!file ? (
           <div>
-            <div className="mb-2.5 font-display text-[clamp(20px,2.6vw,30px)] uppercase">
-              Arrastra tu archivo
+            <div className="mb-2.5 font-display text-[clamp(19px,2.4vw,26px)] font-medium">
+              Adjuntar expediente
             </div>
-            <p className="m-0 text-sm text-muted">
-              o haz clic para elegirlo · PDF, JPG, PNG, MP4 · hasta 25 MB
+            <p className="m-0 text-sm text-ink-soft">
+              Arrastre el archivo o haga clic para elegirlo · PDF, JPG, PNG, MP4 · hasta 25 MB
             </p>
           </div>
         ) : (
           <div className="flex items-center gap-4 text-left">
-            <span className="photo-slot size-[60px] shrink-0 rounded-[14px] border border-hairline" />
+            <span className="size-[54px] shrink-0 border border-rule bg-surface-2" />
             <div className="min-w-0 flex-1">
-              <div className="truncate text-sm font-bold">{file.name}</div>
-              <div className="my-1 mb-2 font-mono text-[11px] text-muted">
+              <div className="truncate text-sm font-medium">{file.name}</div>
+              <div className="my-1 mb-2 font-mono text-[11px] text-ink-faint">
                 {bytesToMb(file.size)}
               </div>
-              <div className="h-1 rounded-full bg-hairline">
-                <div className="h-full w-full rounded-full bg-gradient-accent" />
+              <div className="h-0.5 bg-rule-soft">
+                <div className="h-full w-full bg-accent" />
               </div>
             </div>
             <button
@@ -181,7 +180,7 @@ export function ConvocatoriaForm() {
                 setFile(null);
                 if (inputRef.current) inputRef.current.value = "";
               }}
-              className="size-9 shrink-0 cursor-pointer rounded-full border border-hairline bg-transparent"
+              className="size-9 shrink-0 cursor-pointer border border-rule bg-transparent"
             >
               ×
             </button>
@@ -197,25 +196,22 @@ export function ConvocatoriaForm() {
             role="checkbox"
             aria-checked={Boolean(checks[c.k])}
             onClick={() => setChecks((s) => ({ ...s, [c.k]: !s[c.k] }))}
-            className="flex min-h-11 cursor-pointer items-start gap-3.5 rounded-2xl border border-hairline bg-panel p-[15px] text-left"
+            className={`${checkRow} border-rule`}
           >
             <span
-              className="grid size-[22px] shrink-0 place-items-center rounded-[7px] border border-hairline-strong text-[13px] font-extrabold text-on-accent"
+              className={checkBox}
               style={{ background: checks[c.k] ? "var(--accent)" : "transparent" }}
             >
               {checks[c.k] ? "✓" : ""}
             </span>
-            <span className="text-sm leading-[1.6] text-muted">{c.label}</span>
+            <span className="text-sm leading-[1.7] text-ink-soft">{c.label}</span>
             {checks[c.k] && <input type="hidden" name={c.k} value="on" />}
           </button>
         ))}
       </div>
 
       {error && (
-        <p
-          role="alert"
-          className="mt-4 rounded-[14px] border border-danger/50 bg-danger/10 px-4 py-3.5 text-sm text-danger-text"
-        >
+        <p role="alert" className="mt-4 border border-danger/40 px-4 py-3 text-sm text-danger">
           {error}
         </p>
       )}
@@ -223,7 +219,7 @@ export function ConvocatoriaForm() {
       <button
         type="submit"
         disabled={pending}
-        className="mt-6 min-h-[52px] w-full cursor-pointer rounded-full border-0 bg-gradient-accent text-xs font-extrabold uppercase tracking-[0.18em] text-on-accent disabled:opacity-60"
+        className="mt-6 min-h-[50px] w-full cursor-pointer border-0 bg-ink text-[11px] font-semibold uppercase tracking-[0.16em] text-paper transition-colors duration-250 hover:bg-accent disabled:opacity-60"
       >
         {pending ? "Enviando…" : "Enviar participación"}
       </button>

@@ -31,42 +31,45 @@ export default async function ProductPage({ params }: Params) {
   if (!product) notFound();
 
   return (
-    <section className="pb-[clamp(60px,8vw,110px)] pt-[clamp(50px,7vw,90px)]">
+    <section className="border-b border-rule pb-[clamp(56px,7vw,96px)] pt-[clamp(34px,4vw,56px)]">
       <div className="shell">
         <Link
           href="/tienda"
-          className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-muted hover:text-accent"
+          className="border-b border-rule text-[11px] font-semibold uppercase tracking-[0.16em] text-ink-soft"
         >
-          ← Volver al catálogo
+          Volver al catálogo
         </Link>
 
-        <div className="mt-[34px] grid items-start gap-[clamp(28px,4vw,64px)] [grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]">
+        <div className="mt-[34px] grid items-start gap-[clamp(28px,4vw,60px)] [grid-template-columns:repeat(auto-fit,minmax(290px,1fr))]">
           <div className="grid gap-3">
-            <PhotoSlot label={product.shot} ratio="1/1" className="rounded-3xl" />
+            <PhotoSlot label={product.shot} ratio="4/5" className="p-5" />
             <div className="grid grid-cols-3 gap-3">
               {PRODUCT_THUMBS.map((t) => (
-                <PhotoSlot key={t} label={t} ratio="1/1" className="rounded-[14px]" />
+                <PhotoSlot key={t} label={t} ratio="1/1" tone="surface-2" className="p-2" />
               ))}
             </div>
           </div>
 
           <div>
-            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-accent">
               {product.cat}
             </span>
-            <h1 className="m-0 my-3.5 mb-2.5 font-display text-[clamp(34px,5vw,72px)] uppercase leading-[0.92]">
+            <h1 className="m-0 mb-2.5 mt-3.5 font-display text-[clamp(30px,4vw,50px)] font-normal leading-[1.12]">
               {product.name}
             </h1>
-            <p className="m-0 mb-[22px] text-[17px] text-muted">{product.sub}</p>
-            <div className="mb-6 font-display text-[40px]">{money(product.price)}</div>
-            <p className="m-0 mb-[30px] max-w-[52ch] leading-[1.75] text-pretty text-muted">
+            <p className="m-0 mb-[22px] text-[17px] text-ink-soft">{product.sub}</p>
+            <div className="mb-6 border-b border-rule pb-[22px] font-mono text-xl">
+              {money(product.price)}
+            </div>
+            <p className="m-0 mb-[30px] max-w-[52ch] leading-[1.8] text-pretty text-ink-soft">
               {product.desc}
             </p>
 
             <ProductActions product={product} />
 
-            <p className="m-0 mt-[26px] font-mono text-[11px] leading-[1.8] text-muted">
-              Envío estándar $120 MXN · Devoluciones dentro de 30 días · Facturación disponible
+            <p className="m-0 mt-[26px] font-mono text-[11px] leading-[1.9] text-ink-faint">
+              Envío estándar $120 MXN · Devoluciones dentro de 30 días naturales · Facturación
+              disponible
             </p>
           </div>
         </div>

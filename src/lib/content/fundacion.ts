@@ -6,8 +6,8 @@ export const CAMPAIGNS = [
 ];
 
 export const CONVOCATORIA_BRIEF = [
-  { n: "01", title: "Qué pedimos", body: "Un video de juego de cinco a ocho minutos y una carta de una página: quién eres, dónde juegas y qué necesitas para seguir." },
-  { n: "02", title: "Requisitos técnicos", body: "PDF, JPG, PNG o MP4 de hasta 25 MB. Si tu video pesa más, comparte un enlace público en el campo correspondiente." },
+  { n: "01", title: "Qué se solicita", body: "Un video de juego de cinco a ocho minutos y una carta de una página: quién es el jugador, dónde juega y qué necesita para continuar." },
+  { n: "02", title: "Requisitos técnicos", body: "PDF, JPG, PNG o MP4 de hasta 25 MB. Si el video excede el peso, comparta un enlace público en el campo correspondiente." },
   { n: "03", title: "Cómo se elige", body: "Tres evaluadores del programa califican potencial deportivo, contexto y compromiso académico. Lista corta el 15 de diciembre." },
 ];
 

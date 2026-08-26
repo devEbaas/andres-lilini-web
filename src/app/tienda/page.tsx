@@ -7,9 +7,9 @@ import { CatalogGrid } from "@/components/tienda/CatalogGrid";
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "Tienda oficial",
+  title: "Publicaciones y equipamiento",
   description:
-    "Material de trabajo: metodología, indumentaria y equipamiento. Envío a todo México en 3 a 5 días hábiles.",
+    "Material de trabajo: metodología, indumentaria y equipamiento. Envío nacional de tres a cinco días hábiles.",
 };
 
 export default async function TiendaPage() {
@@ -17,22 +17,20 @@ export default async function TiendaPage() {
 
   return (
     <>
-      <section className="pb-[clamp(30px,4vw,50px)] pt-[clamp(60px,8vw,110px)]">
+      <section className="border-b border-rule pb-[clamp(30px,4vw,48px)] pt-[clamp(46px,6vw,80px)]">
         <div className="shell">
-          <p className="m-0 mb-5 font-mono text-[11px] uppercase tracking-[0.38em] text-accent">
-            Tienda oficial
-          </p>
-          <h1 className="m-0 mb-[22px] font-display text-[clamp(40px,8vw,120px)] uppercase leading-[0.88]">
-            Material de trabajo
+          <p className="eyebrow m-0 mb-[18px]">Material de trabajo</p>
+          <h1 className="m-0 mb-5 font-display text-[clamp(32px,4.6vw,58px)] font-normal leading-[1.1]">
+            Publicaciones y equipamiento
           </h1>
-          <p className="m-0 max-w-[52ch] leading-[1.7] text-muted">
-            Envío a todo México en 3 a 5 días hábiles. Stock limitado por tirada; lo agotado no se
-            reimprime.
+          <p className="m-0 max-w-[54ch] text-[17px] leading-[1.8] text-ink-soft">
+            Envío nacional de tres a cinco días hábiles. Cada tirada es limitada; el material
+            agotado no se reimprime.
           </p>
         </div>
       </section>
 
-      <section className="pb-[clamp(60px,8vw,110px)]">
+      <section className="border-b border-rule pb-[clamp(56px,7vw,96px)] pt-[clamp(28px,4vw,44px)]">
         <div className="shell">
           <CatalogGrid products={products} />
         </div>

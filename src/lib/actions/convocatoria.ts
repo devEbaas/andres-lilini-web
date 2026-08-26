@@ -15,13 +15,13 @@ export async function submitConvocatoria(
   const okPriv = formData.get("priv") === "on";
   const file = formData.get("file");
 
-  if (!nombre) return { ok: false, error: "Escribe tu nombre completo." };
-  if (!isEmail(email)) return { ok: false, error: "Necesitamos un correo válido." };
+  if (!nombre) return { ok: false, error: "Indique su nombre completo." };
+  if (!isEmail(email)) return { ok: false, error: "Se requiere un correo electrónico válido." };
   if (propuesta.length < 20) {
-    return { ok: false, error: "Describe tu propuesta con al menos veinte caracteres." };
+    return { ok: false, error: "Exponga el caso con al menos veinte caracteres." };
   }
   if (!okBases || !okPriv) {
-    return { ok: false, error: "Acepta las bases y el aviso de privacidad para participar." };
+    return { ok: false, error: "Acepte las bases y el aviso de privacidad para participar." };
   }
 
   const upload = file instanceof File && file.size > 0 ? file : null;
@@ -30,7 +30,7 @@ export async function submitConvocatoria(
       return { ok: false, error: "El archivo supera los 25 MB permitidos." };
     }
     if (!UPLOAD_ACCEPT.includes(upload.type)) {
-      return { ok: false, error: "Formato no admitido. Usa PDF, JPG, PNG o MP4." };
+      return { ok: false, error: "Formato no admitido. Use PDF, JPG, PNG o MP4." };
     }
   }
 
@@ -48,7 +48,7 @@ export async function submitConvocatoria(
 
     if (uploadError) {
       console.error("[submitConvocatoria:upload]", uploadError.message);
-      return { ok: false, error: "No pudimos subir el archivo. Inténtalo de nuevo." };
+      return { ok: false, error: "No fue posible subir el archivo. Inténtelo de nuevo." };
     }
   }
 
@@ -67,7 +67,7 @@ export async function submitConvocatoria(
     if (error.code === "23505") {
       return {
         ok: false,
-        error: "Ya registramos una propuesta con este correo. Sólo se admite una por participante.",
+        error: "Ya existe una participación registrada con este correo. Sólo se admite una por participante.",
       };
     }
     console.error("[submitConvocatoria]", error.message);
