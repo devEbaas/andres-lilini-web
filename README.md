@@ -1,36 +1,133 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Andrés Lillini — sitio oficial
 
-## Getting Started
+Implementación en producción del canvas de Claude Design
+[`Andrés Lillini.dc.html`](https://claude.ai/design/p/74e0f595-677b-4cbb-9a05-e895350d525e?file=Andres+Lillini.dc.html).
 
-First, run the development server:
+**Stack:** Next.js 16 (App Router) · TypeScript · Tailwind CSS v4 · Motion · Supabase.
+
+---
+
+## Arranque
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # opcional, ver "Supabase" más abajo
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+El sitio arranca y es completamente navegable **sin Supabase**: el catálogo usa
+los datos semilla de `src/lib/content/tienda.ts` y los formularios validan y
+muestran su pantalla de éxito sin persistir nada. Al conectar Supabase, esas
+mismas rutas pasan a leer y escribir de verdad, sin cambios en el código.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Rutas
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Ruta | Contenido |
+| --- | --- |
+| `/` | Hero, métricas animadas, trayectoria, archivo visual, metodología |
+| `/programa` | Formulario de postulación en 5 secciones + rúbrica de 15 atributos |
+| `/tienda` | Catálogo con filtro por categoría |
+| `/tienda/[id]` | Ficha de producto (prerenderizada por `generateStaticParams`) |
+| `/convocatoria` | Beca 2027: bases, formulario y carga de archivo |
+| `/fundacion` | Campañas de impacto comunitario |
+| `/contacto` | Formulario por tema + canales directos |
+| `/contenido/[doc]` | Prensa, FAQ, patrocinios, privacidad, términos, bases |
+| `/sistema` | Sistema de diseño: tokens, tipografía, componentes, tarjetas OG |
+| — | `not-found.tsx` para el 404 |
 
-## Learn More
+## Supabase
 
-To learn more about Next.js, take a look at the following resources:
+1. Crea un proyecto y copia las credenciales a `.env.local`:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=
+   SUPABASE_SERVICE_ROLE_KEY=
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. Aplica las migraciones de `supabase/migrations/` en orden — desde el SQL
+   editor del dashboard o con la CLI:
 
-## Deploy on Vercel
+   ```bash
+   supabase link --project-ref <ref>
+   supabase db push
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   `0001_init.sql` crea las tablas, activa RLS y crea el bucket privado
+   `convocatoria`. `0002_seed_products.sql` carga el catálogo.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. Regenera los tipos cuando cambies el esquema:
+
+   ```bash
+   npx supabase gen types typescript --project-id <ref> > src/lib/supabase/types.ts
+   ```
+
+### Modelo de datos
+
+| Tabla | Escribe | Lee |
+| --- | --- | --- |
+| `products` | — (semilla) | público (RLS: `select` para `anon`) |
+| `applications` | `submitApplication` | sólo service role |
+| `convocatoria_entries` | `submitConvocatoria` | sólo service role |
+| `contact_messages` | `submitContact` | sólo service role |
+| `newsletter_subscribers` | `subscribe` | sólo service role |
+| `orders` | `createOrder` | sólo service role |
+
+`/tienda` y `/tienda/[id]` se prerenderizan con `revalidate = 300`, así que el
+catálogo se sirve estático y se regenera cada cinco minutos. La lectura usa un
+cliente anónimo sin cookies (`src/lib/supabase/public.ts`) precisamente para que
+esas rutas no se vuelvan dinámicas al conectar Supabase.
+
+### Seguridad
+
+- RLS está activo en todas las tablas y la única policy pública es lectura de
+  `products`. El navegador no puede leer ni escribir postulaciones, mensajes ni
+  pedidos.
+- Las escrituras pasan por Server Actions (`src/lib/actions/`) que usan la
+  service role key, importada sólo desde módulos marcados con `server-only`.
+- `createOrder` recalcula los importes con los precios del catálogo del
+  servidor; nunca confía en los que manda el cliente.
+- El bucket `convocatoria` es privado, con límite de 25 MB y MIME types
+  restringidos a PDF, JPG, PNG y MP4. `next.config.ts` sube el
+  `bodySizeLimit` de Server Actions a 26 MB para que quepa el archivo.
+
+## Diseño
+
+Los tokens del canvas (paleta oklch, sombras, gradiente de acento) viven en
+`src/app/globals.css`: primero como custom properties en `:root` y
+`[data-theme="light"]`, y después mapeados al `@theme` de Tailwind, de modo que
+`bg-panel`, `text-muted`, `border-hairline` o `shadow-deep` resuelven a los
+mismos valores. Cambiar `--accent` y `--accent-light` en `:root` retiñe el sitio
+entero.
+
+El tema claro está implementado y se activa poniendo `data-theme="light"` en
+`<html>` (`src/app/layout.tsx`); todavía no hay control de usuario para
+alternarlo. El selector ES/EN de la cabecera es parte del diseño original y hoy
+sólo avisa de que la versión en inglés está pendiente.
+
+### Movimiento
+
+Todo el movimiento usa `motion/react` y respeta `prefers-reduced-motion`:
+
+- `Reveal` — entrada escalonada por scroll (opacidad + desplazamiento + blur).
+- `Counter` — conteo de las métricas al entrar en viewport.
+- `Hero` — parallax de los halos con `useScroll` / `useTransform`.
+- `ScrollProgress` — barra superior con `useSpring`.
+- `RouteTransition` — fundido al cambiar de ruta. Va cifrado por `pathname`,
+  no por URL completa, para no remontar la página en los enlaces de ancla
+  (`#trayectoria`, `#form`, `#participar`).
+
+### Fotografía
+
+Las fotos aún no existen: `PhotoSlot` dibuja el marcador rayado del diseño con
+la descripción del encuadre previsto. Sustituir por `next/image` cuando llegue
+el material.
+
+## Scripts
+
+```bash
+npm run dev     # desarrollo
+npm run build   # build de producción
+npm run start   # servir el build
+npm run lint    # eslint
+```
