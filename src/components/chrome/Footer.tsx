@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { FOOTER_COLS, SOCIAL } from "@/lib/content/site";
 import { NewsletterForm } from "./NewsletterForm";
@@ -7,15 +8,19 @@ export function Footer() {
     <footer className="border-t border-hairline bg-panel pb-[30px] pt-[clamp(50px,7vw,90px)]">
       <div className="shell">
         <div className="grid gap-[clamp(30px,4vw,50px)] [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))] nav:[grid-template-columns:1.6fr_repeat(4,1fr)]">
-          <div className="col-span-2 min-w-0 nav:col-span-1">
-            <div className="flex items-center gap-3">
-              <span className="grid size-[38px] place-items-center rounded-[11px] bg-gradient-accent font-display text-xl text-on-accent">
-                AL
-              </span>
-              <span className="font-display text-[22px] uppercase tracking-[0.05em]">
-                Andrés Lillini
-              </span>
-            </div>
+          {/* A partir de 640px la rejilla tiene dos columnas o más; por debajo
+              sólo hay una y `col-span-2` abría una columna implícita que
+              desbordaba la pantalla. */}
+          <div className="min-w-0 sm:col-span-2 nav:col-span-1">
+            {/* Aquí va la marca completa: ya trae el nombre y el descriptor,
+                así que no se repiten al lado. */}
+            <Image
+              src="/images/logo.png"
+              alt="Andrés Lillini · formador de futbolistas"
+              width={640}
+              height={719}
+              className="h-[clamp(120px,14vw,152px)] w-auto"
+            />
             <p className="m-0 my-[18px] mb-[22px] max-w-[34ch] leading-[1.7] text-muted">
               Formación, detección y desarrollo de futbolistas. México · Argentina.
             </p>
