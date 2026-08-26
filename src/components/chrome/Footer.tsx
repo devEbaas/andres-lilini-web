@@ -19,7 +19,7 @@ export function Footer() {
               alt="Andrés Lillini · formador de futbolistas"
               width={640}
               height={719}
-              className="h-[clamp(120px,14vw,152px)] w-auto"
+              className="h-[clamp(140px,14vw,152px)] w-auto"
             />
             <p className="m-0 my-[18px] mb-[22px] max-w-[34ch] leading-[1.7] text-muted">
               Formación, detección y desarrollo de futbolistas. México · Argentina.
