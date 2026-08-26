@@ -18,7 +18,10 @@ export type Milestone = {
   year: string;
   title: string;
   body: string;
+  /** Encuadre previsto; se muestra en el marcador mientras no haya `image`. */
   photo: string;
+  /** Ruta en /public cuando la fotografía ya está entregada. */
+  image?: string;
   caption: string;
 };
 
@@ -28,6 +31,7 @@ export const TIMELINE: Milestone[] = [
     title: "Primeros pasos en Buenos Aires",
     body: "Empieza como entrenador de categorías formativas en el fútbol argentino, con foco en el trabajo individual del jugador joven.",
     photo: "Foto de archivo · cancha de barrio, Buenos Aires",
+    image: "/images/cancha-barrio.jpeg",
     caption: "Origen · fútbol formativo argentino",
   },
   {

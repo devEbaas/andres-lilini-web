@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { GALLERY, TIMELINE } from "@/lib/content/home";
 import { PhotoSlot } from "@/components/ui/PhotoSlot";
 import { Reveal } from "@/components/ui/Reveal";
@@ -46,15 +48,36 @@ export function Timeline() {
                 </p>
               </div>
               <figure className="m-0">
-                <PhotoSlot
-                  label={t.photo}
-                  ratio="16/10"
-                  className="rounded-[18px] p-4 transition duration-500 hover:-translate-y-1 hover:border-accent"
-                >
-                  <span className="absolute bottom-3 right-3.5 font-display text-[30px] leading-none text-white/15">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                </PhotoSlot>
+                {t.image ? (
+                  // Marco 16:10 del canvas; el original es 3:2, así que recorta a los lados.
+                  <div className="relative aspect-16/10 overflow-hidden rounded-[18px] border border-hairline transition duration-500 hover:-translate-y-1 hover:border-accent">
+                    <Image
+                      src={t.image}
+                      alt={t.caption}
+                      fill
+                      sizes="(max-width: 940px) 100vw, 45vw"
+                      className="object-cover"
+                    />
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5"
+                      style={{ background: "linear-gradient(180deg,transparent,oklch(0 0 0 / 0.6))" }}
+                    />
+                    <span className="absolute bottom-3 right-3.5 font-display text-[30px] leading-none text-white/40">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+                ) : (
+                  <PhotoSlot
+                    label={t.photo}
+                    ratio="16/10"
+                    className="rounded-[18px] p-4 transition duration-500 hover:-translate-y-1 hover:border-accent"
+                  >
+                    <span className="absolute bottom-3 right-3.5 font-display text-[30px] leading-none text-white/15">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </PhotoSlot>
+                )}
                 <figcaption className="mt-2.5 font-mono text-[10px] tracking-[0.04em] text-muted">
                   {t.caption}
                 </figcaption>
