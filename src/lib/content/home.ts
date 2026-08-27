@@ -18,7 +18,10 @@ export type Milestone = {
   year: string;
   title: string;
   body: string;
+  /** Encuadre previsto; se muestra en el marcador mientras no haya `image`. */
   photo: string;
+  /** Ruta en /public cuando la fotografía ya está entregada. */
+  image?: string;
   caption: string;
 };
 
@@ -28,6 +31,7 @@ export const TIMELINE: Milestone[] = [
     title: "Primeros pasos en Buenos Aires",
     body: "Empieza como entrenador de categorías formativas en el fútbol argentino, con foco en el trabajo individual del jugador joven.",
     photo: "Foto de archivo · cancha de barrio, Buenos Aires",
+    image: "/images/cancha-barrio.jpeg",
     caption: "Origen · fútbol formativo argentino",
   },
   {
@@ -35,6 +39,7 @@ export const TIMELINE: Milestone[] = [
     title: "Coordinador de fuerzas básicas en Morelia",
     body: "Llega a México invitado a estructurar la cantera de Monarcas Morelia. De ahí sale, entre otros, un lateral que sería multicampeón en la Liga MX.",
     photo: "Foto 16:10 · sesión de fuerzas básicas, Morelia",
+    image: "/images/morelia.jpg",
     caption: "Primer proyecto en México",
   },
   {
@@ -42,6 +47,7 @@ export const TIMELINE: Milestone[] = [
     title: "Boca Juniors",
     body: "Regresa a Argentina para dirigir el trabajo formativo de uno de los clubes más grandes del continente, con una escala y una presión distintas.",
     photo: "Foto 16:10 · complejo de entrenamiento",
+    image: "/images/boca.webp",
     caption: "Cuatro años en la cantera xeneize",
   },
   {
@@ -49,6 +55,7 @@ export const TIMELINE: Milestone[] = [
     title: "CSKA Moscú",
     body: "Salto a Europa del Este para reorganizar el área juvenil: aprende a rastrear jugadores en contextos culturales y climáticos completamente ajenos.",
     photo: "Foto 16:10 · sesión invernal, Moscú",
+    image: "/images/cska.jpeg",
     caption: "Detección fuera de la zona de confort",
   },
   {
@@ -56,6 +63,7 @@ export const TIMELINE: Milestone[] = [
     title: "Banquillos en Sudamérica",
     body: "Etapas como técnico en Gimnasia y Esgrima y San Luis de Quillota: la traducción del formador al entrenador de resultados semanales.",
     photo: "Foto 16:10 · banquillo en día de partido",
+    image: "/images/sudamerica.jpeg",
     caption: "Primera línea, resultado inmediato",
   },
   {
@@ -63,6 +71,7 @@ export const TIMELINE: Milestone[] = [
     title: "Cantera de Pumas",
     body: "Toma la dirección de fuerzas básicas del club universitario y arma una estructura que alimenta al primer equipo con jugadores propios.",
     photo: "Foto 16:10 · cantera universitaria",
+    image: "/images/pumas.jpg",
     caption: "Cantera como política deportiva",
   },
   {
@@ -70,6 +79,7 @@ export const TIMELINE: Milestone[] = [
     title: "Director técnico del primer equipo",
     body: "Asume de forma interina y se queda dos años y medio: 102 partidos, una final de liga y quince canteranos debutando en primera división.",
     photo: "Foto 16:10 · noche de final",
+    image: "/images/director-pumas.jpg",
     caption: "Interinato que duró dos años y medio",
   },
   {
@@ -77,6 +87,7 @@ export const TIMELINE: Milestone[] = [
     title: "Selecciones nacionales menores",
     body: "Encabeza el proyecto de detección y desarrollo juvenil de la federación mexicana, incluida la búsqueda de jugadores con doble nacionalidad formados en el extranjero.",
     photo: "Foto 16:10 · concentración de selección menor",
+    image: "/images/mexico.png",
     caption: "Actualidad · escala nacional",
   },
 ];

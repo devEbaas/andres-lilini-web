@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, useMotionValueEvent, useScroll } from "motion/react";
@@ -29,11 +30,24 @@ export function Header() {
         className="fixed inset-x-0 top-0.5 z-100 border-b backdrop-blur-[18px] transition-[background-color,border-color,padding] duration-[350ms] data-[scrolled=false]:border-transparent data-[scrolled=false]:bg-transparent data-[scrolled=false]:py-4 data-[scrolled=true]:border-hairline data-[scrolled=true]:bg-[color-mix(in_oklab,var(--bg)_82%,transparent)] data-[scrolled=true]:py-2.5"
       >
         <div className="shell flex items-center gap-7">
-          <Link href="/" className="flex shrink-0 items-center gap-3 text-ink hover:text-ink">
-            <span className="grid size-[34px] place-items-center rounded-[10px] bg-gradient-accent font-display text-[19px] tracking-[-0.02em] text-on-accent">
-              AL
-            </span>
-            <span className="flex flex-col leading-none">
+          <Link
+            href="/"
+            aria-label="Andrés Lillini · inicio"
+            className="flex shrink-0 items-center gap-3 text-ink hover:text-ink"
+          >
+            {/* El isotipo ya dice AL; el texto de al lado da el nombre, así que
+                la imagen es decorativa y la etiqueta vive en el enlace. */}
+            <Image
+              src="/images/logo-small.png"
+              alt=""
+              width={331}
+              height={256}
+              priority
+              className="h-[34px] w-auto"
+            />
+            {/* Por debajo de 400px el isotipo va solo: con el texto, la marca y
+                las acciones no caben en la misma línea. */}
+            <span className="flex flex-col leading-none max-[400px]:hidden">
               <span className="font-display text-[16px] uppercase tracking-[0.06em]">Lillini</span>
               <span className="mt-[3px] font-mono text-[9px] uppercase tracking-[0.22em] text-muted">
                 Formación
