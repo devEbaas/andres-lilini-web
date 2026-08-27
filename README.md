@@ -78,6 +78,30 @@ para que todos usen la misma versión. Los comandos viven en `package.json`.
    npm run db:types
    ```
 
+   Ojo: `src/lib/supabase/types.ts` está escrito a mano y es más legible que la
+   salida de la CLI. Regenerarlo lo sustituye entero. No rompe nada —fuera del
+   archivo sólo se importa `Database`—, pero se pierden los alias intermedios.
+
+### Despliegue automático
+
+`.github/workflows/deploy-migrations.yml` aplica las migraciones al empujar a
+`main`, y sólo cuando cambia algo bajo `supabase/`. Necesita tres secretos en
+**Settings › Secrets and variables › Actions**:
+
+| Secreto | De dónde sale |
+| --- | --- |
+| `SUPABASE_ACCESS_TOKEN` | Account settings › Access Tokens |
+| `SUPABASE_DB_PASSWORD` | la contraseña de la base del proyecto |
+| `SUPABASE_PROJECT_ID` | el ref del proyecto (`cwtiokhjyclexedugjmb`) |
+
+`.github/workflows/validate-migrations.yml` corre en cada PR: levanta una base
+limpia y aplica todas las migraciones desde cero. Es el check que conviene
+exigir en **Settings › Rules › Rulesets** para que un SQL inválido no llegue a
+`main`. Aparecerá en el selector de checks después de su primera ejecución.
+
+Mientras no estén los secretos, el workflow de despliegue falla; el de
+validación funciona sin ninguno.
+
 ### Cambios de esquema
 
 La regla es no tocar la base remota a mano: en cuanto se usan migraciones, un

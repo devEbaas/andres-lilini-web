@@ -1,0 +1,31 @@
+name: Validar migraciones
+
+# Levanta una base limpia y aplica todas las migraciones desde cero. Sirve para
+# que un SQL inválido no llegue a main: es el check que se puede exigir desde
+# Settings › Rules › Rulesets, sin necesitar el plan Pro.
+on:
+  pull_request:
+    paths:
+      - "supabase/migrations/**"
+      - "supabase/config.toml"
+      - ".github/workflows/validate-migrations.yml"
+  workflow_dispatch:
+
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.116.0
+
+      # `db start` aplica en orden todo lo que haya en supabase/migrations
+      # sobre una base recién creada; si algo falla, falla aquí.
+      - name: Aplicar las migraciones sobre una base limpia
+        run: supabase db start
+
+      - name: Comprobar que el historial quedó completo
+        run: supabase migration list --local
