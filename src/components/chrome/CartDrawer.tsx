@@ -4,7 +4,7 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState, useTransition } from "react";
 
-import { createOrder } from "@/lib/actions/checkout";
+import { startCheckout } from "@/lib/actions/checkout";
 import { money } from "@/lib/format";
 import { useCart } from "@/lib/store/cart";
 import { useToast } from "@/lib/store/toast";
@@ -30,13 +30,21 @@ export function CartDrawer() {
   const checkout = () => {
     setError("");
     startTransition(async () => {
-      const res = await createOrder(lines.map((l) => ({ id: l.id, qty: l.qty })));
+      const res = await startCheckout(lines.map((l) => ({ id: l.id, qty: l.qty })));
       if (!res.ok) {
         setError(res.error);
         return;
       }
+      // Redirigimos desde el cliente en vez de con `redirect()` en la acción:
+      // así el estado de carga y el error siguen viviendo en el componente,
+      // igual que en el resto de formularios del sitio. La bolsa no se vacía
+      // aquí, sino al confirmar: si abandona el pago, la conserva.
+      if (res.data.url) {
+        window.location.href = res.data.url;
+        return;
+      }
       close();
-      flash("Redirigiendo a la pasarela de pago…");
+      flash("Pedido registrado. Te contactamos para completar el pago.");
     });
   };
 
