@@ -39,6 +39,7 @@ export const TIMELINE: Milestone[] = [
     title: "Coordinador de fuerzas básicas en Morelia",
     body: "Llega a México invitado a estructurar la cantera de Monarcas Morelia. De ahí sale, entre otros, un lateral que sería multicampeón en la Liga MX.",
     photo: "Foto 16:10 · sesión de fuerzas básicas, Morelia",
+    image: "/images/morelia.jpg",
     caption: "Primer proyecto en México",
   },
   {
@@ -46,6 +47,7 @@ export const TIMELINE: Milestone[] = [
     title: "Boca Juniors",
     body: "Regresa a Argentina para dirigir el trabajo formativo de uno de los clubes más grandes del continente, con una escala y una presión distintas.",
     photo: "Foto 16:10 · complejo de entrenamiento",
+    image: "/images/boca.webp",
     caption: "Cuatro años en la cantera xeneize",
   },
   {
