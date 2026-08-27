@@ -37,37 +37,60 @@ mismas rutas pasan a leer y escribir de verdad, sin cambios en el código.
 
 ## Supabase
 
-1. Crea un proyecto y copia las credenciales a `.env.local`:
+El esquema se despliega con la **CLI**, fijada como dependencia de desarrollo
+para que todos usen la misma versión. Los comandos viven en `package.json`.
+
+1. Crea el proyecto y copia las credenciales a `.env.local` (o `.env`; ambos
+   están en `.gitignore`):
 
    ```
    NEXT_PUBLIC_SUPABASE_URL=
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=
-   SUPABASE_SERVICE_ROLE_KEY=
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=      # panel nuevo: "Publishable key"
+   SUPABASE_SERVICE_ROLE_KEY=          # panel nuevo: "Secret key"
    ```
 
-2. Aplica las migraciones de `supabase/migrations/` en orden — desde el SQL
-   editor del dashboard o con la CLI:
+   Las dos primeras llegan al navegador; la tercera no sale del servidor
+   —`admin.ts` está marcado con `server-only`—.
+
+2. Autentica la CLI y enlaza el proyecto. Los dos son interactivos: el primero
+   abre el navegador, el segundo pide la contraseña de la base de datos.
 
    ```bash
-   supabase link --project-ref <ref>
-   supabase db push
+   npx supabase login
+   npm run db:link
+   ```
+
+3. Aplica las migraciones:
+
+   ```bash
+   npm run db:push
    ```
 
    `20260825173800_init.sql` crea las tablas, activa RLS y crea el bucket
    privado `convocatoria`. `20260825173900_seed_products.sql` carga el catálogo.
-   Los nombres llevan marca de tiempo porque es el formato que exigen la CLI y
-   la integración de GitHub: el historial de migraciones usa ese número como id.
+   Los nombres llevan marca de tiempo porque es el formato que exige la CLI: el
+   historial de `supabase_migrations.schema_migrations` usa ese número como id
+   único y las aplica en ese orden.
 
-   Si en su lugar despliegas desde GitHub, conecta el repositorio en
-   **Project Settings › Integrations**, pon `.` en *Working directory* (el
-   `supabase/` está en la raíz), elige la rama de producción y activa
-   **Deploy to production**.
-
-3. Regenera los tipos cuando cambies el esquema:
+4. Regenera los tipos cuando cambie el esquema:
 
    ```bash
-   npx supabase gen types typescript --project-id <ref> > src/lib/supabase/types.ts
+   npm run db:types
    ```
+
+### Cambios de esquema
+
+La regla es no tocar la base remota a mano: en cuanto se usan migraciones, un
+cambio hecho desde el SQL editor deja el historial desincronizado y `db push`
+empieza a fallar. Para cada cambio:
+
+```bash
+npx supabase migration new descripcion_del_cambio   # crea el archivo con marca de tiempo
+npm run db:push
+```
+
+`npm run db:diff` muestra la diferencia entre el esquema local y el remoto sin
+aplicar nada.
 
 ### Modelo de datos
 
