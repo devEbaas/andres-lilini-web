@@ -63,6 +63,7 @@ export const TIMELINE: Milestone[] = [
     title: "Banquillos en Sudamérica",
     body: "Etapas como técnico en Gimnasia y Esgrima y San Luis de Quillota: la traducción del formador al entrenador de resultados semanales.",
     photo: "Foto 16:10 · banquillo en día de partido",
+    image: "/images/sudamerica.jpeg",
     caption: "Primera línea, resultado inmediato",
   },
   {
@@ -70,6 +71,7 @@ export const TIMELINE: Milestone[] = [
     title: "Cantera de Pumas",
     body: "Toma la dirección de fuerzas básicas del club universitario y arma una estructura que alimenta al primer equipo con jugadores propios.",
     photo: "Foto 16:10 · cantera universitaria",
+    image: "/images/pumas.jpg",
     caption: "Cantera como política deportiva",
   },
   {
