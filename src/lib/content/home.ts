@@ -79,6 +79,7 @@ export const TIMELINE: Milestone[] = [
     title: "Director técnico del primer equipo",
     body: "Asume de forma interina y se queda dos años y medio: 102 partidos, una final de liga y quince canteranos debutando en primera división.",
     photo: "Foto 16:10 · noche de final",
+    image: "/images/director-pumas.jpg",
     caption: "Interinato que duró dos años y medio",
   },
   {
@@ -86,6 +87,7 @@ export const TIMELINE: Milestone[] = [
     title: "Selecciones nacionales menores",
     body: "Encabeza el proyecto de detección y desarrollo juvenil de la federación mexicana, incluida la búsqueda de jugadores con doble nacionalidad formados en el extranjero.",
     photo: "Foto 16:10 · concentración de selección menor",
+    image: "/images/mexico.png",
     caption: "Actualidad · escala nacional",
   },
 ];
