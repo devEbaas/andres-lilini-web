@@ -55,6 +55,7 @@ export const TIMELINE: Milestone[] = [
     title: "CSKA Moscú",
     body: "Salto a Europa del Este para reorganizar el área juvenil: aprende a rastrear jugadores en contextos culturales y climáticos completamente ajenos.",
     photo: "Foto 16:10 · sesión invernal, Moscú",
+    image: "/images/cska.jpeg",
     caption: "Detección fuera de la zona de confort",
   },
   {
