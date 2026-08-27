@@ -53,8 +53,15 @@ mismas rutas pasan a leer y escribir de verdad, sin cambios en el código.
    supabase db push
    ```
 
-   `0001_init.sql` crea las tablas, activa RLS y crea el bucket privado
-   `convocatoria`. `0002_seed_products.sql` carga el catálogo.
+   `20260825173800_init.sql` crea las tablas, activa RLS y crea el bucket
+   privado `convocatoria`. `20260825173900_seed_products.sql` carga el catálogo.
+   Los nombres llevan marca de tiempo porque es el formato que exigen la CLI y
+   la integración de GitHub: el historial de migraciones usa ese número como id.
+
+   Si en su lugar despliegas desde GitHub, conecta el repositorio en
+   **Project Settings › Integrations**, pon `.` en *Working directory* (el
+   `supabase/` está en la raíz), elige la rama de producción y activa
+   **Deploy to production**.
 
 3. Regenera los tipos cuando cambies el esquema:
 
