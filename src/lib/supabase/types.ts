@@ -42,11 +42,39 @@ export type ContactInsert = {
   message: string;
 };
 
+/** Estados por los que pasa un pedido. Los fija un CHECK en la base. */
+export type OrderStatus = "pendiente" | "iniciado" | "pagado" | "expirado";
+
+/**
+ * Las columnas de Stripe van opcionales: la fila nace sin sesión y el webhook
+ * las rellena después. Al ser parte del Insert, también las cubre el Update.
+ */
 export type OrderInsert = {
   subtotal: number;
   shipping: number;
   total: number;
   items: Json;
+  status?: OrderStatus;
+  stripe_session_id?: string | null;
+  stripe_payment_intent?: string | null;
+  email?: string | null;
+  shipping_address?: Json | null;
+  paid_at?: string | null;
+};
+
+export type OrderRow = {
+  id: string;
+  created_at: string;
+  subtotal: number;
+  shipping: number;
+  total: number;
+  items: Json;
+  status: OrderStatus;
+  stripe_session_id: string | null;
+  stripe_payment_intent: string | null;
+  email: string | null;
+  shipping_address: Json | null;
+  paid_at: string | null;
 };
 
 type Table<Row, Insert = Row> = {
@@ -76,10 +104,7 @@ export type Database = {
         { id: string; email: string; created_at: string },
         { email: string }
       >;
-      orders: Table<
-        OrderInsert & { id: string; created_at: string; status: string },
-        OrderInsert
-      >;
+      orders: Table<OrderRow, OrderInsert>;
     };
     Views: Record<never, never>;
     Functions: Record<never, never>;
