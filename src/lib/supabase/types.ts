@@ -77,10 +77,71 @@ export type OrderRow = {
   paid_at: string | null;
 };
 
-type Table<Row, Insert = Row> = {
+/** Estados de una postulación. Los fija un CHECK en la base. */
+export type ApplicationStatus =
+  | "recibida"
+  | "en_revision"
+  | "preseleccionada"
+  | "aceptada"
+  | "descartada";
+
+/** Roles de la aplicación. Los fija un enum en la base. */
+export type AppRole = "cliente" | "admin";
+
+export type ProfileRow = {
+  id: string;
+  nombre: string;
+  apellido: string;
+  telefono: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+/**
+ * Lo único que el propio usuario puede escribir de su perfil. El resto de
+ * columnas ni siquiera tienen GRANT para `authenticated`.
+ */
+export type ProfileUpdate = {
+  nombre?: string;
+  apellido?: string;
+  telefono?: string | null;
+};
+
+/**
+ * Tabla de autorización. La app no la lee nunca: el rol llega dentro del JWT,
+ * puesto por `custom_access_token_hook`. Sólo la service role la escribe.
+ */
+export type UserRoleRow = {
+  user_id: string;
+  role: AppRole;
+  is_active: boolean;
+  created_at: string;
+};
+
+export type AdminAuditInsert = {
+  actor_id: string | null;
+  actor_email: string | null;
+  action: string;
+  target_table?: string | null;
+  target_id?: string | null;
+  meta?: Json;
+};
+
+export type AdminAuditRow = {
+  id: number;
+  actor_id: string | null;
+  actor_email: string | null;
+  action: string;
+  target_table: string | null;
+  target_id: string | null;
+  meta: Json;
+  created_at: string;
+};
+
+type Table<Row, Insert = Row, Update = Partial<Insert>> = {
   Row: Row;
   Insert: Insert;
-  Update: Partial<Insert>;
+  Update: Update;
   Relationships: [];
 };
 
@@ -89,8 +150,10 @@ export type Database = {
     Tables: {
       products: Table<ProductRow & { created_at: string }, ProductRow>;
       applications: Table<
-        ApplicationInsert & { id: string; created_at: string; status: string },
-        ApplicationInsert
+        ApplicationInsert & { id: string; created_at: string; status: ApplicationStatus },
+        ApplicationInsert,
+        // El panel sólo cambia el estado; el resto de la fila es del postulante.
+        { status?: ApplicationStatus }
       >;
       convocatoria_entries: Table<
         ConvocatoriaInsert & { id: string; created_at: string },
@@ -98,17 +161,21 @@ export type Database = {
       >;
       contact_messages: Table<
         ContactInsert & { id: string; created_at: string; handled: boolean },
-        ContactInsert
+        ContactInsert,
+        { handled?: boolean }
       >;
       newsletter_subscribers: Table<
         { id: string; email: string; created_at: string },
         { email: string }
       >;
       orders: Table<OrderRow, OrderInsert>;
+      profiles: Table<ProfileRow, ProfileUpdate & { id: string }>;
+      user_roles: Table<UserRoleRow, Omit<UserRoleRow, "created_at">>;
+      admin_audit: Table<AdminAuditRow, AdminAuditInsert>;
     };
     Views: Record<never, never>;
     Functions: Record<never, never>;
-    Enums: Record<never, never>;
+    Enums: { app_role: AppRole };
     CompositeTypes: Record<never, never>;
   };
 };
