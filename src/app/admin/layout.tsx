@@ -16,6 +16,7 @@ const SECCIONES = [
   { href: "/admin/convocatoria", label: "Convocatoria" },
   { href: "/admin/mensajes", label: "Mensajes" },
   { href: "/admin/boletin", label: "Boletín" },
+  { href: "/admin/arco", label: "Derechos" },
   { href: "/admin/seguridad", label: "Seguridad" },
 ];
 

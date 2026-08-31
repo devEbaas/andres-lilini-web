@@ -658,6 +658,8 @@ Cuatro decisiones que conviene conocer:
 
 El QR y el secreto TOTP no pasan por nuestro servidor: van de Supabase al navegador y de ahí a la app de autenticación. Lo que no se registra no se filtra por un log.
 
+> Los dos huecos que quedan abiertos —correo transaccional y derechos ARCO— tienen su propio plan en [PRIVACIDAD-Y-CORREO.md](./PRIVACIDAD-Y-CORREO.md).
+
 **Fase 2 — completada en la tercera iteración**
 
 | Archivo | Qué añade |

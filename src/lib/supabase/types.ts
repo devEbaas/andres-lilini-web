@@ -87,6 +87,28 @@ export type ApplicationStatus =
   | "aceptada"
   | "descartada";
 
+/** Derechos ARCO. Los fija un CHECK en la base. */
+export type ArcoTipo = "acceso" | "rectificacion" | "cancelacion" | "oposicion";
+
+/** Estados de una solicitud ARCO. */
+export type ArcoStatus = "recibida" | "en_proceso" | "atendida" | "rechazada";
+
+export type ArcoInsert = {
+  tipo: ArcoTipo;
+  nombre: string;
+  email: string;
+  detalle: string;
+};
+
+export type ArcoRow = ArcoInsert & {
+  id: string;
+  status: ArcoStatus;
+  nota: string | null;
+  created_at: string;
+  resolved_at: string | null;
+  resolved_by: string | null;
+};
+
 /** Roles de la aplicación. Los fija un enum en la base. */
 export type AppRole = "cliente" | "admin";
 
@@ -174,10 +196,23 @@ export type Database = {
       profiles: Table<ProfileRow, ProfileUpdate & { id: string }>;
       user_roles: Table<UserRoleRow, Omit<UserRoleRow, "created_at">>;
       admin_audit: Table<AdminAuditRow, AdminAuditInsert>;
+      arco_requests: Table<
+        ArcoRow,
+        ArcoInsert,
+        { status?: ArcoStatus; nota?: string | null; resolved_at?: string | null; resolved_by?: string | null }
+      >;
+      account_deletions: Table<
+        { id: number; user_id: string; created_at: string },
+        { user_id: string }
+      >;
     };
     Views: Record<never, never>;
     Functions: {
       vincular_pedidos_huerfanos: {
+        Args: Record<string, never>;
+        Returns: number;
+      };
+      cancelar_mi_cuenta: {
         Args: Record<string, never>;
         Returns: number;
       };
