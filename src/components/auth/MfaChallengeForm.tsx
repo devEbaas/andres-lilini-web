@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 import { verificarMfa } from "@/lib/actions/mfa";
@@ -8,7 +7,6 @@ import { Spinner } from "@/components/ui/Spinner";
 
 /** Reto suelto: para la sesión que se quedó a medias y vuelve más tarde. */
 export function MfaChallengeForm({ next }: { next?: string }) {
-  const router = useRouter();
   const [codigo, setCodigo] = useState("");
   const [error, setError] = useState("");
   const [pending, startTransition] = useTransition();
@@ -17,14 +15,11 @@ export function MfaChallengeForm({ next }: { next?: string }) {
     e.preventDefault();
     setError("");
     startTransition(async () => {
+      // Sólo vuelve si el código no valía: al verificar, la acción redirige
+      // desde el servidor, con la cookie ya elevada a aal2.
       const res = await verificarMfa({ code: codigo, next });
-      if (!res.ok) {
-        setCodigo("");
-        setError(res.error);
-        return;
-      }
-      router.refresh();
-      router.replace(res.data.redirectTo);
+      setCodigo("");
+      setError(res.error);
     });
   };
 

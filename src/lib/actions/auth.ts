@@ -1,5 +1,7 @@
 "use server";
 
+import { redirect } from "next/navigation";
+
 import { createServerSupabase } from "@/lib/supabase/server";
 import { safeNext } from "@/lib/auth/redirect";
 import { isEmail, type ActionResult } from "./types";
@@ -19,7 +21,7 @@ export async function signIn(input: {
   email: string;
   password: string;
   next?: string;
-}): Promise<ActionResult<{ redirectTo: string } | { mfa: true }>> {
+}): Promise<ActionResult<{ mfa: true }>> {
   if (!isEmail(input.email) || !input.password) {
     return { ok: false, error: CREDENCIALES };
   }
@@ -51,7 +53,12 @@ export async function signIn(input: {
   const esAdmin = verificado?.claims?.user_role === "admin";
   const porDefecto = esAdmin ? "/admin" : "/cuenta";
 
-  return { ok: true, data: { redirectTo: safeNext(input.next, porDefecto) } };
+  // Redirige el servidor, no el navegador. Escribir la cookie de sesión y
+  // navegar en la misma respuesta las hace atómicas: si el cliente hiciera
+  // `refresh()` y `replace()` por su cuenta, la primera petición podría
+  // renderizarse todavía con el token anterior. `redirect()` lanza, así que
+  // esta función sólo vuelve cuando algo falló.
+  redirect(safeNext(input.next, porDefecto));
 }
 
 export async function signOut(): Promise<ActionResult> {
