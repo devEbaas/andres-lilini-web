@@ -1,13 +1,27 @@
 "use client";
 
-import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 
 import { createBrowserSupabase } from "@/lib/supabase/browser";
 import { Spinner } from "@/components/ui/Spinner";
 import { btnQuiet } from "@/components/ui/styles";
 
-type Pendiente = { factorId: string; qr: string; secreto: string };
+type Pendiente = { factorId: string; qr: string; secreto: string; uri: string };
+
+/**
+ * El SVG del QR a un `data:` URI que el navegador acepte.
+ *
+ * En base64 y no con `encodeURIComponent`: el SVG trae almohadillas en los
+ * colores (`fill="#fff"`), y una `#` sin escapar corta la URI ahí mismo —el
+ * navegador la lee como fragmento— y el resultado es el icono de imagen rota.
+ * En base64 no hay carácter que pueda cortarla.
+ */
+function svgADataUri(svg: string): string {
+  const bytes = new TextEncoder().encode(svg);
+  let binario = "";
+  for (const b of bytes) binario += String.fromCharCode(b);
+  return `data:image/svg+xml;base64,${btoa(binario)}`;
+}
 
 /**
  * Alta del segundo factor, entera en el navegador.
@@ -58,7 +72,12 @@ export function MfaEnroll({ activo }: { activo: boolean }) {
       setError("No pudimos generar el código. Inténtalo de nuevo.");
       return;
     }
-    setPendiente({ factorId: data.id, qr: data.totp.qr_code, secreto: data.totp.secret });
+    setPendiente({
+      factorId: data.id,
+      qr: data.totp.qr_code,
+      secreto: data.totp.secret,
+      uri: data.totp.uri,
+    });
   };
 
   const confirmar = async (e: React.FormEvent) => {
@@ -143,14 +162,25 @@ export function MfaEnroll({ activo }: { activo: boolean }) {
         </p>
 
         <div className="mx-auto rounded-[18px] bg-white p-3.5">
-          <Image
-            src={`data:image/svg+xml;utf-8,${encodeURIComponent(pendiente.qr)}`}
+          {/* `img` y no `next/image`: la fuente es un data: URI que se arma en
+              el cliente, así que no hay nada que optimizar ni ninguna ruta que
+              Next pueda resolver. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={svgADataUri(pendiente.qr)}
             alt="Código QR para configurar el segundo factor"
             width={200}
             height={200}
-            unoptimized
+            className="block size-[200px]"
           />
         </div>
+
+        <a
+          href={pendiente.uri}
+          className="text-center font-mono text-[11px] text-accent underline underline-offset-4 nav:hidden"
+        >
+          Abrir directamente en la app de autenticación
+        </a>
 
         <label className="flex flex-col gap-[9px]">
           <span className="label-caps">Si no puedes escanear</span>
