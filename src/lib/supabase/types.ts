@@ -99,10 +99,14 @@ export type ApplicationInsert = {
   escolaridad?: string | null;
   estudia?: boolean | null;
   turno?: string | null;
-  // Invitación al expediente. Se guarda el hash del token, nunca el token.
+  // Enlaces privados. De los dos se guarda el hash del token, nunca el
+  // token: el enlace es la credencial.
   expediente_token_hash?: string | null;
   expediente_expira?: string | null;
   expediente_enviado_at?: string | null;
+  tutor_token_hash?: string | null;
+  tutor_token_expira?: string | null;
+  tutor_verificado_at?: string | null;
   // Sale del `payload` a columna propia: decide si hacen falta los datos
   // del tutor, y eso no puede vivir dentro de un jsonb.
   nacimiento?: string | null;
@@ -280,6 +284,9 @@ export type Database = {
           expediente_token_hash?: string | null;
           expediente_expira?: string | null;
           expediente_enviado_at?: string | null;
+          tutor_token_hash?: string | null;
+          tutor_token_expira?: string | null;
+          tutor_verificado_at?: string | null;
         }
       >;
       convocatoria_entries: Table<

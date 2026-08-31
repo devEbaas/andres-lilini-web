@@ -2,7 +2,11 @@
 
 import { createAdminClient } from "@/lib/supabase/admin";
 import { APPLY_STEPS } from "@/lib/content/programa";
-import { MAX_CLUBES, PARENTESCOS } from "@/lib/content/jugador";
+import { MAX_CLUBES, PARENTESCOS, TUTOR_DIAS } from "@/lib/content/jugador";
+import { enviarCorreo } from "@/lib/email/client";
+import { plantillaTutor } from "@/lib/email/plantillas";
+import { enDias, hashToken, nuevoToken } from "@/lib/tokens";
+import { siteUrl } from "@/lib/urls";
 import { esMenorHoy } from "@/lib/edad";
 import { GENERIC_ERROR, isEmail, randomFolio, type ActionResult } from "./types";
 
@@ -50,6 +54,10 @@ export async function submitApplication(
     const parentesco = t("parentesco");
     if (parentesco && !PARENTESCOS.includes(parentesco)) {
       fieldErrors.parentesco = "Elige el parentesco.";
+    }
+    const tutorEmail = t("tutorEmail");
+    if (tutorEmail && !isEmail(tutorEmail)) {
+      fieldErrors.tutorEmail = "Revisa el formato del correo.";
     }
   }
 
@@ -131,6 +139,36 @@ export async function submitApplication(
   if (filas.length) {
     const { error: errorClubes } = await supabase.from("application_clubs").insert(filas);
     if (errorClubes) console.error("[submitApplication] clubes", errorClubes.message);
+  }
+
+  // ── Verificación del tutor ────────────────────────────────
+  // Hasta aquí el consentimiento era declarativo: una casilla que podía
+  // marcar el propio menor. El enlace al correo del tutor es lo que lo
+  // convierte en demostrable, que es lo que la ley pide.
+  //
+  // Si el correo no sale, la postulación NO se pierde: queda registrada y
+  // sin verificar, y el panel la muestra como pendiente. Un fallo de envío
+  // no es motivo para descartar a nadie.
+  if (esMenor) {
+    const token = nuevoToken();
+    const expira = enDias(TUTOR_DIAS);
+
+    const { error: errorToken } = await supabase
+      .from("applications")
+      .update({ tutor_token_hash: hashToken(token), tutor_token_expira: expira.toISOString() })
+      .eq("id", fila.id);
+
+    if (errorToken) {
+      console.error("[submitApplication] token de tutor", errorToken.message);
+    } else {
+      const plantilla = plantillaTutor({
+        jugador: t("nombre"),
+        folio: `AL-2026-${folio}`,
+        url: `${siteUrl()}/tutor/${token}`,
+        dias: TUTOR_DIAS,
+      });
+      await enviarCorreo({ para: t("tutorEmail"), ...plantilla });
+    }
   }
 
   return { ok: true, data: { folio } };

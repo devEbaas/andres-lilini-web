@@ -8,6 +8,8 @@ import { logAdminAction } from "@/lib/auth/audit";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/lib/supabase/env";
+import { enviarCorreo } from "@/lib/email/client";
+import { plantillaArco } from "@/lib/email/plantillas";
 import type { ArcoStatus, ArcoTipo } from "@/lib/supabase/types";
 import { GENERIC_ERROR, isEmail, type ActionResult } from "./types";
 
@@ -136,6 +138,14 @@ export async function crearSolicitudArco(input: {
     console.error("[crearSolicitudArco]", error.message);
     return { ok: false, error: GENERIC_ERROR };
   }
+
+  // Acuse al solicitante. Hasta ahora la cola era muda: la solicitud
+  // entraba y quien la mandó no sabía si había llegado. Si el envío falla,
+  // la solicitud ya está registrada y el admin la ve igual.
+  await enviarCorreo({
+    para: input.email.trim().toLowerCase(),
+    ...plantillaArco({ nombre: input.nombre.trim(), tipo: input.tipo }),
+  });
 
   return {
     ok: true,

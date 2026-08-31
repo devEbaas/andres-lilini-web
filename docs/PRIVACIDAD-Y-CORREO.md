@@ -7,7 +7,7 @@ Cierra los dos huecos que quedaron abiertos en [AUTENTICACION.md](./AUTENTICACIO
 
 Van juntos en un documento porque comparten una dependencia: los dos necesitan que `andreslillini.com` mande y reciba correo.
 
-> **Estado**: §2 (ARCO) implementado. §1 (correo) pendiente — depende de DNS y de un buzón, que llegan en un paso futuro. Ver §5.
+> **Estado**: §2 (ARCO) implementado. §1 (correo) — **el código está listo**; falta el DNS y el buzón, que son tuyos. Ver §5.
 
 ---
 
@@ -242,3 +242,36 @@ Verificado con `tsc`, `eslint` y `next build`.
 - [ ] Abrir `enable_signup` en producción, y sólo después del correo
 
 Mientras el correo no salga, la vía B funciona pero es muda: la solicitud entra en la cola y el admin la ve, pero nadie recibe un acuse. Para un sitio demo es suficiente; antes de abrirlo a gente real, no.
+
+
+---
+
+## 6. Correo transaccional — implementado (1 sep 2026)
+
+El código que manda correo ya está. Lo que falta es externo: verificar el dominio y poner tres variables.
+
+### Qué se construyó
+
+| Archivo | Qué hace |
+|---|---|
+| `src/lib/email/client.ts` | `enviarCorreo()` sobre la API de Resend |
+| `src/lib/email/plantillas.ts` | Tres plantillas en español, con alternativa en texto plano |
+| `src/lib/actions/apply.ts` | Manda el enlace de verificación al tutor |
+| `src/lib/actions/expediente.ts` | Manda la invitación al expediente |
+| `src/lib/actions/privacidad.ts` | Acuse de las solicitudes ARCO |
+
+### Cuatro decisiones
+
+- **Sin dependencia nueva.** La API de Resend es un `POST`; se usa `fetch`. Una dependencia más para un solo endpoint no se paga sola.
+- **`enviarCorreo()` nunca lanza.** Un correo es la consecuencia de una acción, no la acción: si el envío falla, la postulación ya está guardada y sería absurdo mostrarle un error a alguien que no puede arreglarlo. Devuelve `false` y lo deja en el log.
+- **Sin API key es un no-op silencioso**, igual que `createAdminClient()` sin Supabase. El sitio y la demo funcionan sin correo configurado; simplemente esos avisos no salen.
+- **El destinatario no se registra en los logs.** Es un dato personal, y los logs de Vercel los ve cualquiera con acceso al proyecto. Se registra el código de estado y el motivo que devuelve Resend, nada más.
+
+### Lo que falta, y es tuyo
+
+1. Alta y verificación de `andreslillini.com` en Resend (§1.2). Hoy la cuenta sólo tiene `rentocuarto.com` y `allpuppies.com`.
+2. `RESEND_API_KEY`, `EMAIL_FROM` y opcionalmente `EMAIL_INTERNO` en Vercel.
+3. Proveedor de buzón y registros MX (§1.3), que es lo que hace falta para *recibir*.
+4. SMTP de Supabase y plantillas de Auth (§1.2, pasos 6–8). Los correos de confirmación de cuenta y recuperación **no** pasan por este código: los manda Supabase.
+
+Hasta el paso 2, todo lo construido sigue el camino del no-op: el enlace del expediente se copia a mano y la solicitud ARCO no genera acuse, exactamente como antes.

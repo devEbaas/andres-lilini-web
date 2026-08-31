@@ -13,7 +13,10 @@ import {
   SEGUROS,
   TESTS_AGILIDAD,
 } from "@/lib/content/jugador";
-import { hashToken, leerInvitacion, nuevoToken } from "@/lib/expediente";
+import { leerInvitacion } from "@/lib/expediente";
+import { enviarCorreo } from "@/lib/email/client";
+import { plantillaExpediente } from "@/lib/email/plantillas";
+import { enDias, hashToken, nuevoToken } from "@/lib/tokens";
 import { siteUrl } from "@/lib/urls";
 import { GENERIC_ERROR, type ActionResult } from "./types";
 
@@ -30,7 +33,7 @@ const ENLACE_MALO = "Este enlace no es válido o ya caducó.";
  */
 export async function generarEnlaceExpediente(
   applicationId: string,
-): Promise<ActionResult<{ url: string; expira: string }>> {
+): Promise<ActionResult<{ url: string; expira: string; enviado: boolean }>> {
   const admin = await adminOrNull();
   if (!admin) return { ok: false, error: NO_AUTORIZADO };
 
@@ -38,7 +41,7 @@ export async function generarEnlaceExpediente(
   if (!supabase) return { ok: false, error: GENERIC_ERROR };
 
   const token = nuevoToken();
-  const expira = new Date(Date.now() + EXPEDIENTE_DIAS * 24 * 60 * 60 * 1000);
+  const expira = enDias(EXPEDIENTE_DIAS);
 
   const { data, error } = await supabase
     .from("applications")
@@ -50,7 +53,7 @@ export async function generarEnlaceExpediente(
       expediente_enviado_at: null,
     })
     .eq("id", applicationId)
-    .select("id")
+    .select("id, nombre, email, folio")
     .maybeSingle();
 
   if (error) {
@@ -68,11 +71,23 @@ export async function generarEnlaceExpediente(
     meta: { expira: expira.toISOString() },
   });
 
+  const url = `${siteUrl()}/expediente/${token}`;
+
+  // Se intenta mandar y se dice si salió. El enlace se devuelve igualmente:
+  // sin correo configurado —o si el envío falla— el admin lo copia y lo
+  // manda por donde pueda, que es como funcionaba hasta ahora.
+  const enviado = await enviarCorreo({
+    para: data.email,
+    ...plantillaExpediente({
+      jugador: data.nombre.split(" ")[0],
+      folio: data.folio,
+      url,
+      dias: EXPEDIENTE_DIAS,
+    }),
+  });
+
   revalidatePath("/admin/postulaciones");
-  return {
-    ok: true,
-    data: { url: `${siteUrl()}/expediente/${token}`, expira: expira.toISOString() },
-  };
+  return { ok: true, data: { url, expira: expira.toISOString(), enviado } };
 }
 
 export type ExpedientePayload = {

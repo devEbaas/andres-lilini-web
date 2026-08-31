@@ -9,7 +9,7 @@ export default async function PostulacionesPage() {
 
   const { data, error } = await supabase
     .from("applications")
-    .select("id, folio, created_at, nombre, email, status, video_url, es_menor, tutor_nombre, tutor_tel, posicion, pie, nivel, club, escolaridad, expediente_enviado_at")
+    .select("id, folio, created_at, nombre, email, status, video_url, es_menor, tutor_nombre, tutor_tel, posicion, pie, nivel, club, escolaridad, expediente_enviado_at, tutor_email, tutor_verificado_at")
     .order("created_at", { ascending: false })
     .limit(200);
 
@@ -56,6 +56,15 @@ export default async function PostulacionesPage() {
               <>
                 <span className="block text-ink">{a.tutor_nombre}</span>
                 <span className="block">{a.tutor_tel}</span>
+                {/* Sin verificar, el consentimiento sigue siendo declarativo:
+                    la casilla la pudo marcar el propio menor. */}
+                <span
+                  className={`mt-1 block text-[10px] font-extrabold uppercase tracking-[0.14em] ${
+                    a.tutor_verificado_at ? "text-accent" : "text-danger-text"
+                  }`}
+                >
+                  {a.tutor_verificado_at ? "Verificado" : "Sin verificar"}
+                </span>
               </>
             ) : (
               "—"
