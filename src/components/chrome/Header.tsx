@@ -9,6 +9,7 @@ import { useState } from "react";
 import { NAV } from "@/lib/content/site";
 import { useCart } from "@/lib/store/cart";
 import { useToast } from "@/lib/store/toast";
+import { CartIcon } from "@/components/ui/CartIcon";
 import { PanelLink } from "@/components/auth/PanelLink";
 import { MobileMenu } from "./MobileMenu";
 
@@ -98,7 +99,7 @@ export function Header() {
               aria-label={count ? `Carrito, ${count} artículos` : "Carrito"}
               className="relative grid size-11 min-w-11 cursor-pointer place-items-center rounded-full border border-hairline bg-panel transition-colors duration-[250ms] hover:border-accent"
             >
-              <span className="text-[11px] font-extrabold tracking-[0.1em]">BAG</span>
+              <CartIcon />
               {count > 0 && (
                 <motion.span
                   key={count}
