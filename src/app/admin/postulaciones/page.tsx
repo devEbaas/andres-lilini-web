@@ -8,7 +8,7 @@ export default async function PostulacionesPage() {
 
   const { data, error } = await supabase
     .from("applications")
-    .select("id, folio, created_at, nombre, email, status, video_url, es_menor, tutor_nombre, tutor_tel")
+    .select("id, folio, created_at, nombre, email, status, video_url, es_menor, tutor_nombre, tutor_tel, posicion, pie, nivel, club, escolaridad")
     .order("created_at", { ascending: false })
     .limit(200);
 
@@ -19,20 +19,37 @@ export default async function PostulacionesPage() {
   if (!data?.length) return <Vacio texto="Todavía no hay postulaciones." />;
 
   return (
-    <Tabla cols={["Folio", "Fecha", "Nombre", "Correo", "Tutor", "Estado", "Vídeo"]}>
+    <Tabla cols={["Folio", "Fecha", "Jugador", "Perfil", "Tutor", "Estado", "Vídeo"]}>
       {data.map((a) => (
         <tr key={a.id}>
           <Celda mono>{a.folio}</Celda>
           <Celda mono>{fecha(a.created_at)}</Celda>
           <Celda>
             <span className="block">{a.nombre}</span>
+            <span className="block font-mono text-xs text-muted">{a.email}</span>
             {a.es_menor && (
               <span className="block text-[10px] font-extrabold uppercase tracking-[0.16em] text-accent">
                 Menor de edad
               </span>
             )}
           </Celda>
-          <Celda mono>{a.email}</Celda>
+          <Celda>
+            {a.posicion ? (
+              <>
+                <span className="block text-[11px] font-extrabold uppercase tracking-[0.14em] text-accent">
+                  {a.posicion}
+                </span>
+                <span className="block font-mono text-xs text-muted">
+                  {[a.pie, a.club].filter(Boolean).join(" · ") || "—"}
+                </span>
+                <span className="block font-mono text-xs text-muted">
+                  {[a.nivel, a.escolaridad].filter(Boolean).join(" · ") || "—"}
+                </span>
+              </>
+            ) : (
+              <span className="font-mono text-xs text-muted">—</span>
+            )}
+          </Celda>
           <Celda mono>
             {a.tutor_nombre ? (
               <>

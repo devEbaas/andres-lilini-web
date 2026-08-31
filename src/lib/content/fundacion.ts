@@ -1,5 +1,17 @@
 import { edadEn } from "@/lib/edad";
 
+// El vocabulario del perfil de jugador vive en `jugador.ts`: lo comparten
+// la convocatoria y el programa. Se reexporta para no romper los sitios
+// que ya lo importaban desde aquí.
+export {
+  CATEGORIAS,
+  ESTADOS_MX,
+  PAISES,
+  PARENTESCOS,
+  PIES,
+  POSICIONES,
+} from "./jugador";
+
 export const CAMPAIGNS = [
   { status: "En curso", title: "Canchas de barrio", photo: "Foto 4:3 · cancha comunitaria rehabilitada", body: "Rehabilitación de superficies y porterías en clubes comunitarios de tres estados, con dotación de material y capacitación al entrenador local." },
   { status: "En curso", title: "Visorías sin costo", photo: "Foto 4:3 · fila de jugadores en visoría", body: "Jornadas gratuitas de detección en municipios sin representación en ligas formativas. Transporte y comida cubiertos para el jugador y un acompañante." },
@@ -44,26 +56,7 @@ export function edadAlCierre(nacimiento: string): number | null {
   return edadEn(nacimiento, CONVOCATORIA_CIERRE);
 }
 
-export const PAISES = ["México", "Otro"];
 
-export const ESTADOS_MX = [
-  "Aguascalientes", "Baja California", "Baja California Sur", "Campeche",
-  "Chiapas", "Chihuahua", "Ciudad de México", "Coahuila", "Colima", "Durango",
-  "Estado de México", "Guanajuato", "Guerrero", "Hidalgo", "Jalisco",
-  "Michoacán", "Morelos", "Nayarit", "Nuevo León", "Oaxaca", "Puebla",
-  "Querétaro", "Quintana Roo", "San Luis Potosí", "Sinaloa", "Sonora",
-  "Tabasco", "Tamaulipas", "Tlaxcala", "Veracruz", "Yucatán", "Zacatecas",
-];
-
-export const CATEGORIAS = ["Sub-13", "Sub-15", "Sub-17", "Sub-20", "Libre"];
-
-export const POSICIONES = [
-  "Portero", "Lateral", "Central", "Mediocentro", "Interior", "Extremo", "Delantero",
-];
-
-export const PIES = ["Derecho", "Izquierdo", "Ambos"];
-
-export const PARENTESCOS = ["Padre", "Madre", "Tutor legal"];
 
 export const UPLOAD_MAX_BYTES = 25 * 1024 * 1024;
 export const UPLOAD_ACCEPT = ["application/pdf", "image/jpeg", "image/png", "video/mp4"];

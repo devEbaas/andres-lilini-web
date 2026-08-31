@@ -25,12 +25,49 @@ export type TutorInsert = {
   tutor_email?: string | null;
 };
 
+/** Un club del historial. Tabla hija, no un array dentro del payload. */
+export type ApplicationClubInsert = {
+  application_id: string;
+  club: string;
+  categoria?: string | null;
+  desde?: number | null;
+  hasta?: number | null;
+  orden?: number;
+};
+
+export type ApplicationClubRow = ApplicationClubInsert & {
+  id: string;
+  created_at: string;
+};
+
+/**
+ * Regla para leer esta tabla: `payload` es **lo que se envió**, tal cual;
+ * las columnas son **cómo se consulta**. La misma información aparece en
+ * los dos sitios a propósito — una para conservar el envío íntegro, otra
+ * para poder filtrar y ordenar sin recorrer un blob.
+ */
 export type ApplicationInsert = {
   folio: string;
   nombre: string;
   email: string;
   video_url: string | null;
   payload: Json;
+  // Proyección consultable del perfil.
+  pais?: string | null;
+  estado?: string | null;
+  ciudad?: string | null;
+  posicion?: string | null;
+  posicion_sec?: string | null;
+  pie?: string | null;
+  estatura?: number | null;
+  peso?: number | null;
+  club?: string | null;
+  liga?: string | null;
+  anios_practica?: number | null;
+  nivel?: string | null;
+  escolaridad?: string | null;
+  estudia?: boolean | null;
+  turno?: string | null;
   // Sale del `payload` a columna propia: decide si hacen falta los datos
   // del tutor, y eso no puede vivir dentro de un jsonb.
   nacimiento?: string | null;
@@ -221,6 +258,7 @@ export type Database = {
       profiles: Table<ProfileRow, ProfileUpdate & { id: string }>;
       user_roles: Table<UserRoleRow, Omit<UserRoleRow, "created_at">>;
       admin_audit: Table<AdminAuditRow, AdminAuditInsert>;
+      application_clubs: Table<ApplicationClubRow, ApplicationClubInsert>;
       arco_requests: Table<
         ArcoRow,
         ArcoInsert,
