@@ -1,3 +1,5 @@
+import { edadEn } from "@/lib/edad";
+
 export const CAMPAIGNS = [
   { status: "En curso", title: "Canchas de barrio", photo: "Foto 4:3 · cancha comunitaria rehabilitada", body: "Rehabilitación de superficies y porterías en clubes comunitarios de tres estados, con dotación de material y capacitación al entrenador local." },
   { status: "En curso", title: "Visorías sin costo", photo: "Foto 4:3 · fila de jugadores en visoría", body: "Jornadas gratuitas de detección en municipios sin representación en ligas formativas. Transporte y comida cubiertos para el jugador y un acompañante." },
@@ -12,9 +14,56 @@ export const CONVOCATORIA_BRIEF = [
 ];
 
 export const CONVOCATORIA_CHECKS = [
-  { k: "bases", label: "Acepto las bases de la convocatoria y el fallo del jurado." },
-  { k: "priv", label: "Acepto el aviso de privacidad y el tratamiento de mis datos." },
+  { k: "bases", label: "Acepto las bases de la convocatoria y el fallo del jurado.", requerido: true },
+  { k: "priv", label: "Acepto el aviso de privacidad y el tratamiento de mis datos.", requerido: true },
+  // Separado a propósito: evaluar el video y difundirlo son finalidades
+  // distintas. Se debe poder aceptar lo primero y rechazar lo segundo.
+  {
+    k: "imagen",
+    label: "Autorizo el uso de mi imagen y mi video en materiales del programa. Opcional: no afecta a la evaluación.",
+    requerido: false,
+  },
 ];
+
+// ── Elegibilidad ──────────────────────────────────────────────
+// Las bases (/contenido/bases) fijan estos límites. Si cambian allí,
+// hay que cambiarlos aquí: son la misma regla escrita dos veces.
+export const CONVOCATORIA_CIERRE = "2026-11-30";
+export const EDAD_MIN = 12;
+export const EDAD_MAX = 21;
+
+/**
+ * Edad que tendrá el jugador el día del cierre, no hoy.
+ *
+ * Importa: quien cumple 22 en octubre queda fuera aunque hoy tenga 21, y
+ * quien cumple 12 en noviembre entra aunque hoy tenga 11. Calcularlo contra
+ * la fecha actual haría que el mismo jugador fuese elegible o no según el
+ * día en que abriera el formulario.
+ */
+export function edadAlCierre(nacimiento: string): number | null {
+  return edadEn(nacimiento, CONVOCATORIA_CIERRE);
+}
+
+export const PAISES = ["México", "Otro"];
+
+export const ESTADOS_MX = [
+  "Aguascalientes", "Baja California", "Baja California Sur", "Campeche",
+  "Chiapas", "Chihuahua", "Ciudad de México", "Coahuila", "Colima", "Durango",
+  "Estado de México", "Guanajuato", "Guerrero", "Hidalgo", "Jalisco",
+  "Michoacán", "Morelos", "Nayarit", "Nuevo León", "Oaxaca", "Puebla",
+  "Querétaro", "Quintana Roo", "San Luis Potosí", "Sinaloa", "Sonora",
+  "Tabasco", "Tamaulipas", "Tlaxcala", "Veracruz", "Yucatán", "Zacatecas",
+];
+
+export const CATEGORIAS = ["Sub-13", "Sub-15", "Sub-17", "Sub-20", "Libre"];
+
+export const POSICIONES = [
+  "Portero", "Lateral", "Central", "Mediocentro", "Interior", "Extremo", "Delantero",
+];
+
+export const PIES = ["Derecho", "Izquierdo", "Ambos"];
+
+export const PARENTESCOS = ["Padre", "Madre", "Tutor legal"];
 
 export const UPLOAD_MAX_BYTES = 25 * 1024 * 1024;
 export const UPLOAD_ACCEPT = ["application/pdf", "image/jpeg", "image/png", "video/mp4"];

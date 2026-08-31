@@ -16,13 +16,25 @@ export type ProductRow = {
   sort: number;
 };
 
+/** Datos del tutor. Obligatorios si el postulante es menor de edad. */
+export type TutorInsert = {
+  es_menor?: boolean;
+  tutor_nombre?: string | null;
+  tutor_parentesco?: string | null;
+  tutor_tel?: string | null;
+  tutor_email?: string | null;
+};
+
 export type ApplicationInsert = {
   folio: string;
   nombre: string;
   email: string;
   video_url: string | null;
   payload: Json;
-};
+  // Sale del `payload` a columna propia: decide si hacen falta los datos
+  // del tutor, y eso no puede vivir dentro de un jsonb.
+  nacimiento?: string | null;
+} & TutorInsert;
 
 export type ConvocatoriaInsert = {
   folio: string;
@@ -33,7 +45,20 @@ export type ConvocatoriaInsert = {
   file_path: string | null;
   file_name: string | null;
   file_size: number | null;
-};
+  // Elegibilidad y perfil. Opcionales en el tipo porque las filas
+  // anteriores a la migración no los tienen; la Server Action los exige
+  // en todo envío nuevo.
+  nacimiento?: string | null;
+  pais?: string | null;
+  estado?: string | null;
+  categoria?: string | null;
+  posicion?: string | null;
+  pie?: string | null;
+  club?: string | null;
+  liga?: string | null;
+  sin_contrato?: boolean;
+  ok_imagen?: boolean;
+} & TutorInsert;
 
 export type ContactInsert = {
   nombre: string;

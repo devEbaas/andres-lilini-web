@@ -8,7 +8,7 @@ export default async function PostulacionesPage() {
 
   const { data, error } = await supabase
     .from("applications")
-    .select("id, folio, created_at, nombre, email, status, video_url")
+    .select("id, folio, created_at, nombre, email, status, video_url, es_menor, tutor_nombre, tutor_tel")
     .order("created_at", { ascending: false })
     .limit(200);
 
@@ -19,13 +19,30 @@ export default async function PostulacionesPage() {
   if (!data?.length) return <Vacio texto="Todavía no hay postulaciones." />;
 
   return (
-    <Tabla cols={["Folio", "Fecha", "Nombre", "Correo", "Estado", "Vídeo"]}>
+    <Tabla cols={["Folio", "Fecha", "Nombre", "Correo", "Tutor", "Estado", "Vídeo"]}>
       {data.map((a) => (
         <tr key={a.id}>
           <Celda mono>{a.folio}</Celda>
           <Celda mono>{fecha(a.created_at)}</Celda>
-          <Celda>{a.nombre}</Celda>
+          <Celda>
+            <span className="block">{a.nombre}</span>
+            {a.es_menor && (
+              <span className="block text-[10px] font-extrabold uppercase tracking-[0.16em] text-accent">
+                Menor de edad
+              </span>
+            )}
+          </Celda>
           <Celda mono>{a.email}</Celda>
+          <Celda mono>
+            {a.tutor_nombre ? (
+              <>
+                <span className="block text-ink">{a.tutor_nombre}</span>
+                <span className="block">{a.tutor_tel}</span>
+              </>
+            ) : (
+              "—"
+            )}
+          </Celda>
           <Celda>
             <EstadoPostulacion id={a.id} inicial={a.status} />
           </Celda>

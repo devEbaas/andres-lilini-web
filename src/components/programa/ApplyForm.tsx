@@ -5,6 +5,7 @@ import { useState, useTransition } from "react";
 
 import { submitApplication, type ApplyPayload } from "@/lib/actions/apply";
 import { APPLY_STEPS, type ApplyField } from "@/lib/content/programa";
+import { esMenorHoy } from "@/lib/edad";
 import { Spinner } from "@/components/ui/Spinner";
 import { btnQuiet } from "@/components/ui/styles";
 
@@ -20,6 +21,13 @@ export function ApplyForm() {
 
   const current = APPLY_STEPS[step];
   const pct = Math.round(((step + 1) / TOTAL) * 100);
+
+  // Se mide con la fecha de hoy, no con ninguna fecha de cierre: es cuando
+  // se otorga el consentimiento. A un mayor de edad ni se le enseñan los
+  // campos del tutor — no hay tutor que registrar.
+  const nac = String(values.nac ?? "");
+  const esMenor = Boolean(nac) && esMenorHoy(nac);
+  const visibles = current.fields.filter((f) => !f.soloMenores || esMenor);
 
   const set = (key: string, value: string | boolean) => {
     setValues((v) => ({ ...v, [key]: value }));
@@ -141,7 +149,13 @@ export function ApplyForm() {
         transition={{ duration: 0.3, ease: [0.2, 0.7, 0.2, 1] }}
         className="grid gap-[22px] p-[clamp(24px,3.5vw,40px)] [grid-template-columns:repeat(auto-fit,minmax(230px,1fr))]"
       >
-        {current.fields.map((f) => (
+        {esMenor && current.fields.some((f) => f.soloMenores) && (
+          <p className="col-span-full m-0 rounded-[14px] border border-accent/40 bg-panel-2 px-4 py-3.5 text-sm leading-[1.7] text-muted">
+            Eres menor de edad, así que necesitamos los datos de tu padre, madre o tutor legal
+            y su autorización expresa. Sin eso no podemos evaluar la postulación.
+          </p>
+        )}
+        {visibles.map((f) => (
           <Field
             key={f.key}
             field={f}
