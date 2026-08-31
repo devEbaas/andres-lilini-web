@@ -13,6 +13,7 @@ const SECCIONES = [
   { href: "/cuenta", label: "Perfil" },
   { href: "/cuenta/pedidos", label: "Mis pedidos" },
   { href: "/cuenta/password", label: "Contraseña" },
+  { href: "/cuenta/privacidad", label: "Privacidad" },
 ];
 
 export default async function CuentaLayout({ children }: { children: React.ReactNode }) {

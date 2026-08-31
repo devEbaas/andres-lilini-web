@@ -58,7 +58,10 @@ export const DOCS: Doc[] = [
       { h: "Datos que recabamos", p: "Datos de identificación y contacto, datos deportivos aportados voluntariamente en el formulario del programa, y datos de facturación y envío en el caso de compras en la tienda." },
       { h: "Menores de edad", p: "Toda postulación de una persona menor de 18 años requiere el consentimiento expreso de su padre, madre o tutor legal, incluidos nombre completo, parentesco y medio de contacto verificable." },
       { h: "Finalidades", p: "Evaluar postulaciones deportivas, gestionar pedidos, responder solicitudes de contacto y, si lo autorizas, enviarte el boletín. No vendemos ni cedemos datos a terceros con fines publicitarios." },
-      { h: "Derechos", p: "Puedes solicitar acceso, rectificación, cancelación u oposición al tratamiento de tus datos escribiendo desde el formulario de contacto con el tema General. Atendemos la solicitud en un máximo de veinte días hábiles." },
+      { h: "Conservación", p: "Los datos de un pedido se conservan mientras dure la obligación fiscal de resguardar la contabilidad, aunque canceles tu cuenta. En ese caso se eliminan el correo y la dirección de envío, y sólo quedan importes, fechas y estado, que no identifican a nadie." },
+      { h: "Encargados", p: "Los pagos los procesa Stripe, la base de datos y el almacenamiento están alojados en Supabase, y el sitio se sirve desde Vercel. Cada uno trata los datos únicamente para prestarnos ese servicio." },
+      { h: "Derechos", p: "Puedes solicitar acceso, rectificación, cancelación u oposición al tratamiento de tus datos desde el formulario de derechos del sitio. Antes de entregar o eliminar información verificamos la identidad de quien la solicita. Atendemos la solicitud en un máximo de veinte días hábiles." },
+      { h: "Si tienes cuenta", p: "Desde el apartado de privacidad de tu cuenta puedes descargar todos tus datos y cancelar la cuenta al momento, sin esperar. Los formularios que hayas enviado sin haber iniciado sesión se gestionan por el formulario de derechos." },
     ],
   },
   {
