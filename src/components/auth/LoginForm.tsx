@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 import { signIn } from "@/lib/actions/auth";
@@ -11,7 +10,6 @@ const inputCodigo =
   "field !bg-bg text-center font-mono !text-[22px] tracking-[0.5em]";
 
 export function LoginForm({ next }: { next?: string }) {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [codigo, setCodigo] = useState("");
@@ -19,28 +17,20 @@ export function LoginForm({ next }: { next?: string }) {
   const [error, setError] = useState("");
   const [pending, startTransition] = useTransition();
 
-  const entrar = (destino: string) => {
-    // `refresh()` antes de navegar: los Server Components tienen que volver a
-    // renderizarse ya con la sesión puesta en las cookies.
-    router.refresh();
-    router.replace(destino);
-  };
-
   const onCredenciales = (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     startTransition(async () => {
+      // En caso de éxito la acción redirige desde el servidor y esto no
+      // vuelve: sólo se llega aquí si falta el segundo factor o si algo
+      // falló.
       const res = await signIn({ email, password, next });
       if (!res.ok) {
         setError(res.error);
         return;
       }
-      if ("mfa" in res.data) {
-        setPassword(""); // No se queda en memoria mientras se pide el código.
-        setPideCodigo(true);
-        return;
-      }
-      entrar(res.data.redirectTo);
+      setPassword(""); // No se queda en memoria mientras se pide el código.
+      setPideCodigo(true);
     });
   };
 
@@ -48,13 +38,10 @@ export function LoginForm({ next }: { next?: string }) {
     e.preventDefault();
     setError("");
     startTransition(async () => {
+      // Sólo vuelve si el código no valía: al verificar, la acción redirige.
       const res = await verificarMfa({ code: codigo, next });
-      if (!res.ok) {
-        setCodigo("");
-        setError(res.error);
-        return;
-      }
-      entrar(res.data.redirectTo);
+      setCodigo("");
+      setError(res.error);
     });
   };
 

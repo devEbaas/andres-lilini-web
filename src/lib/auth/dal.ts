@@ -9,6 +9,8 @@ export type SessionClaims = {
   email: string | null;
   role: AppRole;
   isActive: boolean;
+  /** Nivel de garantía del propio JWT: "aal1" con contraseña, "aal2" con MFA. */
+  aal: string | null;
 };
 
 /**
@@ -34,6 +36,7 @@ export async function getClaims(): Promise<SessionClaims | null> {
     email: typeof claims.email === "string" ? claims.email : null,
     role,
     isActive: claims.is_active === true,
+    aal: typeof claims.aal === "string" ? claims.aal : null,
   };
 }
 
@@ -68,6 +71,13 @@ export async function requireUser(next: string): Promise<SessionClaims> {
   if (!claims || !claims.isActive) {
     redirect(`/login?next=${encodeURIComponent(next)}`);
   }
+
+  // Si el propio JWT ya dice aal2, el segundo factor está resuelto y no hay
+  // nada que preguntar. Es el atajo que evita el doble código: `getClaims()`
+  // acaba de verificar la firma de ese token, mientras que
+  // `getAuthenticatorAssuranceLevel()` vuelve a leer la sesión y puede ver
+  // todavía la anterior en la primera navegación tras verificar.
+  if (claims.aal === "aal2") return claims;
 
   // Una sesión a medio autenticar no vale como sesión.
   if (await mfaPendiente()) {

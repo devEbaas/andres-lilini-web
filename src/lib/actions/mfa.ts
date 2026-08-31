@@ -1,8 +1,9 @@
 "use server";
 
+import { redirect } from "next/navigation";
+
 import { createServerSupabase } from "@/lib/supabase/server";
 import { safeNext } from "@/lib/auth/redirect";
-import { type ActionResult } from "./types";
 
 const CODIGO_MAL = "Código incorrecto o caducado. Prueba con el siguiente.";
 const FALLO = "No pudimos verificar el código. Inténtalo de nuevo.";
@@ -16,7 +17,7 @@ const FALLO = "No pudimos verificar el código. Inténtalo de nuevo.";
 export async function verificarMfa(input: {
   code: string;
   next?: string;
-}): Promise<ActionResult<{ redirectTo: string }>> {
+}): Promise<{ ok: false; error: string }> {
   const code = input.code.replace(/\s/g, "");
   if (!/^\d{6}$/.test(code)) return { ok: false, error: CODIGO_MAL };
 
@@ -55,5 +56,8 @@ export async function verificarMfa(input: {
   const { data: verificado } = await supabase.auth.getClaims();
   const esAdmin = verificado?.claims?.user_role === "admin";
 
-  return { ok: true, data: { redirectTo: safeNext(input.next, esAdmin ? "/admin" : "/") } };
+  // Igual que en `signIn`: la cookie con el token ya elevado a aal2 y la
+  // navegación viajan en la misma respuesta. Era justo esta separación la
+  // que hacía que el código se pidiera dos veces.
+  redirect(safeNext(input.next, esAdmin ? "/admin" : "/"));
 }
