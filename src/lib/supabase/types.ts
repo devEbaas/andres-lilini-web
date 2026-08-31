@@ -60,6 +60,7 @@ export type OrderInsert = {
   email?: string | null;
   shipping_address?: Json | null;
   paid_at?: string | null;
+  user_id?: string | null;
 };
 
 export type OrderRow = {
@@ -75,6 +76,7 @@ export type OrderRow = {
   email: string | null;
   shipping_address: Json | null;
   paid_at: string | null;
+  user_id: string | null;
 };
 
 /** Estados de una postulación. Los fija un CHECK en la base. */
@@ -174,7 +176,12 @@ export type Database = {
       admin_audit: Table<AdminAuditRow, AdminAuditInsert>;
     };
     Views: Record<never, never>;
-    Functions: Record<never, never>;
+    Functions: {
+      vincular_pedidos_huerfanos: {
+        Args: Record<string, never>;
+        Returns: number;
+      };
+    };
     Enums: { app_role: AppRole };
     CompositeTypes: Record<never, never>;
   };

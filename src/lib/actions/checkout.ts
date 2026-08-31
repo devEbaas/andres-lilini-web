@@ -1,6 +1,7 @@
 "use server";
 
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getClaims } from "@/lib/auth/dal";
 import { SHIPPING_MXN } from "@/lib/content/site";
 import { getProducts } from "@/lib/data/products";
 import { getStripe, siteUrl, toCents } from "@/lib/stripe/client";
@@ -42,6 +43,10 @@ export async function startCheckout(
   const supabase = createAdminClient();
   if (!supabase) return { ok: true, data: { orderId: null, total, url: null } };
 
+  // Si hay sesión, el pedido nace con dueño. Si no, queda de invitado y se
+  // vincula solo cuando esa persona se registre con el mismo correo.
+  const claims = await getClaims();
+
   const { data, error } = await supabase
     .from("orders")
     .insert({
@@ -50,6 +55,7 @@ export async function startCheckout(
       total,
       items: items as never,
       status: "iniciado",
+      user_id: claims?.userId ?? null,
     })
     .select("id")
     .single();

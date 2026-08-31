@@ -7,7 +7,7 @@ Plan para dos funcionalidades que comparten cimientos:
 
 Se construyen en ese orden. La fase 2 no reescribe nada de la fase 1: es el mismo `auth.users`, las mismas tablas y las mismas policies con un `using()` distinto.
 
-> **Estado**: fase 1 completa, sin desplegar. Ver §10.
+> **Estado**: fases 1 y 2 completas, sin desplegar. Ver §10.
 > Las migraciones **no se han podido validar en local** (no hay Docker ni Postgres en esta máquina): lo hará el workflow `Validar migraciones` al abrir el PR.
 
 ---
@@ -658,4 +658,25 @@ Cuatro decisiones que conviene conocer:
 
 El QR y el secreto TOTP no pasan por nuestro servidor: van de Supabase al navegador y de ahí a la app de autenticación. Lo que no se registra no se filtra por un log.
 
-**Fase 2 completa** — §5.
+**Fase 2 — completada en la tercera iteración**
+
+| Archivo | Qué añade |
+|---|---|
+| `supabase/migrations/20260831120000_cuentas_cliente.sql` | `orders.user_id`, índices, policy del cliente y `vincular_pedidos_huerfanos()` |
+| `src/lib/actions/cuenta.ts` | Registro, reset, cambio de contraseña y edición de perfil |
+| `src/lib/auth/pedidos.ts` | Adopción de pedidos de invitado |
+| `src/lib/urls.ts` | `siteUrl()` compartido — antes vivía dentro de `stripe/client.ts` |
+| `src/app/auth/callback/route.ts` | Canje del código de los enlaces de correo |
+| `src/app/registro/`, `src/app/recuperar/`, `src/app/cuenta/` | Alta, recuperación, perfil, pedidos y contraseña |
+
+Y `startCheckout` ahora graba `user_id` cuando hay sesión: el pedido nace con dueño en vez de esperar a la vinculación por correo.
+
+Cinco decisiones que conviene conocer:
+
+- **El checkout sigue siendo de invitado.** `user_id` es nullable y así se queda. Obligar a registrarse antes de pagar es la forma más eficaz de perder compras.
+- **La vinculación por correo se comprueba en Postgres, no en la aplicación.** `vincular_pedidos_huerfanos()` es `security definer` y exige `email_confirmed_at is not null`. Aunque alguien llame a la función desde otro sitio, sin correo confirmado no adopta nada.
+- **No es una Server Action.** Se llama durante el render de `/cuenta/pedidos`, y `revalidatePath` en fase de render no vale. Vive en `src/lib/auth/pedidos.ts` como función normal.
+- **`/cuenta/pedidos` no filtra por usuario en la consulta.** La policy decide qué filas existen para esa sesión; añadir un `.eq()` daría la falsa impresión de que la seguridad está en el SELECT.
+- **Los redirects de los correos se arman con `siteUrl()`, nunca con el `Host` de la petición.** Un `Host` falsificado convierte el enlace de confirmación en una fuga del código de sesión hacia el dominio del atacante.
+
+**Ojo con `enable_signup`.** En `config.toml` está en `true` para poder probar el registro en local. **En producción sigue cerrado** y debe seguir así hasta que el SMTP propio esté verificado: sin correo que llegue, nadie confirma la cuenta ni recupera la contraseña, y la policy de pedidos de invitado depende de que la confirmación sea obligatoria.
