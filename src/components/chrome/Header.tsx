@@ -9,6 +9,7 @@ import { useState } from "react";
 import { NAV } from "@/lib/content/site";
 import { useCart } from "@/lib/store/cart";
 import { useToast } from "@/lib/store/toast";
+import { PanelLink } from "@/components/auth/PanelLink";
 import { MobileMenu } from "./MobileMenu";
 
 export function Header() {
@@ -71,6 +72,8 @@ export function Header() {
           </nav>
 
           <div className="ml-auto flex items-center gap-2.5 nav:ml-0">
+            <PanelLink />
+
             <div className="flex overflow-hidden rounded-full border border-hairline">
               <button
                 type="button"
