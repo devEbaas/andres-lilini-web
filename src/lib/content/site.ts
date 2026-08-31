@@ -7,7 +7,6 @@ export const NAV: Route[] = [
   { label: "Programa", href: "/programa" },
   { label: "Convocatoria", href: "/convocatoria" },
   { label: "Fundación", href: "/fundacion" },
-  { label: "Sistema", href: "/sistema" },
 ];
 
 export const SOCIAL = ["IG", "X", "YT", "IN"] as const;
@@ -35,7 +34,6 @@ export const FOOTER_COLS: { title: string; links: Route[] }[] = [
       { label: "Inicio", href: "/" },
       { label: "Trayectoria", href: "/#trayectoria" },
       { label: "Tienda", href: "/tienda" },
-      { label: "Sistema", href: "/sistema" },
     ],
   },
   {
@@ -53,6 +51,7 @@ export const FOOTER_COLS: { title: string; links: Route[] }[] = [
       { label: "Aviso de privacidad", href: "/contenido/privacidad" },
       { label: "Términos", href: "/contenido/terminos" },
       { label: "Bases de la convocatoria", href: "/contenido/bases" },
+      { label: "Ejercer tus derechos", href: "/derechos" },
     ],
   },
   {

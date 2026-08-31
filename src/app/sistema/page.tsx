@@ -7,6 +7,10 @@ import { Spinner } from "@/components/ui/Spinner";
 export const metadata: Metadata = {
   title: "Sistema de diseño",
   description: "Tokens, tipografía, componentes y tarjetas Open Graph del sitio.",
+  // Referencia interna: sigue accesible por URL para quien construye el
+  // sitio, pero fuera del menú y fuera de los buscadores. Un resultado
+  // titulado «Sistema de diseño» bajo la marca no le sirve a nadie.
+  robots: { index: false, follow: false },
 };
 
 const H2 = "m-0 mb-5 font-display text-[26px] uppercase";

@@ -1,55 +1,45 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import QRCode from "qrcode";
 
 import { createBrowserSupabase } from "@/lib/supabase/browser";
 import { Spinner } from "@/components/ui/Spinner";
 import { btnQuiet } from "@/components/ui/styles";
 
-/** `qr` guarda el `data:` URI ya listo, o "" si el SVG no era usable. */
+/** `qr` guarda el `data:` URI del código, o "" si no se pudo dibujar. */
 type Pendiente = { factorId: string; qr: string; secreto: string; uri: string };
 
 /**
- * Convierte el SVG del QR en un `data:` URI utilizable, o `null` si no hay
- * forma de mostrarlo.
+ * Dibuja el QR a partir del `otpauth://`, no del SVG que manda Supabase.
  *
- * Hay que sanearlo antes: el SVG que devuelve Supabase trae alguna etiqueta
- * mal cerrada —`<rect ... >` en vez de `<rect ... />`—, y como un SVG se
- * parsea con las reglas de XML, una sola etiqueta abierta aborta el parseo
- * entero y el navegador pinta el icono de imagen rota. No es culpa de la
- * codificación: el contenido en sí es XML inválido.
+ * Ese SVG venía con etiquetas mal cerradas —`<rect ... >` en vez de
+ * `<rect ... />`—, y como un SVG se parsea con reglas de XML, una sola
+ * etiqueta abierta aborta el documento entero. Se intentó sanearlo dos
+ * veces y seguía fallando; repararlo a ciegas es perseguir un formato que
+ * no controlamos.
  *
- * Va en base64 y no con `encodeURIComponent` por un segundo motivo: si el
- * SVG trajera almohadillas en los colores, una `#` sin escapar cortaría la
- * URI ahí mismo, porque el navegador la leería como fragmento.
+ * La URI sí es canónica: es exactamente lo que la app de autenticación
+ * necesita, y de ella se deriva el mismo código. Un QR generado aquí no
+ * puede venir malformado.
  */
-function prepararQr(svg: string): string | null {
-  if (!svg) return null;
-
-  // Autocierra cualquier etiqueta que se haya quedado abierta.
-  const saneado = svg.replace(/(<(?:rect|path|circle|line)\b[^>]*[^/])>/g, "$1/>");
-
-  // Si aun así no parsea, mejor no enseñar nada que enseñar algo roto.
+async function dibujarQr(uri: string): Promise<string> {
+  if (!uri) return "";
   try {
-    const doc = new DOMParser().parseFromString(saneado, "image/svg+xml");
-    if (doc.getElementsByTagName("parsererror").length > 0) return null;
-  } catch {
-    return null;
+    return await QRCode.toDataURL(uri, {
+      errorCorrectionLevel: "M",
+      margin: 1,
+      width: 400,
+      // Alto contraste: el lector necesita negro sobre blanco, no los
+      // colores del sitio.
+      color: { dark: "#000000", light: "#ffffff" },
+    });
+  } catch (e) {
+    console.warn("[mfa] no se pudo dibujar el QR", (e as Error).message);
+    return "";
   }
-
-  const bytes = new TextEncoder().encode(saneado);
-  let binario = "";
-  for (const b of bytes) binario += String.fromCharCode(b);
-  return `data:image/svg+xml;base64,${btoa(binario)}`;
 }
 
-/**
- * Alta del segundo factor, entera en el navegador.
- *
- * El QR y el secreto no pasan por nuestro servidor a propósito: viajan de
- * Supabase al navegador y de ahí a la app de autenticación. Lo que no se
- * registra no se puede filtrar por un log.
- */
 export function MfaEnroll({ activo }: { activo: boolean }) {
   const [tieneFactor, setTieneFactor] = useState(activo);
   const [pendiente, setPendiente] = useState<Pendiente | null>(null);
@@ -95,20 +85,14 @@ export function MfaEnroll({ activo }: { activo: boolean }) {
     // El QR es un extra, no el mecanismo: lo que enrola de verdad es el
     // secreto. Si el servidor no lo manda, se sigue pudiendo activar a mano,
     // así que no se deja que un campo vacío bloquee el alta.
-    const qr = prepararQr(typeof data.totp?.qr_code === "string" ? data.totp.qr_code : "");
-
-    if (!qr) {
-      // Sólo la forma de la respuesta, nunca el secreto ni el QR.
-      console.warn("[mfa] QR no utilizable", {
-        claves: data.totp ? Object.keys(data.totp) : null,
-      });
-    }
+    const uri = data.totp?.uri ?? "";
+    const qr = await dibujarQr(uri);
 
     setPendiente({
       factorId: data.id,
-      qr: qr ?? "",
+      qr,
       secreto: data.totp?.secret ?? "",
-      uri: data.totp?.uri ?? "",
+      uri,
     });
   };
 
@@ -195,9 +179,9 @@ export function MfaEnroll({ activo }: { activo: boolean }) {
 
         {pendiente.qr ? (
           <div className="mx-auto rounded-[18px] bg-white p-3.5">
-            {/* `img` y no `next/image`: la fuente es un data: URI que se arma
-                en el cliente, así que no hay nada que optimizar ni ninguna
-                ruta que Next pueda resolver. */}
+            {/* `img` y no `next/image`: la fuente es un data: URI que se
+                genera en el cliente, así que no hay nada que optimizar ni
+                ninguna ruta que Next pueda resolver. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={pendiente.qr}
@@ -211,7 +195,7 @@ export function MfaEnroll({ activo }: { activo: boolean }) {
           <p className="m-0 rounded-[14px] border border-hairline bg-bg px-4 py-3.5 text-sm leading-[1.7] text-muted">
             No pudimos dibujar el código QR. Da igual: añade la cuenta a mano con el
             secreto de aquí abajo, o toca el enlace si estás en el móvil. El resultado
-            es el mismo.
+            es exactamente el mismo: lo que enrola es el secreto, no la imagen.
           </p>
         )}
 
