@@ -70,3 +70,34 @@ export const ESTADOS_MX = [
 
 /** Cuántos clubes admite el historial. Más de esto es ruido, no señal. */
 export const MAX_CLUBES = 5;
+
+
+// ── Expediente del preseleccionado ────────────────────────────
+// Segunda fase: sólo para quien pasó el corte.
+
+/**
+ * Cómo se midió. No es un adorno: un 30 m a cronómetro manual y otro
+ * con fotocélulas se diferencian en dos o tres décimas, más que la
+ * distancia entre un jugador rápido y uno normal. Sin este dato los
+ * medibles sirven para ordenar candidatos, no para compararlos.
+ */
+export const PROTOCOLOS = ["Cronómetro manual", "Fotocélulas", "App móvil"];
+
+/** Tests de cambio de dirección. Discriminan más que la línea recta. */
+export const TESTS_AGILIDAD = ["505", "Illinois", "T-test", "Otro"];
+
+export const SEGUROS = ["IMSS", "ISSSTE", "Seguro privado", "Ninguno"];
+
+/**
+ * Alcance del uso de imagen. Son tres permisos distintos y se pueden
+ * querer por separado: evaluar un video internamente no es lo mismo
+ * que publicarlo en redes.
+ */
+export const ALCANCES_IMAGEN = [
+  "Sólo evaluación interna",
+  "Materiales del programa",
+  "Redes sociales",
+];
+
+/** Días que vive un enlace de expediente. */
+export const EXPEDIENTE_DIAS = 30;

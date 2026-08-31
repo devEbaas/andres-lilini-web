@@ -1,6 +1,7 @@
 import { createServerSupabase } from "@/lib/supabase/server";
 import { Celda, Tabla, Vacio, fecha } from "@/components/admin/Tabla";
 import { EstadoPostulacion } from "@/components/admin/EstadoPostulacion";
+import { EnlaceExpediente } from "@/components/admin/EnlaceExpediente";
 
 export default async function PostulacionesPage() {
   const supabase = await createServerSupabase();
@@ -8,7 +9,7 @@ export default async function PostulacionesPage() {
 
   const { data, error } = await supabase
     .from("applications")
-    .select("id, folio, created_at, nombre, email, status, video_url, es_menor, tutor_nombre, tutor_tel, posicion, pie, nivel, club, escolaridad")
+    .select("id, folio, created_at, nombre, email, status, video_url, es_menor, tutor_nombre, tutor_tel, posicion, pie, nivel, club, escolaridad, expediente_enviado_at")
     .order("created_at", { ascending: false })
     .limit(200);
 
@@ -19,7 +20,7 @@ export default async function PostulacionesPage() {
   if (!data?.length) return <Vacio texto="Todavía no hay postulaciones." />;
 
   return (
-    <Tabla cols={["Folio", "Fecha", "Jugador", "Perfil", "Tutor", "Estado", "Vídeo"]}>
+    <Tabla cols={["Folio", "Fecha", "Jugador", "Perfil", "Tutor", "Estado", "Expediente", "Vídeo"]}>
       {data.map((a) => (
         <tr key={a.id}>
           <Celda mono>{a.folio}</Celda>
@@ -62,6 +63,9 @@ export default async function PostulacionesPage() {
           </Celda>
           <Celda>
             <EstadoPostulacion id={a.id} inicial={a.status} />
+          </Celda>
+          <Celda>
+            <EnlaceExpediente id={a.id} enviado={a.expediente_enviado_at ?? null} />
           </Celda>
           <Celda mono>
             {a.video_url ? (

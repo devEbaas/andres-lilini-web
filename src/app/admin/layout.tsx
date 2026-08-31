@@ -14,6 +14,7 @@ const SECCIONES = [
   { href: "/admin/pedidos", label: "Pedidos" },
   { href: "/admin/postulaciones", label: "Postulaciones" },
   { href: "/admin/convocatoria", label: "Convocatoria" },
+  { href: "/admin/expedientes", label: "Expedientes" },
   { href: "/admin/mensajes", label: "Mensajes" },
   { href: "/admin/boletin", label: "Boletín" },
   { href: "/admin/arco", label: "Derechos" },
