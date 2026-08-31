@@ -33,6 +33,10 @@ export type ApplyField = {
   options?: string[];
   hint?: string;
   required?: boolean;
+  /** Sólo se muestra si quien se postula es menor de edad hoy. */
+  soloMenores?: boolean;
+  /** Obligatorio cuando se muestra a un menor. */
+  requiredIfMenor?: boolean;
 };
 
 export type ApplyStep = { short: string; title: string; fields: ApplyField[] };
@@ -97,11 +101,13 @@ export const APPLY_STEPS: ApplyStep[] = [
     short: "Consentimientos",
     title: "Consentimientos",
     fields: [
-      { key: "tutor", label: "Nombre del tutor (si eres menor)", type: "text", ph: "Nombre completo del padre, madre o tutor", wide: true },
-      { key: "tutorTel", label: "Contacto del tutor", type: "tel", ph: "+52 55 0000 0000" },
-      { key: "parentesco", label: "Parentesco", type: "select", options: ["Padre", "Madre", "Tutor legal", "No aplica"] },
+      { key: "tutor", soloMenores: true, label: "Nombre completo del tutor", type: "text", ph: "Padre, madre o tutor legal", wide: true, requiredIfMenor: true },
+      { key: "tutorTel", soloMenores: true, label: "Teléfono del tutor", type: "tel", ph: "+52 55 0000 0000", requiredIfMenor: true },
+      { key: "parentesco", soloMenores: true, label: "Parentesco", type: "select", options: ["Padre", "Madre", "Tutor legal"], requiredIfMenor: true },
+      { key: "tutorEmail", soloMenores: true, label: "Correo del tutor (opcional)", type: "email", ph: "correo@dominio.com" },
       { key: "okPriv", label: "", type: "check", ph: "He leído y acepto el aviso de privacidad y el tratamiento de los datos deportivos aquí incluidos.", wide: true },
       { key: "okVerdad", label: "", type: "check", ph: "Declaro que la información y el video enviados son verídicos y de mi autoría o de mi tutor.", wide: true },
+      { key: "okTutor", soloMenores: true, label: "", type: "check", ph: "Mi padre, madre o tutor legal conoce esta postulación y autoriza expresamente el tratamiento de mis datos.", wide: true, requiredIfMenor: true },
     ],
   },
 ];

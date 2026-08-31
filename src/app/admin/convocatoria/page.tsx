@@ -1,5 +1,6 @@
 import { createServerSupabase } from "@/lib/supabase/server";
 import { bytesToMb } from "@/lib/format";
+import { edadAlCierre } from "@/lib/content/fundacion";
 import { Celda, Tabla, Vacio, fecha } from "@/components/admin/Tabla";
 import { DescargarArchivo } from "@/components/admin/DescargarArchivo";
 
@@ -9,7 +10,7 @@ export default async function ConvocatoriaPage() {
 
   const { data, error } = await supabase
     .from("convocatoria_entries")
-    .select("id, folio, created_at, nombre, email, link, file_name, file_size")
+    .select("id, folio, created_at, nombre, email, link, file_name, file_size, nacimiento, estado, categoria, posicion, pie, es_menor, tutor_nombre, tutor_tel")
     .order("created_at", { ascending: false })
     .limit(200);
 
@@ -21,13 +22,51 @@ export default async function ConvocatoriaPage() {
 
   return (
     <>
-      <Tabla cols={["Folio", "Fecha", "Nombre", "Correo", "Enlace", "Archivo"]}>
+      <Tabla cols={["Folio", "Fecha", "Jugador", "Edad", "Perfil", "Tutor", "Enlace", "Archivo"]}>
         {data.map((c) => (
           <tr key={c.id}>
             <Celda mono>{c.folio}</Celda>
             <Celda mono>{fecha(c.created_at)}</Celda>
-            <Celda>{c.nombre}</Celda>
-            <Celda mono>{c.email}</Celda>
+            <Celda>
+              <span className="block">{c.nombre}</span>
+              <span className="block font-mono text-xs text-muted">{c.email}</span>
+              {c.estado && (
+                <span className="block font-mono text-xs text-muted">{c.estado}</span>
+              )}
+            </Celda>
+            <Celda mono>
+              {/* Edad al cierre, no la de hoy: es la que fijan las bases. */}
+              {c.nacimiento ? `${edadAlCierre(c.nacimiento) ?? "—"} años` : "—"}
+              {c.es_menor && (
+                <span className="mt-1 block text-[10px] font-extrabold uppercase tracking-[0.16em] text-accent">
+                  Menor
+                </span>
+              )}
+            </Celda>
+            <Celda>
+              {c.categoria ? (
+                <>
+                  <span className="block text-[11px] font-extrabold uppercase tracking-[0.14em] text-accent">
+                    {c.categoria}
+                  </span>
+                  <span className="block font-mono text-xs text-muted">
+                    {[c.posicion, c.pie].filter(Boolean).join(" · ") || "—"}
+                  </span>
+                </>
+              ) : (
+                <span className="font-mono text-xs text-muted">—</span>
+              )}
+            </Celda>
+            <Celda mono>
+              {c.tutor_nombre ? (
+                <>
+                  <span className="block text-ink">{c.tutor_nombre}</span>
+                  <span className="block">{c.tutor_tel}</span>
+                </>
+              ) : (
+                "—"
+              )}
+            </Celda>
             <Celda mono>
               {c.link ? (
                 <a
