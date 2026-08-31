@@ -6,18 +6,38 @@ import { createBrowserSupabase } from "@/lib/supabase/browser";
 import { Spinner } from "@/components/ui/Spinner";
 import { btnQuiet } from "@/components/ui/styles";
 
+/** `qr` guarda el `data:` URI ya listo, o "" si el SVG no era usable. */
 type Pendiente = { factorId: string; qr: string; secreto: string; uri: string };
 
 /**
- * El SVG del QR a un `data:` URI que el navegador acepte.
+ * Convierte el SVG del QR en un `data:` URI utilizable, o `null` si no hay
+ * forma de mostrarlo.
  *
- * En base64 y no con `encodeURIComponent`: el SVG trae almohadillas en los
- * colores (`fill="#fff"`), y una `#` sin escapar corta la URI ahí mismo —el
- * navegador la lee como fragmento— y el resultado es el icono de imagen rota.
- * En base64 no hay carácter que pueda cortarla.
+ * Hay que sanearlo antes: el SVG que devuelve Supabase trae alguna etiqueta
+ * mal cerrada —`<rect ... >` en vez de `<rect ... />`—, y como un SVG se
+ * parsea con las reglas de XML, una sola etiqueta abierta aborta el parseo
+ * entero y el navegador pinta el icono de imagen rota. No es culpa de la
+ * codificación: el contenido en sí es XML inválido.
+ *
+ * Va en base64 y no con `encodeURIComponent` por un segundo motivo: si el
+ * SVG trajera almohadillas en los colores, una `#` sin escapar cortaría la
+ * URI ahí mismo, porque el navegador la leería como fragmento.
  */
-function svgADataUri(svg: string): string {
-  const bytes = new TextEncoder().encode(svg);
+function prepararQr(svg: string): string | null {
+  if (!svg) return null;
+
+  // Autocierra cualquier etiqueta que se haya quedado abierta.
+  const saneado = svg.replace(/(<(?:rect|path|circle|line)\b[^>]*[^/])>/g, "$1/>");
+
+  // Si aun así no parsea, mejor no enseñar nada que enseñar algo roto.
+  try {
+    const doc = new DOMParser().parseFromString(saneado, "image/svg+xml");
+    if (doc.getElementsByTagName("parsererror").length > 0) return null;
+  } catch {
+    return null;
+  }
+
+  const bytes = new TextEncoder().encode(saneado);
   let binario = "";
   for (const b of bytes) binario += String.fromCharCode(b);
   return `data:image/svg+xml;base64,${btoa(binario)}`;
@@ -72,11 +92,23 @@ export function MfaEnroll({ activo }: { activo: boolean }) {
       setError("No pudimos generar el código. Inténtalo de nuevo.");
       return;
     }
+    // El QR es un extra, no el mecanismo: lo que enrola de verdad es el
+    // secreto. Si el servidor no lo manda, se sigue pudiendo activar a mano,
+    // así que no se deja que un campo vacío bloquee el alta.
+    const qr = prepararQr(typeof data.totp?.qr_code === "string" ? data.totp.qr_code : "");
+
+    if (!qr) {
+      // Sólo la forma de la respuesta, nunca el secreto ni el QR.
+      console.warn("[mfa] QR no utilizable", {
+        claves: data.totp ? Object.keys(data.totp) : null,
+      });
+    }
+
     setPendiente({
       factorId: data.id,
-      qr: data.totp.qr_code,
-      secreto: data.totp.secret,
-      uri: data.totp.uri,
+      qr: qr ?? "",
+      secreto: data.totp?.secret ?? "",
+      uri: data.totp?.uri ?? "",
     });
   };
 
@@ -161,26 +193,38 @@ export function MfaEnroll({ activo }: { activo: boolean }) {
           Escanea el código con Google Authenticator, 1Password o la app que uses.
         </p>
 
-        <div className="mx-auto rounded-[18px] bg-white p-3.5">
-          {/* `img` y no `next/image`: la fuente es un data: URI que se arma en
-              el cliente, así que no hay nada que optimizar ni ninguna ruta que
-              Next pueda resolver. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={svgADataUri(pendiente.qr)}
-            alt="Código QR para configurar el segundo factor"
-            width={200}
-            height={200}
-            className="block size-[200px]"
-          />
-        </div>
+        {pendiente.qr ? (
+          <div className="mx-auto rounded-[18px] bg-white p-3.5">
+            {/* `img` y no `next/image`: la fuente es un data: URI que se arma
+                en el cliente, así que no hay nada que optimizar ni ninguna
+                ruta que Next pueda resolver. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={pendiente.qr}
+              alt="Código QR para configurar el segundo factor"
+              width={200}
+              height={200}
+              className="block size-[200px]"
+            />
+          </div>
+        ) : (
+          <p className="m-0 rounded-[14px] border border-hairline bg-bg px-4 py-3.5 text-sm leading-[1.7] text-muted">
+            No pudimos dibujar el código QR. Da igual: añade la cuenta a mano con el
+            secreto de aquí abajo, o toca el enlace si estás en el móvil. El resultado
+            es el mismo.
+          </p>
+        )}
 
-        <a
-          href={pendiente.uri}
-          className="text-center font-mono text-[11px] text-accent underline underline-offset-4 nav:hidden"
-        >
-          Abrir directamente en la app de autenticación
-        </a>
+        {pendiente.uri && (
+          <a
+            href={pendiente.uri}
+            className={`text-center font-mono text-[11px] text-accent underline underline-offset-4 ${
+              pendiente.qr ? "nav:hidden" : ""
+            }`}
+          >
+            Abrir directamente en la app de autenticación
+          </a>
+        )}
 
         <label className="flex flex-col gap-[9px]">
           <span className="label-caps">Si no puedes escanear</span>
