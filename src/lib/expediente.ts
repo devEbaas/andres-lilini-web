@@ -1,22 +1,7 @@
 import "server-only";
-import { createHash, randomBytes } from "node:crypto";
 
 import { createAdminClient } from "@/lib/supabase/admin";
-
-/**
- * El enlace del expediente es la credencial: quien lo tiene, entra. Por eso
- * en la base sólo vive su SHA-256 — si se filtrara, los enlaces no serían
- * utilizables. Es el mismo criterio con el que se guarda una contraseña,
- * aplicado a un token de un solo destinatario.
- */
-export function hashToken(token: string): string {
-  return createHash("sha256").update(token).digest("hex");
-}
-
-/** 32 bytes de aleatoriedad: no se adivina ni se recorre por fuerza bruta. */
-export function nuevoToken(): string {
-  return randomBytes(32).toString("base64url");
-}
+import { caducado, hashToken, tokenPlausible } from "@/lib/tokens";
 
 export type Invitacion = {
   applicationId: string;
@@ -35,7 +20,7 @@ export type Invitacion = {
  * cuáles existieron.
  */
 export async function leerInvitacion(token: string): Promise<Invitacion | null> {
-  if (!token || token.length < 20) return null;
+  if (!tokenPlausible(token)) return null;
 
   const supabase = createAdminClient();
   if (!supabase) return null;
@@ -52,8 +37,7 @@ export async function leerInvitacion(token: string): Promise<Invitacion | null> 
   }
   if (!data) return null;
 
-  const expira = data.expediente_expira ? new Date(data.expediente_expira) : null;
-  if (!expira || expira.getTime() < Date.now()) return null;
+  if (caducado(data.expediente_expira)) return null;
 
   return {
     applicationId: data.id,

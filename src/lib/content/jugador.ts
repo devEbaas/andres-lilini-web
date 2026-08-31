@@ -101,3 +101,6 @@ export const ALCANCES_IMAGEN = [
 
 /** Días que vive un enlace de expediente. */
 export const EXPEDIENTE_DIAS = 30;
+
+/** Días que vive el enlace de verificación del tutor. */
+export const TUTOR_DIAS = 14;

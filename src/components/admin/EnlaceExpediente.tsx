@@ -22,6 +22,7 @@ export function EnlaceExpediente({
   enviado: string | null;
 }) {
   const [url, setUrl] = useState("");
+  const [porCorreo, setPorCorreo] = useState(false);
   const [copiado, setCopiado] = useState(false);
   const [error, setError] = useState("");
   const [pending, startTransition] = useTransition();
@@ -31,7 +32,10 @@ export function EnlaceExpediente({
     setCopiado(false);
     startTransition(async () => {
       const res = await generarEnlaceExpediente(id);
-      if (res.ok) setUrl(res.data.url);
+      if (res.ok) {
+        setUrl(res.data.url);
+        setPorCorreo(res.data.enviado);
+      }
       else setError(res.error);
     });
   };
@@ -49,7 +53,10 @@ export function EnlaceExpediente({
     return (
       <div className="grid gap-2 rounded-[14px] border border-accent/40 bg-panel-2 p-3">
         <p className="m-0 text-[11px] leading-[1.5] text-muted">
-          Cópialo ahora: no se vuelve a mostrar. Caduca en {EXPEDIENTE_DIAS} días.
+          {porCorreo
+            ? "Enviado por correo al jugador. "
+            : "No se pudo enviar por correo: cópialo y mándaselo tú. "}
+          No se vuelve a mostrar. Caduca en {EXPEDIENTE_DIAS} días.
         </p>
         <input
           readOnly

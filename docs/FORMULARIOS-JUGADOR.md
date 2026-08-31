@@ -258,7 +258,7 @@ Verificado con `tsc`, `eslint` y `next build`.
 - **El CHECK vive en la base, no sólo en la aplicación.** `not es_menor or (tutor_nombre is not null and ...)`. Es la regla que el aviso de privacidad promete por escrito: si algún día se inserta desde otro sitio, la base sigue diciendo que no.
 - **La autorización del tutor es una casilla separada** de la de privacidad y la de veracidad. Autorizan cosas distintas y deben poder marcarse por separado.
 
-**Y una limitación que conviene no maquillar**: el consentimiento es hoy **declarativo**. El formulario exige los datos del tutor y su autorización, pero nadie comprueba que quien marca la casilla sea el tutor. La verificación real —un correo o SMS de confirmación al tutor— depende del SMTP, que sigue pendiente. El aviso de privacidad describe el mecanismo tal como es, sin prometer una verificación que todavía no existe.
+**Nota (1 sep 2026)**: la limitación que se describía aquí —consentimiento declarativo, sin comprobar que quien marca la casilla sea el tutor— **está cerrada en código**. El correo del tutor pasó a ser obligatorio para menores, y al enviarse la postulación se manda un enlace de un solo uso que sólo él puede activar. Falta el DNS para que el correo salga de verdad; hasta entonces la postulación queda registrada y marcada como «Sin verificar», que es el estado honesto.
 
 ### Hecho — Fase 2: modelo unificado, columnas y contexto
 
@@ -308,6 +308,6 @@ Verificado con `tsc`, `eslint` y `next build`.
 
 ### Pendiente
 
-- [ ] Verificación real del tutor por correo, cuando haya SMTP ([PRIVACIDAD-Y-CORREO.md](./PRIVACIDAD-Y-CORREO.md) §1).
+- [x] ~~Verificación real del tutor por correo~~ — hecha el 1 sep 2026. Al postularse un menor se genera un token, se manda un enlace al correo del tutor y sólo su clic marca la postulación como verificada. El panel distingue «Verificado» de «Sin verificar». Requiere el DNS de [PRIVACIDAD-Y-CORREO.md](./PRIVACIDAD-Y-CORREO.md) §1 para salir de verdad.
 - [ ] Revisión legal del aviso antes de producción.
 - [ ] Fases 2 y 3 — §5.

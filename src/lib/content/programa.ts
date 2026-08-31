@@ -128,7 +128,7 @@ export const APPLY_STEPS: ApplyStep[] = [
       { key: "tutor", soloMenores: true, label: "Nombre completo del tutor", type: "text", ph: "Padre, madre o tutor legal", wide: true, requiredIfMenor: true },
       { key: "tutorTel", soloMenores: true, label: "Teléfono del tutor", type: "tel", ph: "+52 55 0000 0000", requiredIfMenor: true },
       { key: "parentesco", soloMenores: true, label: "Parentesco", type: "select", options: PARENTESCOS, requiredIfMenor: true },
-      { key: "tutorEmail", soloMenores: true, label: "Correo del tutor (opcional)", type: "email", ph: "correo@dominio.com" },
+      { key: "tutorEmail", soloMenores: true, label: "Correo del tutor", type: "email", ph: "correo@dominio.com", requiredIfMenor: true, hint: "Le mandamos un enlace para que autorice la postulación." },
       { key: "okPriv", label: "", type: "check", ph: "He leído y acepto el aviso de privacidad y el tratamiento de los datos deportivos aquí incluidos.", wide: true },
       { key: "okVerdad", label: "", type: "check", ph: "Declaro que la información y el video enviados son verídicos y de mi autoría o de mi tutor.", wide: true },
       { key: "okTutor", soloMenores: true, label: "", type: "check", ph: "Mi padre, madre o tutor legal conoce esta postulación y autoriza expresamente el tratamiento de mis datos.", wide: true, requiredIfMenor: true },
