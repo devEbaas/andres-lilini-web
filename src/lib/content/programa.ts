@@ -1,3 +1,14 @@
+import {
+  ESCOLARIDAD,
+  NIVELES,
+  PAISES,
+  PIES,
+  POSICIONES,
+  POSICIONES_SEC,
+  PARENTESCOS,
+  TURNOS,
+} from "./jugador";
+
 export const PROGRAMA_INTRO = [
   { n: "01", title: "Qué evaluamos", body: "Quince atributos técnicos, físicos y mentales, más el contexto familiar y académico del jugador." },
   { n: "02", title: "Cuánto tarda", body: "Diez minutos llenar el formulario. Respuesta con dictamen en 15 días hábiles." },
@@ -22,7 +33,9 @@ export const RUBRIC: [string, string][] = [
   ["Ética de trabajo", "Lo que hace el jugador cuando nadie lo está evaluando."],
 ];
 
-export type FieldType = "text" | "email" | "tel" | "date" | "number" | "select" | "radio" | "area" | "check";
+// `clubes` es el único que no es un control suelto: renderiza el
+// repetidor del historial. Ver `ApplyForm`.
+export type FieldType = "text" | "email" | "tel" | "date" | "number" | "select" | "radio" | "area" | "check" | "clubes";
 
 export type ApplyField = {
   key: string;
@@ -48,7 +61,7 @@ export const APPLY_STEPS: ApplyStep[] = [
     fields: [
       { key: "nombre", label: "Nombre completo", type: "text", ph: "Nombre y apellidos", wide: true, required: true },
       { key: "nac", label: "Fecha de nacimiento", type: "date", required: true },
-      { key: "pais", label: "País de residencia", type: "select", options: ["México", "Argentina", "Estados Unidos", "España", "Otro"] },
+      { key: "pais", label: "País de residencia", type: "select", options: PAISES },
       { key: "nacionalidad", label: "Nacionalidad", type: "text", ph: "Ej. mexicana" },
       { key: "estado", label: "Estado o provincia", type: "text", ph: "Ej. Jalisco" },
       { key: "ciudad", label: "Ciudad", type: "text", ph: "Ej. Guadalajara" },
@@ -62,14 +75,15 @@ export const APPLY_STEPS: ApplyStep[] = [
     fields: [
       { key: "estatura", label: "Estatura (cm)", type: "number", ph: "175" },
       { key: "peso", label: "Peso (kg)", type: "number", ph: "68" },
-      { key: "pos1", label: "Posición principal", type: "select", options: ["Portero", "Lateral", "Central", "Mediocentro", "Interior", "Extremo", "Delantero"] },
-      { key: "pos2", label: "Posición secundaria", type: "select", options: ["Ninguna", "Lateral", "Central", "Mediocentro", "Extremo", "Delantero"] },
-      { key: "pie", label: "Pie dominante", type: "radio", options: ["Derecho", "Izquierdo", "Ambos"] },
+      { key: "pos1", label: "Posición principal", type: "select", options: POSICIONES },
+      { key: "pos2", label: "Posición secundaria", type: "select", options: POSICIONES_SEC },
+      { key: "pie", label: "Pie dominante", type: "radio", options: PIES },
       { key: "equipo", label: "Equipo actual", type: "text", ph: "Nombre del club" },
       { key: "liga", label: "Liga o categoría", type: "text", ph: "Ej. Liga TDP Sub-20" },
       { key: "anios", label: "Años practicando", type: "number", ph: "8" },
-      { key: "nivel", label: "Nivel más alto alcanzado", type: "select", options: ["Liga local", "Liga estatal", "Liga nacional juvenil", "Cantera profesional", "Selección estatal", "Selección nacional"] },
+      { key: "nivel", label: "Nivel más alto alcanzado", type: "select", options: NIVELES },
       { key: "dt", label: "Entrenador actual y contacto", type: "text", ph: "Nombre y teléfono", wide: true },
+      { key: "clubes", label: "Clubes anteriores", type: "clubes", wide: true, hint: "Opcional. Cuántos clubes y cuánto duraste en cada uno dice tanto como el actual." },
     ],
   },
   {
@@ -98,12 +112,22 @@ export const APPLY_STEPS: ApplyStep[] = [
     ],
   },
   {
+    short: "Estudios",
+    title: "Contexto académico",
+    fields: [
+      { key: "escolaridad", label: "Escolaridad actual", type: "select", options: ESCOLARIDAD, required: true },
+      { key: "estudia", label: "¿Sigues estudiando?", type: "radio", options: ["Sí", "No"], required: true },
+      { key: "turno", label: "Turno", type: "select", options: TURNOS, hint: "Determina si puedes entrenar por la mañana o por la tarde." },
+      { key: "escuela", label: "Escuela o institución", type: "text", ph: "Nombre del plantel", wide: true },
+    ],
+  },
+  {
     short: "Consentimientos",
     title: "Consentimientos",
     fields: [
       { key: "tutor", soloMenores: true, label: "Nombre completo del tutor", type: "text", ph: "Padre, madre o tutor legal", wide: true, requiredIfMenor: true },
       { key: "tutorTel", soloMenores: true, label: "Teléfono del tutor", type: "tel", ph: "+52 55 0000 0000", requiredIfMenor: true },
-      { key: "parentesco", soloMenores: true, label: "Parentesco", type: "select", options: ["Padre", "Madre", "Tutor legal"], requiredIfMenor: true },
+      { key: "parentesco", soloMenores: true, label: "Parentesco", type: "select", options: PARENTESCOS, requiredIfMenor: true },
       { key: "tutorEmail", soloMenores: true, label: "Correo del tutor (opcional)", type: "email", ph: "correo@dominio.com" },
       { key: "okPriv", label: "", type: "check", ph: "He leído y acepto el aviso de privacidad y el tratamiento de los datos deportivos aquí incluidos.", wide: true },
       { key: "okVerdad", label: "", type: "check", ph: "Declaro que la información y el video enviados son verídicos y de mi autoría o de mi tutor.", wide: true },

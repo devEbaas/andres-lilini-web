@@ -2,7 +2,7 @@
 
 Revisión de los dos formularios que recogen datos de jugadores, qué falta, y qué obliga la ley mexicana cuando la mayoría de quienes se postulan son menores de edad.
 
-> **Estado**: Fases 0 y 1 implementadas (31 ago 2026). Ver §7.
+> **Estado**: Fases 0, 1 y 2 implementadas (31 ago 2026). Ver §7.
 
 ---
 
@@ -259,6 +259,25 @@ Verificado con `tsc`, `eslint` y `next build`.
 - **La autorización del tutor es una casilla separada** de la de privacidad y la de veracidad. Autorizan cosas distintas y deben poder marcarse por separado.
 
 **Y una limitación que conviene no maquillar**: el consentimiento es hoy **declarativo**. El formulario exige los datos del tutor y su autorización, pero nadie comprueba que quien marca la casilla sea el tutor. La verificación real —un correo o SMS de confirmación al tutor— depende del SMTP, que sigue pendiente. El aviso de privacidad describe el mecanismo tal como es, sin prometer una verificación que todavía no existe.
+
+### Hecho — Fase 2: modelo unificado, columnas y contexto
+
+| Archivo | Qué añade |
+|---|---|
+| `src/lib/content/jugador.ts` | Vocabulario compartido: posiciones, pies, categorías, niveles, escolaridad, turnos, estados |
+| `supabase/migrations/20260831200000_perfil_jugador.sql` | Quince columnas nuevas en `applications`, backfill desde `payload`, y la tabla `application_clubs` |
+| `src/lib/content/programa.ts` | Paso «Estudios» nuevo y el repetidor de clubes; usa el vocabulario compartido |
+| `src/lib/actions/apply.ts` · `src/components/programa/ApplyForm.tsx` | Persistencia estructurada y el repetidor |
+| `src/app/admin/postulaciones/page.tsx` | Posición, pie, club, nivel y escolaridad en el listado |
+
+**Cuatro decisiones que quedaron en el código:**
+
+- **`payload` es lo que se envió; las columnas son cómo se consulta.** La información aparece en los dos sitios a propósito: una conserva el envío íntegro de un formulario que va a seguir cambiando de forma, la otra permite filtrar y ordenar sin recorrer un blob. Ante una discrepancia, mandan las columnas.
+- **Las postulaciones antiguas se rellenan leyendo su propio `payload`.** Sin el backfill quedarían invisibles a cualquier filtro nuevo, que es justo lo que se intentaba arreglar. Los numéricos se convierten sólo si son enteros: lo que no lo sea se ignora en vez de reventar la migración.
+- **El historial de clubes es tabla hija, no un array en el blob.** Es una lista que se ordena por fecha y se cuenta, y se puede buscar por club. Un jugador con cinco clubes en tres años cuenta una historia distinta a uno con seis años en el mismo sitio — y eso es contexto, uno de los tres criterios que el jurado dice evaluar.
+- **El historial se guarda después de la postulación y su fallo no la tumba.** Si el insert del historial falla, la postulación ya está registrada: el historial es contexto, no requisito.
+
+**Y una limitación deliberada**: el historial y el bloque académico están **sólo en `/programa`**, no en la convocatoria. Añadir un repetidor a un formulario público y corto contradiría el argumento de la §4 — la convocatoria se queda breve, y el detalle llega en la fase de preselección.
 
 ### Pendiente
 

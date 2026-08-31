@@ -3,8 +3,9 @@
 import { motion } from "motion/react";
 import { useState, useTransition } from "react";
 
-import { submitApplication, type ApplyPayload } from "@/lib/actions/apply";
+import { submitApplication, type ApplyPayload, type ClubEntry } from "@/lib/actions/apply";
 import { APPLY_STEPS, type ApplyField } from "@/lib/content/programa";
+import { CATEGORIAS, MAX_CLUBES } from "@/lib/content/jugador";
 import { esMenorHoy } from "@/lib/edad";
 import { Spinner } from "@/components/ui/Spinner";
 import { btnQuiet } from "@/components/ui/styles";
@@ -29,7 +30,7 @@ export function ApplyForm() {
   const esMenor = Boolean(nac) && esMenorHoy(nac);
   const visibles = current.fields.filter((f) => !f.soloMenores || esMenor);
 
-  const set = (key: string, value: string | boolean) => {
+  const set = (key: string, value: string | boolean | ClubEntry[]) => {
     setValues((v) => ({ ...v, [key]: value }));
     setErrors((e) => ({ ...e, [key]: "" }));
   };
@@ -155,15 +156,24 @@ export function ApplyForm() {
             y su autorización expresa. Sin eso no podemos evaluar la postulación.
           </p>
         )}
-        {visibles.map((f) => (
-          <Field
-            key={f.key}
-            field={f}
-            value={values[f.key]}
-            error={errors[f.key]}
-            onChange={(v) => set(f.key, v)}
-          />
-        ))}
+        {visibles.map((f) =>
+          f.type === "clubes" ? (
+            <Clubes
+              key={f.key}
+              field={f}
+              value={Array.isArray(values[f.key]) ? (values[f.key] as ClubEntry[]) : []}
+              onChange={(v) => set(f.key, v)}
+            />
+          ) : (
+            <Field
+              key={f.key}
+              field={f}
+              value={values[f.key] as string | boolean | undefined}
+              error={errors[f.key]}
+              onChange={(v) => set(f.key, v)}
+            />
+          ),
+        )}
       </motion.div>
 
       {formError && (
@@ -196,6 +206,119 @@ export function ApplyForm() {
           {pending ? "Enviando" : step === TOTAL - 1 ? "Enviar postulación" : "Siguiente →"}
         </button>
       </div>
+    </div>
+  );
+}
+
+const VACIO: ClubEntry = { club: "", categoria: "", desde: "", hasta: "" };
+
+/**
+ * Repetidor del historial de clubes.
+ *
+ * Es opcional a propósito: pedirlo obligatorio en un formulario que ya
+ * tiene seis pasos añadiría fricción sin ganar nada. Quien lo llena da
+ * contexto; quien no, no queda penalizado.
+ */
+function Clubes({
+  field,
+  value,
+  onChange,
+}: {
+  field: ApplyField;
+  value: ClubEntry[];
+  onChange: (v: ClubEntry[]) => void;
+}) {
+  const filas = value.length ? value : [VACIO];
+
+  const editar = (i: number, k: keyof ClubEntry, v: string) => {
+    const copia = filas.map((f, j) => (i === j ? { ...f, [k]: v } : f));
+    onChange(copia);
+  };
+
+  return (
+    <div className="col-span-full grid gap-3">
+      <span className="label-caps">{field.label}</span>
+      {field.hint && (
+        <span className="-mt-1 font-mono text-[10px] leading-[1.6] text-muted">{field.hint}</span>
+      )}
+
+      {filas.map((fila, i) => (
+        <div
+          key={i}
+          className="grid items-end gap-3 rounded-2xl border border-hairline bg-panel p-3.5 [grid-template-columns:repeat(auto-fit,minmax(130px,1fr))]"
+        >
+          <label className="flex flex-col gap-1.5">
+            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">Club</span>
+            <input
+              value={fila.club}
+              onChange={(e) => editar(i, "club", e.target.value)}
+              placeholder="Nombre del club"
+              className="field !bg-bg"
+            />
+          </label>
+          <label className="flex flex-col gap-1.5">
+            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
+              Categoría
+            </span>
+            <select
+              value={fila.categoria}
+              onChange={(e) => editar(i, "categoria", e.target.value)}
+              className="field !bg-bg appearance-none"
+            >
+              <option value="">—</option>
+              {CATEGORIAS.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="flex flex-col gap-1.5">
+            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
+              Desde
+            </span>
+            <input
+              value={fila.desde}
+              onChange={(e) => editar(i, "desde", e.target.value.replace(/\D/g, "").slice(0, 4))}
+              inputMode="numeric"
+              placeholder="2021"
+              className="field !bg-bg"
+            />
+          </label>
+          <label className="flex flex-col gap-1.5">
+            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
+              Hasta
+            </span>
+            <input
+              value={fila.hasta}
+              onChange={(e) => editar(i, "hasta", e.target.value.replace(/\D/g, "").slice(0, 4))}
+              inputMode="numeric"
+              placeholder="2023"
+              className="field !bg-bg"
+            />
+          </label>
+          {filas.length > 1 && (
+            <button
+              type="button"
+              aria-label={`Quitar el club ${i + 1}`}
+              onClick={() => onChange(filas.filter((_, j) => j !== i))}
+              className="size-11 shrink-0 cursor-pointer rounded-full border border-hairline bg-transparent text-muted hover:border-accent hover:text-ink"
+            >
+              ×
+            </button>
+          )}
+        </div>
+      ))}
+
+      {filas.length < MAX_CLUBES && (
+        <button
+          type="button"
+          onClick={() => onChange([...filas, { ...VACIO }])}
+          className={btnQuiet}
+        >
+          Añadir otro club
+        </button>
+      )}
     </div>
   );
 }
