@@ -35,6 +35,37 @@ export type ApplicationClubInsert = {
   orden?: number;
 };
 
+/**
+ * Expediente de segunda fase. Tabla aparte de `applications` porque
+ * contiene datos de salud —sensibles bajo la LFPDPPP— y porque sólo lo
+ * llena un puñado de candidatos.
+ */
+export type ExpedienteInsert = {
+  application_id: string;
+  sprint_10?: number | null;
+  sprint_30?: number | null;
+  salto_cmj?: number | null;
+  agilidad_test?: string | null;
+  agilidad_seg?: number | null;
+  yoyo?: string | null;
+  protocolo?: string | null;
+  medido_en?: string | null;
+  contacto_nombre?: string | null;
+  contacto_parentesco?: string | null;
+  contacto_tel?: string | null;
+  alergias?: string | null;
+  condiciones?: string | null;
+  lesiones?: string | null;
+  seguro?: string | null;
+  ok_salud?: boolean;
+  ok_imagen?: boolean;
+  imagen_alcance?: string | null;
+  firmante?: string | null;
+  firmante_nombre?: string | null;
+};
+
+export type ExpedienteRow = ExpedienteInsert & { id: string; created_at: string };
+
 export type ApplicationClubRow = ApplicationClubInsert & {
   id: string;
   created_at: string;
@@ -68,6 +99,10 @@ export type ApplicationInsert = {
   escolaridad?: string | null;
   estudia?: boolean | null;
   turno?: string | null;
+  // Invitación al expediente. Se guarda el hash del token, nunca el token.
+  expediente_token_hash?: string | null;
+  expediente_expira?: string | null;
+  expediente_enviado_at?: string | null;
   // Sale del `payload` a columna propia: decide si hacen falta los datos
   // del tutor, y eso no puede vivir dentro de un jsonb.
   nacimiento?: string | null;
@@ -238,8 +273,14 @@ export type Database = {
       applications: Table<
         ApplicationInsert & { id: string; created_at: string; status: ApplicationStatus },
         ApplicationInsert,
-        // El panel sólo cambia el estado; el resto de la fila es del postulante.
-        { status?: ApplicationStatus }
+        // El panel cambia el estado; la invitación al expediente escribe su
+        // token y su fecha. El resto de la fila es del postulante.
+        {
+          status?: ApplicationStatus;
+          expediente_token_hash?: string | null;
+          expediente_expira?: string | null;
+          expediente_enviado_at?: string | null;
+        }
       >;
       convocatoria_entries: Table<
         ConvocatoriaInsert & { id: string; created_at: string },
@@ -259,6 +300,7 @@ export type Database = {
       user_roles: Table<UserRoleRow, Omit<UserRoleRow, "created_at">>;
       admin_audit: Table<AdminAuditRow, AdminAuditInsert>;
       application_clubs: Table<ApplicationClubRow, ApplicationClubInsert>;
+      expedientes: Table<ExpedienteRow, ExpedienteInsert>;
       arco_requests: Table<
         ArcoRow,
         ArcoInsert,

@@ -2,7 +2,7 @@
 
 Revisión de los dos formularios que recogen datos de jugadores, qué falta, y qué obliga la ley mexicana cuando la mayoría de quienes se postulan son menores de edad.
 
-> **Estado**: Fases 0, 1 y 2 implementadas (31 ago 2026). Ver §7.
+> **Estado**: Fases 0, 1, 2 y 3 implementadas (1 sep 2026). Ver §7.
 
 ---
 
@@ -278,6 +278,33 @@ Verificado con `tsc`, `eslint` y `next build`.
 - **El historial se guarda después de la postulación y su fallo no la tumba.** Si el insert del historial falla, la postulación ya está registrada: el historial es contexto, no requisito.
 
 **Y una limitación deliberada**: el historial y el bloque académico están **sólo en `/programa`**, no en la convocatoria. Añadir un repetidor a un formulario público y corto contradiría el argumento de la §4 — la convocatoria se queda breve, y el detalle llega en la fase de preselección.
+
+### Hecho — Fase 3: expediente del preseleccionado
+
+| Archivo | Qué añade |
+|---|---|
+| `supabase/migrations/20260901100000_expediente_preseleccion.sql` | Tabla `expedientes`, columnas de invitación en `applications` y sus CHECK |
+| `src/lib/expediente.ts` | Token, hash y resolución de la invitación |
+| `src/lib/actions/expediente.ts` | Generar enlace (admin) y enviar expediente (público, con token) |
+| `src/app/expediente/[token]/` | Formulario privado del preseleccionado |
+| `src/components/admin/EnlaceExpediente.tsx` | Generar y copiar el enlace, una sola vez |
+| `src/app/admin/expedientes/` | Lectura de los expedientes recibidos |
+
+**Seis decisiones que quedaron en el código:**
+
+- **En la base sólo vive el SHA-256 del token, nunca el token.** El enlace es la credencial: quien lo tiene, entra. Si la base se filtrara, los enlaces no serían utilizables. Es el mismo criterio con el que se guarda una contraseña.
+- **El enlace se muestra una vez y no se puede volver a ver.** Es consecuencia de lo anterior, no un descuido. Si se pierde, se regenera — y el anterior deja de servir, que es justo lo que se quiere si acabó donde no debía.
+- **El token tampoco entra en la auditoría.** Registrar la credencial en `admin_audit` anularía el trabajo de no guardarla en la tabla.
+- **Token inventado, caducado o de una postulación borrada dan la misma pantalla.** Quien prueba enlaces al azar no debe poder deducir cuáles existieron.
+- **La autorización se recomprueba al enviar.** La página que mostró el formulario no decide nada, y el id de la postulación nunca viaja desde el navegador: sale de resolver el token otra vez en el servidor.
+- **Sin consentimiento expreso no se guarda ni una línea de salud**, aunque venga escrita en el formulario. Lo impone la acción y lo repite un CHECK en la base. Son datos sensibles bajo la LFPDPPP y esta es la parte del sistema donde más importa.
+
+**Y dos detalles de producto:**
+
+- El **protocolo de medición** es un campo de primera clase, y el panel marca en rojo los expedientes que llegan sin él. Dos décimas de diferencia entre candidatos pueden ser el cronómetro y no el jugador.
+- El **consentimiento de imagen lleva alcance**: evaluación interna, materiales del programa o redes. Son tres permisos distintos y se pueden querer por separado.
+
+**Limitación conocida**: el enlace se entrega a mano. Sin SMTP no hay forma de mandarlo, así que el admin lo copia y lo envía por donde pueda. Cuando haya correo, es un envío automático más.
 
 ### Pendiente
 
