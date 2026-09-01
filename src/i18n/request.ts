@@ -11,8 +11,11 @@ import { routing } from "./routing";
  * aquí con `lang = "algo-que-no-existe.txt"`. `hasLocale` estrecha el tipo y
  * deja el español como red de seguridad.
  */
-export default getRequestConfig(async ({ requestLocale }) => {
-  const solicitado = await requestLocale;
+export default getRequestConfig(async ({ locale: explicito, requestLocale }) => {
+  // `getTranslations({ locale })` —lo que usan las plantillas de correo— pasa
+  // el idioma por aquí. Tiene prioridad sobre el segmento de la URL: un correo
+  // se redacta en el idioma de quien lo recibe, no en el de quien lo dispara.
+  const solicitado = explicito ?? (await requestLocale);
   const locale = hasLocale(routing.locales, solicitado) ? solicitado : routing.defaultLocale;
 
   return {

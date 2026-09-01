@@ -11,7 +11,7 @@ import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/lib/supabase/env";
 import { enviarCorreo } from "@/lib/email/client";
 import { plantillaArco } from "@/lib/email/plantillas";
 import type { ArcoStatus, ArcoTipo } from "@/lib/supabase/types";
-import { GENERIC_ERROR, isEmail, type ActionResult } from "./types";
+import { GENERIC_ERROR, isEmail, normalizaLocale, type ActionResult } from "./types";
 
 const NO_SESION = "sesionCaducada";
 const NO_AUTORIZADO = "noAutorizado";
@@ -117,6 +117,7 @@ export async function crearSolicitudArco(input: {
   nombre: string;
   email: string;
   detalle: string;
+  locale?: string;
 }): Promise<ActionResult<{ mensaje: string }>> {
   if (!TIPOS.includes(input.tipo as ArcoTipo)) {
     return { ok: false, code: "eligeDerecho" };
@@ -127,7 +128,10 @@ export async function crearSolicitudArco(input: {
   const supabase = createAdminClient();
   if (!supabase) return { ok: false, code: GENERIC_ERROR };
 
+  const locale = normalizaLocale(input.locale);
+
   const { error } = await supabase.from("arco_requests").insert({
+    locale,
     tipo: input.tipo as ArcoTipo,
     nombre: input.nombre.trim().slice(0, 120),
     email: input.email.trim().toLowerCase(),
@@ -144,7 +148,7 @@ export async function crearSolicitudArco(input: {
   // la solicitud ya está registrada y el admin la ve igual.
   await enviarCorreo({
     para: input.email.trim().toLowerCase(),
-    ...plantillaArco({ nombre: input.nombre.trim(), tipo: input.tipo }),
+    ...(await plantillaArco({ nombre: input.nombre.trim(), tipo: input.tipo }, locale)),
   });
 
   return {

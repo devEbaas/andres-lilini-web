@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import type { ErrorRef } from "@/lib/actions/types";
 import { useErrores } from "@/lib/errores";
@@ -16,6 +16,7 @@ const DERECHOS = ["acceso", "rectificacion", "cancelacion", "oposicion"] as cons
 export function DerechosForm() {
   const err = useErrores();
   const t = useTranslations("derechos");
+  const locale = useLocale();
   const [tipo, setTipo] = useState("acceso");
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
@@ -28,7 +29,7 @@ export function DerechosForm() {
     e.preventDefault();
     setError(null);
     startTransition(async () => {
-      const res = await crearSolicitudArco({ tipo, nombre, email, detalle });
+      const res = await crearSolicitudArco({ tipo, nombre, email, detalle, locale });
       if (res.ok) setHecho(res.data.mensaje);
       else setError(res.code);
     });

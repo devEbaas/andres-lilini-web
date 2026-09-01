@@ -7,7 +7,7 @@ import { money } from "@/lib/format";
 import { fulfillCheckout } from "@/lib/stripe/fulfill";
 import { ClearCart } from "@/components/tienda/ClearCart";
 import { btnPrimary, btnQuiet } from "@/components/ui/styles";
-import { fijarIdioma } from "@/i18n/servidor";
+import { fijarIdioma, localeActual } from "@/i18n/servidor";
 
 type Props = { searchParams: Promise<{ session_id?: string }> };
 
@@ -22,6 +22,7 @@ export default async function GraciasPage({ searchParams }: Props) {
   // se vuelve dinámica al resolver el locale por cabecera.
   await fijarIdioma();
 
+  const locale = await localeActual();
   const t = await getTranslations("gracias");
 
   const { session_id: sessionId } = await searchParams;
@@ -79,18 +80,18 @@ export default async function GraciasPage({ searchParams }: Props) {
                   {l.name}
                   {l.qty > 1 && <span className="text-muted"> × {l.qty}</span>}
                 </span>
-                <span className="shrink-0 font-mono text-muted">{money(l.amount)}</span>
+                <span className="shrink-0 font-mono text-muted">{money(l.amount, locale)}</span>
               </div>
             ))}
 
             <div className="mt-4 border-t border-hairline pt-4">
               <div className="flex justify-between text-sm text-muted">
                 <span>{t("envio")}</span>
-                <span className="font-mono">{money(order.shipping)}</span>
+                <span className="font-mono">{money(order.shipping, locale)}</span>
               </div>
               <div className="mt-3 flex justify-between font-display text-2xl uppercase">
                 <span>{t("total")}</span>
-                <span>{money(order.total)}</span>
+                <span>{money(order.total, locale)}</span>
               </div>
             </div>
 

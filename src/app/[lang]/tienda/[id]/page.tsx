@@ -34,11 +34,12 @@ export default async function ProductPage({ params }: Params) {
   // Fija el idioma antes de cualquier lectura: sin esto la página
   // se vuelve dinámica al resolver el locale por cabecera.
   await fijarIdioma();
+  const locale = await localeActual();
   const t = await getTranslations("store");
   const tc = await getTranslations("store.cats");
 
   const { id } = await params;
-  const product = await getProduct(id, await localeActual());
+  const product = await getProduct(id, locale);
   if (!product) notFound();
 
   return (
@@ -74,7 +75,7 @@ export default async function ProductPage({ params }: Params) {
               {product.name}
             </h1>
             <p className="m-0 mb-[22px] text-[17px] text-muted">{product.sub}</p>
-            <div className="mb-6 font-display text-[40px]">{money(product.price)}</div>
+            <div className="mb-6 font-display text-[40px]">{money(product.price, locale)}</div>
             <p className="m-0 mb-[30px] max-w-[52ch] leading-[1.75] text-pretty text-muted">
               {product.desc}
             </p>

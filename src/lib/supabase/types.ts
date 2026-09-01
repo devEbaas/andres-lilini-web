@@ -222,13 +222,15 @@ export type ArcoTipo = "acceso" | "rectificacion" | "cancelacion" | "oposicion";
 export type ArcoStatus = "recibida" | "en_proceso" | "atendida" | "rechazada";
 
 export type ArcoInsert = {
+  locale?: FilaLocale;
   tipo: ArcoTipo;
   nombre: string;
   email: string;
   detalle: string;
 };
 
-export type ArcoRow = ArcoInsert & {
+export type ArcoRow = ArcoInsert &
+  FilaLeida & {
   id: string;
   status: ArcoStatus;
   nota: string | null;

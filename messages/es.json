@@ -1223,5 +1223,41 @@
     "soloMexico": "La convocatoria es sólo para residentes en México.",
     "subidaFallida": "No pudimos subir el archivo. Inténtalo de nuevo.",
     "telefonoNecesario": "Necesitamos un teléfono."
+  },
+  "email": {
+    "marca": "Andrés Lillini",
+    "pie": "Recibes este mensaje porque alguien lo solicitó desde {dominio}. Si no fuiste tú, ignóralo.",
+    "botonFallback": "Si el botón no funciona, copia esta dirección:",
+    "tutor": {
+      "asunto": "Autoriza la postulación de {jugador}",
+      "titulo": "Necesitamos tu autorización",
+      "p1": "{jugador} se postuló al programa de atletas y te señaló como su padre, madre o tutor legal.",
+      "p2": "Como es menor de edad, no podemos evaluar la postulación <b>{folio}</b> sin que tú lo autorices expresamente. Confírmalo desde aquí:",
+      "boton": "Autorizar la postulación",
+      "enlace": "Autoriza aquí:",
+      "caduca": "El enlace caduca en {dias} días. Si no reconoces esta postulación, no hagas nada: sin tu confirmación no se evalúa."
+    },
+    "expediente": {
+      "asunto": "Pasaste el primer corte",
+      "titulo": "Pasaste el primer corte",
+      "p1": "Hola, {jugador}. Tu postulación <b>{folio}</b> avanzó a la siguiente fase.",
+      "p2": "Nos falta un último bloque de datos antes de citarte: medibles, un contacto de emergencia y las autorizaciones. No te lo pedimos al postularte porque sólo hace falta ahora.",
+      "boton": "Completar mi expediente",
+      "enlace": "Complétalo aquí:",
+      "caduca": "El enlace es personal y caduca en {dias} días. No lo compartas."
+    },
+    "arco": {
+      "asunto": "Recibimos tu solicitud",
+      "titulo": "Recibimos tu solicitud",
+      "p1": "Hola, {nombre}. Registramos tu solicitud de <b>{derecho}</b> sobre tus datos personales.",
+      "p2": "Antes de entregar o eliminar información tenemos que comprobar que eres quien dices ser. Te escribiremos a esta misma dirección para acreditarlo.",
+      "p3": "Este mensaje es sólo un acuse: no hace falta que respondas todavía."
+    },
+    "derechos": {
+      "acceso": "acceso",
+      "rectificacion": "rectificación",
+      "cancelacion": "cancelación",
+      "oposicion": "oposición"
+    }
   }
 }

@@ -164,12 +164,17 @@ export async function submitApplication(
     if (errorToken) {
       console.error("[submitApplication] token de tutor", errorToken.message);
     } else {
-      const plantilla = plantillaTutor({
-        jugador: t("nombre"),
-        folio: `AL-2026-${folio}`,
-        url: `${siteUrl()}/tutor/${token}`,
-        dias: TUTOR_DIAS,
-      });
+      // Va bilingüe si la postulación no fue en español: quien autoriza es
+      // el tutor, y no tiene por qué leer el idioma que eligió el jugador.
+      const plantilla = await plantillaTutor(
+        {
+          jugador: t("nombre"),
+          folio: `AL-2026-${folio}`,
+          url: `${siteUrl()}/tutor/${token}`,
+          dias: TUTOR_DIAS,
+        },
+        normalizaLocale(locale),
+      );
       await enviarCorreo({ para: t("tutorEmail"), ...plantilla });
     }
   }

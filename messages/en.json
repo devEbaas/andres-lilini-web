@@ -1223,5 +1223,41 @@
     "soloMexico": "The open call is only for residents of Mexico.",
     "subidaFallida": "We couldn't upload the file. Please try again.",
     "telefonoNecesario": "We need a phone number."
+  },
+  "email": {
+    "marca": "Andrés Lillini",
+    "pie": "You're receiving this because someone requested it from {dominio}. If it wasn't you, ignore it.",
+    "botonFallback": "If the button doesn't work, copy this address:",
+    "tutor": {
+      "asunto": "Authorise {jugador}'s application",
+      "titulo": "We need your authorisation",
+      "p1": "{jugador} applied to the athlete program and named you as their parent or legal guardian.",
+      "p2": "As they're under 18, we can't assess application <b>{folio}</b> without your express authorisation. Confirm it here:",
+      "boton": "Authorise the application",
+      "enlace": "Authorise here:",
+      "caduca": "The link expires in {dias} days. If you don't recognise this application, do nothing: without your confirmation it isn't assessed."
+    },
+    "expediente": {
+      "asunto": "You made the first cut",
+      "titulo": "You made the first cut",
+      "p1": "Hi {jugador}. Your application <b>{folio}</b> moved on to the next stage.",
+      "p2": "We need one last block of information before inviting you in: metrics, an emergency contact and the authorisations. We didn't ask for it at application time because it's only needed now.",
+      "boton": "Complete my file",
+      "enlace": "Complete it here:",
+      "caduca": "The link is personal and expires in {dias} days. Don't share it."
+    },
+    "arco": {
+      "asunto": "We received your request",
+      "titulo": "We received your request",
+      "p1": "Hi {nombre}. We've registered your <b>{derecho}</b> request regarding your personal data.",
+      "p2": "Before releasing or deleting information we have to check that you are who you say you are. We'll write to this same address to verify it.",
+      "p3": "This message is only an acknowledgement: you don't need to reply yet."
+    },
+    "derechos": {
+      "acceso": "access",
+      "rectificacion": "rectification",
+      "cancelacion": "deletion",
+      "oposicion": "objection"
+    }
   }
 }

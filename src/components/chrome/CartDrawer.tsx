@@ -10,6 +10,7 @@ import { useErrores } from "@/lib/errores";
 
 import { startCheckout } from "@/lib/actions/checkout";
 import { money } from "@/lib/format";
+import type { Locale } from "@/i18n/routing";
 import { useCart } from "@/lib/store/cart";
 import { useToast } from "@/lib/store/toast";
 import { btnQuiet } from "@/components/ui/styles";
@@ -17,7 +18,7 @@ import { btnQuiet } from "@/components/ui/styles";
 export function CartDrawer() {
   const err = useErrores();
   const t = useTranslations("cart");
-  const locale = useLocale();
+  const locale = useLocale() as Locale;
   const { lines, isOpen, close, setQty, remove, subtotal, shipping, total } = useCart();
   const { flash } = useToast();
   const [pending, startTransition] = useTransition();
@@ -114,7 +115,7 @@ export function CartDrawer() {
                       <div className="min-w-0 flex-1">
                         <div className="text-sm font-bold leading-[1.4]">{l.name}</div>
                         <div className="my-1 mb-2.5 font-mono text-[11px] text-muted">
-                          {t("cadaUno", { precio: money(l.price) })}
+                          {t("cadaUno", { precio: money(l.price, locale) })}
                         </div>
                         <div className="flex items-center gap-2.5">
                           <div className="flex items-center rounded-full border border-hairline">
@@ -154,15 +155,15 @@ export function CartDrawer() {
                 <div className="grid gap-2.5 border-t border-hairline px-6 py-[22px]">
                   <div className="flex justify-between text-sm text-muted">
                     <span>{t("subtotal")}</span>
-                    <span>{money(subtotal)}</span>
+                    <span>{money(subtotal, locale)}</span>
                   </div>
                   <div className="flex justify-between text-sm text-muted">
                     <span>{t("envio")}</span>
-                    <span>{money(shipping)}</span>
+                    <span>{money(shipping, locale)}</span>
                   </div>
                   <div className="mt-1.5 flex justify-between font-display text-2xl uppercase">
                     <span>{t("total")}</span>
-                    <span>{money(total)}</span>
+                    <span>{money(total, locale)}</span>
                   </div>
                   {error && (
                     <p className="m-0 text-[13px] text-danger-text" role="alert">

@@ -53,7 +53,7 @@ export async function generarEnlaceExpediente(
       expediente_enviado_at: null,
     })
     .eq("id", applicationId)
-    .select("id, nombre, email, folio")
+    .select("id, nombre, email, folio, locale")
     .maybeSingle();
 
   if (error) {
@@ -78,12 +78,17 @@ export async function generarEnlaceExpediente(
   // manda por donde pueda, que es como funcionaba hasta ahora.
   const enviado = await enviarCorreo({
     para: data.email,
-    ...plantillaExpediente({
-      jugador: data.nombre.split(" ")[0],
-      folio: data.folio,
-      url,
-      dias: EXPEDIENTE_DIAS,
-    }),
+    // El idioma es el que guardó la postulación, no el del admin que pulsa
+    // el botón: quien lee el correo es el jugador.
+    ...(await plantillaExpediente(
+      {
+        jugador: data.nombre.split(" ")[0],
+        folio: data.folio,
+        url,
+        dias: EXPEDIENTE_DIAS,
+      },
+      data.locale,
+    )),
   });
 
   revalidatePath("/admin/postulaciones");
