@@ -1,6 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+
+import { conIdioma } from "@/i18n/rutas";
 
 import { getClaims } from "@/lib/auth/dal";
 import { createServerSupabase } from "@/lib/supabase/server";
@@ -56,7 +59,7 @@ export async function signUp(input: {
   const supabase = await createServerSupabase();
   if (!supabase) return { ok: false, code: SIN_CONFIGURAR };
 
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email: input.email.trim().toLowerCase(),
     password: input.password,
     options: {
@@ -82,6 +85,18 @@ export async function signUp(input: {
     }
     // Cualquier otra cosa, incluido «ya existe», sale como el mensaje neutro.
     return { ok: true, data: { mensaje: REVISA_CORREO } };
+  }
+
+  // Con la confirmación por correo desactivada en Supabase, `signUp` ya
+  // devuelve sesión: la cuenta queda usable al instante y decir «revisa tu
+  // correo» sería falso.
+  //
+  // Se redirige desde el servidor, igual que en `signIn`: así la cookie recién
+  // escrita y la navegación viajan en la misma respuesta. Devolver un mensaje
+  // dejaba a la persona dentro pero en una página que seguía ofreciéndole
+  // «Entrar», sin nada que la llevara a su cuenta.
+  if (data.session) {
+    redirect(conIdioma("/cuenta", normalizaLocale(input.locale)));
   }
 
   return { ok: true, data: { mensaje: REVISA_CORREO } };
