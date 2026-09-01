@@ -3,22 +3,26 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 
+import type { ErrorRef } from "@/lib/actions/types";
+import { useErrores } from "@/lib/errores";
+
 import { actualizarPassword } from "@/lib/actions/cuenta";
 import { Spinner } from "@/components/ui/Spinner";
 
 export function PasswordForm() {
+  const err = useErrores();
   const t = useTranslations("account");
   const [password, setPassword] = useState("");
   const [repetir, setRepetir] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ErrorRef | null>(null);
   const [hecho, setHecho] = useState(false);
   const [pending, startTransition] = useTransition();
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError(null);
     if (password !== repetir) {
-      setError(t("noCoinciden"));
+      setError("passwordNoCoinciden");
       return;
     }
     startTransition(async () => {
@@ -28,7 +32,7 @@ export function PasswordForm() {
         setRepetir("");
         setHecho(true);
       } else {
-        setError(res.error);
+        setError(res.code);
       }
     });
   };
@@ -65,7 +69,7 @@ export function PasswordForm() {
           role="alert"
           className="rounded-[14px] border border-danger/50 bg-danger/10 px-4 py-3.5 text-sm text-danger-text"
         >
-          {error}
+          {err(error)}
         </div>
       )}
       {hecho && <p className="m-0 text-sm text-accent">{t("contrasenaActualizada")}</p>}

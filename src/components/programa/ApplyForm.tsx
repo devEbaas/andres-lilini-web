@@ -4,6 +4,9 @@ import { motion } from "motion/react";
 import { useState, useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
+import type { ErrorRef } from "@/lib/actions/types";
+import { useErrores } from "@/lib/errores";
+
 import { submitApplication, type ApplyPayload, type ClubEntry } from "@/lib/actions/apply";
 import { APPLY_STEPS, type ApplyField } from "@/lib/content/programa";
 import { CATEGORIAS, MAX_CLUBES } from "@/lib/content/jugador";
@@ -14,14 +17,15 @@ import { btnQuiet } from "@/components/ui/styles";
 const TOTAL = APPLY_STEPS.length;
 
 export function ApplyForm() {
+  const err = useErrores();
   const t = useTranslations("programa.form");
   const locale = useLocale();
   const ts = useTranslations("programa.steps");
   const [step, setStep] = useState(0);
   const [values, setValues] = useState<ApplyPayload>({});
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Record<string, ErrorRef>>({});
   const [folio, setFolio] = useState<string | null>(null);
-  const [formError, setFormError] = useState("");
+  const [formError, setFormError] = useState<ErrorRef | null>(null);
   const [pending, startTransition] = useTransition();
 
   const current = APPLY_STEPS[step];
@@ -36,12 +40,12 @@ export function ApplyForm() {
 
   const set = (key: string, value: string | boolean | ClubEntry[]) => {
     setValues((v) => ({ ...v, [key]: value }));
-    setErrors((e) => ({ ...e, [key]: "" }));
+    setErrors(({ [key]: _quitado, ...resto }) => resto);
   };
 
   const goTo = (i: number) => {
     setStep(i);
-    setFormError("");
+    setFormError(null);
   };
 
   const next = () => {
@@ -49,7 +53,7 @@ export function ApplyForm() {
       goTo(step + 1);
       return;
     }
-    setFormError("");
+    setFormError(null);
     startTransition(async () => {
       const res = await submitApplication(values, locale);
       if (res.ok) {
@@ -58,7 +62,7 @@ export function ApplyForm() {
         return;
       }
       setErrors(res.fieldErrors ?? {});
-      setFormError(res.error);
+      setFormError(res.code);
       // Lleva al usuario al primer paso que tenga un campo con error.
       const bad = Object.keys(res.fieldErrors ?? {})[0];
       if (bad) {
@@ -186,7 +190,7 @@ export function ApplyForm() {
           role="alert"
           className="mx-[clamp(24px,3.5vw,40px)] mb-2 rounded-[14px] border border-danger/50 bg-danger/10 px-4 py-3.5 text-sm text-danger-text"
         >
-          {formError}
+          {err(formError)}
         </p>
       )}
 
@@ -341,9 +345,10 @@ function Field({
 }: {
   field: ApplyField;
   value: string | boolean | undefined;
-  error?: string;
+  error?: ErrorRef;
   onChange: (v: string | boolean) => void;
 }) {
+  const err = useErrores();
   const t = useTranslations("programa.form");
   const tf = useTranslations("programa.f");
   const tv = useTranslations("vocab");
@@ -455,7 +460,7 @@ function Field({
       {hint && !error && <span className="font-mono text-[10px] text-muted">{hint}</span>}
       {error && (
         <span className="text-xs font-semibold text-danger-text" role="alert">
-          {error}
+          {err(error)}
         </span>
       )}
     </div>

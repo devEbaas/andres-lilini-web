@@ -15,11 +15,11 @@ import {
   edadAlCierre,
 } from "@/lib/content/fundacion";
 import { esMenorHoy } from "@/lib/edad";
-import { GENERIC_ERROR, isEmail, normalizaLocale, randomFolio, type ActionResult } from "./types";
+import { GENERIC_ERROR, isEmail, normalizaLocale, randomFolio, type ActionResult, type ErrorRef } from "./types";
 
 const REQUERIDOS = CONVOCATORIA_CHECKS.filter((c) => c.requerido).map((c) => c.k);
 
-const REVISA = "Revisa los campos marcados.";
+const REVISA = "revisaCampos";
 
 export async function submitConvocatoria(
   formData: FormData,
@@ -43,27 +43,28 @@ export async function submitConvocatoria(
   const tutorTel = t("tutorTel");
   const tutorEmail = t("tutorEmail");
 
-  const fieldErrors: Record<string, string> = {};
+  const fieldErrors: Record<string, ErrorRef> = {};
 
   // ── Identidad ──
-  if (!nombre) fieldErrors.nombre = "Escribe tu nombre completo.";
-  if (!isEmail(email)) fieldErrors.email = "Necesitamos un correo válido.";
+  if (!nombre) fieldErrors.nombre = "nombreCompleto";
+  if (!isEmail(email)) fieldErrors.email = "correoNecesario";
 
   // ── Elegibilidad ──
   // Las bases fijan 12 a 21 años y residencia en México. Hasta ahora eran
   // requisitos publicados que nadie comprobaba.
   if (!nacimiento) {
-    fieldErrors.nacimiento = "Necesitamos tu fecha de nacimiento.";
+    fieldErrors.nacimiento = "fechaNecesaria";
   } else {
     const edad = edadAlCierre(nacimiento);
     if (edad === null) {
-      fieldErrors.nacimiento = "Esa fecha no es válida.";
+      fieldErrors.nacimiento = "fechaInvalida";
     } else if (edad < EDAD_MIN || edad > EDAD_MAX) {
       // Se dice la razón exacta: quedar fuera por edad no es un error del
       // participante y merece una explicación, no un «revisa los campos».
-      fieldErrors.nacimiento =
-        `La convocatoria es para jugadores de ${EDAD_MIN} a ${EDAD_MAX} años al cierre. ` +
-        `Con esa fecha tendrías ${edad}.`;
+      fieldErrors.nacimiento = {
+        k: "edadFueraDeRango",
+        p: { min: EDAD_MIN, max: EDAD_MAX, edad },
+      };
     }
   }
 
@@ -74,45 +75,45 @@ export async function submitConvocatoria(
   const esMenor = Boolean(nacimiento) && esMenorHoy(nacimiento);
 
   if (esMenor) {
-    if (!tutorNombre) fieldErrors.tutorNombre = "Obligatorio para menores de edad.";
+    if (!tutorNombre) fieldErrors.tutorNombre = "obligatorioMenores";
     if (!PARENTESCOS.includes(tutorParentesco)) {
-      fieldErrors.tutorParentesco = "Elige el parentesco.";
+      fieldErrors.tutorParentesco = "eligeParentesco";
     }
-    if (!tutorTel) fieldErrors.tutorTel = "Necesitamos un contacto del tutor.";
+    if (!tutorTel) fieldErrors.tutorTel = "contactoTutor";
     if (tutorEmail && !isEmail(tutorEmail)) {
-      fieldErrors.tutorEmail = "Revisa el formato del correo.";
+      fieldErrors.tutorEmail = "correoFormato";
     }
     if (formData.get("tutor") !== "on") {
-      fieldErrors.tutor = "Necesitamos la autorización de tu tutor.";
+      fieldErrors.tutor = "autorizacionTutor";
     }
   }
 
   if (pais !== "México") {
-    fieldErrors.pais = "La convocatoria es sólo para residentes en México.";
+    fieldErrors.pais = "soloMexico";
   } else if (!ESTADOS_MX.includes(estado)) {
-    fieldErrors.estado = "Elige tu estado de residencia.";
+    fieldErrors.estado = "eligeEstado";
   }
 
   if (formData.get("contrato") !== "on") {
-    fieldErrors.contrato = "Necesitamos esta declaración para poder evaluarte.";
+    fieldErrors.contrato = "declaracionNecesaria";
   }
 
   // ── Perfil deportivo ──
-  if (!CATEGORIAS.includes(categoria)) fieldErrors.categoria = "Elige tu categoría.";
-  if (!POSICIONES.includes(posicion)) fieldErrors.posicion = "Elige tu posición principal.";
-  if (!PIES.includes(pie)) fieldErrors.pie = "Indica tu pie dominante.";
-  if (!club) fieldErrors.club = "Dinos en qué equipo juegas hoy.";
+  if (!CATEGORIAS.includes(categoria)) fieldErrors.categoria = "eligeCategoria";
+  if (!POSICIONES.includes(posicion)) fieldErrors.posicion = "eligePosicion";
+  if (!PIES.includes(pie)) fieldErrors.pie = "indicaPie";
+  if (!club) fieldErrors.club = "equipoActual";
 
   // ── Propuesta y consentimientos ──
   if (propuesta.length < 20) {
-    fieldErrors.propuesta = "Cuéntanos un poco más: al menos veinte caracteres.";
+    fieldErrors.propuesta = "propuestaCorta";
   }
   for (const k of REQUERIDOS) {
-    if (formData.get(k) !== "on") fieldErrors[k] = "Necesitamos tu aceptación.";
+    if (formData.get(k) !== "on") fieldErrors[k] = "aceptacionNecesaria";
   }
 
   if (Object.keys(fieldErrors).length) {
-    return { ok: false, error: REVISA, fieldErrors };
+    return { ok: false, code: REVISA, fieldErrors };
   }
 
   // ── Archivo ──
@@ -120,10 +121,10 @@ export async function submitConvocatoria(
   const upload = file instanceof File && file.size > 0 ? file : null;
   if (upload) {
     if (upload.size > UPLOAD_MAX_BYTES) {
-      return { ok: false, error: "El archivo supera los 25 MB permitidos." };
+      return { ok: false, code: "archivoGrande" };
     }
     if (!UPLOAD_ACCEPT.includes(upload.type)) {
-      return { ok: false, error: "Formato no admitido. Usa PDF, JPG, PNG o MP4." };
+      return { ok: false, code: "formatoMal" };
     }
   }
 
@@ -141,7 +142,7 @@ export async function submitConvocatoria(
 
     if (uploadError) {
       console.error("[submitConvocatoria:upload]", uploadError.message);
-      return { ok: false, error: "No pudimos subir el archivo. Inténtalo de nuevo." };
+      return { ok: false, code: "subidaFallida" };
     }
   }
 
@@ -179,11 +180,11 @@ export async function submitConvocatoria(
     if (error.code === "23505") {
       return {
         ok: false,
-        error: "Ya registramos una participación con este correo. Sólo se admite una por jugador.",
+        code: "participacionDuplicada",
       };
     }
     console.error("[submitConvocatoria]", error.message);
-    return { ok: false, error: GENERIC_ERROR };
+    return { ok: false, code: GENERIC_ERROR };
   }
 
   return { ok: true, data: { folio } };

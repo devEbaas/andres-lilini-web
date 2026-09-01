@@ -8,7 +8,7 @@ import { plantillaTutor } from "@/lib/email/plantillas";
 import { enDias, hashToken, nuevoToken } from "@/lib/tokens";
 import { siteUrl } from "@/lib/urls";
 import { esMenorHoy } from "@/lib/edad";
-import { GENERIC_ERROR, isEmail, normalizaLocale, randomFolio, type ActionResult } from "./types";
+import { GENERIC_ERROR, isEmail, normalizaLocale, randomFolio, type ActionResult, type ErrorRef } from "./types";
 
 /** Una fila del historial de clubes tal como la manda el formulario. */
 export type ClubEntry = { club: string; categoria: string; desde: string; hasta: string };
@@ -24,17 +24,17 @@ export async function submitApplication(
   /** Idioma del formulario: decide en qué lengua se responde después. */
   locale?: string,
 ): Promise<ActionResult<{ folio: string }>> {
-  const fieldErrors: Record<string, string> = {};
+  const fieldErrors: Record<string, ErrorRef> = {};
   const t = (k: string) => String(payload[k] ?? "").trim();
 
   for (const f of SIEMPRE) {
-    if (!t(f.key)) fieldErrors[f.key] = "Este dato es obligatorio.";
+    if (!t(f.key)) fieldErrors[f.key] = "obligatorio";
   }
 
   const email = t("email");
-  if (email && !isEmail(email)) fieldErrors.email = "Revisa el formato del correo.";
-  if (!payload.okPriv) fieldErrors.okPriv = "Necesitamos tu consentimiento para continuar.";
-  if (!payload.okVerdad) fieldErrors.okVerdad = "Confirma que la información es verídica.";
+  if (email && !isEmail(email)) fieldErrors.email = "correoFormato";
+  if (!payload.okPriv) fieldErrors.okPriv = "consentimientoContinuar";
+  if (!payload.okVerdad) fieldErrors.okVerdad = "confirmaVeracidad";
 
   // ── Menores ───────────────────────────────────────────────
   // La minoría se mide hoy, no al cierre de nada: es el momento en que se
@@ -49,22 +49,22 @@ export async function submitApplication(
       if (vacio) {
         fieldErrors[f.key] =
           f.type === "check"
-            ? "Necesitamos la autorización de tu tutor."
-            : "Obligatorio para menores de edad.";
+            ? "autorizacionTutor"
+            : "obligatorioMenores";
       }
     }
     const parentesco = t("parentesco");
     if (parentesco && !PARENTESCOS.includes(parentesco)) {
-      fieldErrors.parentesco = "Elige el parentesco.";
+      fieldErrors.parentesco = "eligeParentesco";
     }
     const tutorEmail = t("tutorEmail");
     if (tutorEmail && !isEmail(tutorEmail)) {
-      fieldErrors.tutorEmail = "Revisa el formato del correo.";
+      fieldErrors.tutorEmail = "correoFormato";
     }
   }
 
   if (Object.keys(fieldErrors).length) {
-    return { ok: false, error: "Revisa los campos marcados.", fieldErrors };
+    return { ok: false, code: "revisaCampos", fieldErrors };
   }
 
   const folio = randomFolio();
@@ -121,7 +121,7 @@ export async function submitApplication(
 
   if (error) {
     console.error("[submitApplication]", error.message);
-    return { ok: false, error: GENERIC_ERROR };
+    return { ok: false, code: GENERIC_ERROR };
   }
 
   // El historial va después y en su propia tabla. Si falla, la postulación

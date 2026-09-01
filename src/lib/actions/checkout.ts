@@ -19,7 +19,7 @@ type CheckoutResult = {
   url: string | null;
 };
 
-const CHECKOUT_ERROR = "No pudimos abrir la pasarela de pago. Inténtalo de nuevo.";
+const CHECKOUT_ERROR = "pasarela";
 
 export async function startCheckout(
   lines: CartLineInput[],
@@ -30,7 +30,7 @@ export async function startCheckout(
    */
   locale?: string,
 ): Promise<ActionResult<CheckoutResult>> {
-  if (!lines.length) return { ok: false, error: "Tu bolsa está vacía." };
+  if (!lines.length) return { ok: false, code: "bolsaVacia" };
 
   // Los precios se recalculan contra el catálogo: lo que manda el navegador
   // sólo dice *qué* y *cuánto*, nunca a qué precio.
@@ -43,7 +43,7 @@ export async function startCheckout(
   });
 
   if (!items.length) {
-    return { ok: false, error: "Los artículos de tu bolsa ya no están disponibles." };
+    return { ok: false, code: "articulosNoDisponibles" };
   }
 
   const subtotal = items.reduce((a, i) => a + i.price * i.qty, 0);
@@ -74,7 +74,7 @@ export async function startCheckout(
 
   if (error) {
     console.error("[startCheckout]", error.message);
-    return { ok: false, error: GENERIC_ERROR };
+    return { ok: false, code: GENERIC_ERROR };
   }
 
   const orderId = data.id;
@@ -130,6 +130,6 @@ export async function startCheckout(
     return { ok: true, data: { orderId, total, url: session.url } };
   } catch (e) {
     console.error("[startCheckout] Stripe", (e as Error).message);
-    return { ok: false, error: CHECKOUT_ERROR };
+    return { ok: false, code: CHECKOUT_ERROR };
   }
 }

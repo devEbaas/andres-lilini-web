@@ -4,6 +4,9 @@ import { motion } from "motion/react";
 import { useRef, useState, useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
+import type { ErrorRef } from "@/lib/actions/types";
+import { useErrores } from "@/lib/errores";
+
 import { submitConvocatoria } from "@/lib/actions/convocatoria";
 import {
   CATEGORIAS,
@@ -21,7 +24,7 @@ import {
 import { bytesToMb } from "@/lib/format";
 import { esMenorHoy } from "@/lib/edad";
 
-type Errores = Record<string, string>;
+type Errores = Record<string, ErrorRef>;
 
 /** Etiqueta, control y su error. Con doce campos, repetirlo no compensa. */
 function Campo({
@@ -39,6 +42,7 @@ function Campo({
   hint?: string;
   children: React.ReactNode;
 }) {
+  const err = useErrores();
   const error = errores[name];
   return (
     <label className={`flex flex-col gap-[9px] ${ancho ? "col-span-full" : ""}`}>
@@ -49,7 +53,7 @@ function Campo({
       )}
       {error && (
         <span role="alert" className="text-[11px] leading-[1.5] text-danger-text">
-          {error}
+          {err(error)}
         </span>
       )}
     </label>
@@ -67,8 +71,9 @@ function Casilla({
   label: string;
   marcada: boolean;
   onToggle: () => void;
-  error?: string;
+  error?: ErrorRef;
 }) {
+  const err = useErrores();
   return (
     <div className="grid gap-1.5">
       <button
@@ -91,7 +96,7 @@ function Casilla({
       </button>
       {error && (
         <span role="alert" className="text-[11px] text-danger-text">
-          {error}
+          {err(error)}
         </span>
       )}
     </div>
@@ -99,6 +104,7 @@ function Casilla({
 }
 
 export function ConvocatoriaForm() {
+  const err = useErrores();
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -110,26 +116,26 @@ export function ConvocatoriaForm() {
   const [nacimiento, setNacimiento] = useState("");
   const [checks, setChecks] = useState<Record<string, boolean>>({});
   const [errores, setErrores] = useState<Errores>({});
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ErrorRef | null>(null);
   const [folio, setFolio] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
   const marcar = (k: string) => {
     setChecks((s) => ({ ...s, [k]: !s[k] }));
-    setErrores((e) => ({ ...e, [k]: "" }));
+    setErrores(({ [k]: _quitado, ...resto }) => resto);
   };
 
   const takeFile = (f: File | null | undefined) => {
     if (!f) return;
     if (f.size > UPLOAD_MAX_BYTES) {
-      setError(t("archivoGrande"));
+      setError("archivoGrande");
       return;
     }
     if (!UPLOAD_ACCEPT.includes(f.type)) {
-      setError(t("formatoMal"));
+      setError("formatoMal");
       return;
     }
-    setError("");
+    setError(null);
     setFile(f);
   };
 
@@ -141,7 +147,7 @@ export function ConvocatoriaForm() {
     fd.set("locale", locale);
     if (file) fd.set("file", file);
     else fd.delete("file");
-    setError("");
+    setError(null);
     setErrores({});
     startTransition(async () => {
       const res = await submitConvocatoria(fd);
@@ -151,7 +157,7 @@ export function ConvocatoriaForm() {
         return;
       }
       setErrores(res.fieldErrors ?? {});
-      setError(res.error);
+      setError(res.code);
     });
   };
 
@@ -457,7 +463,7 @@ export function ConvocatoriaForm() {
           role="alert"
           className="mt-4 rounded-[14px] border border-danger/50 bg-danger/10 px-4 py-3.5 text-sm text-danger-text"
         >
-          {error}
+          {err(error)}
         </p>
       )}
 

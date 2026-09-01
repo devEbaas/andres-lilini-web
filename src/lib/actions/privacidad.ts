@@ -13,8 +13,8 @@ import { plantillaArco } from "@/lib/email/plantillas";
 import type { ArcoStatus, ArcoTipo } from "@/lib/supabase/types";
 import { GENERIC_ERROR, isEmail, type ActionResult } from "./types";
 
-const NO_SESION = "Tu sesión ha caducado. Vuelve a entrar.";
-const NO_AUTORIZADO = "Tu sesión no permite esta acción.";
+const NO_SESION = "sesionCaducada";
+const NO_AUTORIZADO = "noAutorizado";
 
 const TIPOS: ArcoTipo[] = ["acceso", "rectificacion", "cancelacion", "oposicion"];
 const ESTADOS: ArcoStatus[] = ["recibida", "en_proceso", "atendida", "rechazada"];
@@ -30,10 +30,10 @@ const ESTADOS: ArcoStatus[] = ["recibida", "en_proceso", "atendida", "rechazada"
  */
 export async function exportarMisDatos(): Promise<ActionResult<{ json: string }>> {
   const claims = await getClaims();
-  if (!claims) return { ok: false, error: NO_SESION };
+  if (!claims) return { ok: false, code: NO_SESION };
 
   const supabase = await createServerSupabase();
-  if (!supabase) return { ok: false, error: GENERIC_ERROR };
+  if (!supabase) return { ok: false, code: GENERIC_ERROR };
 
   const [perfil, pedidos] = await Promise.all([
     supabase.from("profiles").select("*").eq("id", claims.userId).maybeSingle(),
@@ -57,10 +57,10 @@ export async function cancelarMiCuenta(input: {
   confirmacion: string;
 }): Promise<ActionResult<{ pedidosAnonimizados: number }>> {
   const claims = await getClaims();
-  if (!claims || !claims.email) return { ok: false, error: NO_SESION };
+  if (!claims || !claims.email) return { ok: false, code: NO_SESION };
 
   if (input.confirmacion.trim().toLowerCase() !== claims.email.toLowerCase()) {
-    return { ok: false, error: "Escribe tu correo exactamente para confirmar." };
+    return { ok: false, code: "correoExacto" };
   }
 
   // Reautenticación con un cliente desechable, sin cookies: si la contraseña
@@ -74,27 +74,27 @@ export async function cancelarMiCuenta(input: {
     password: input.password,
   });
   if (errorPassword) {
-    return { ok: false, error: "La contraseña no es correcta." };
+    return { ok: false, code: "passwordIncorrecta" };
   }
 
   const supabase = await createServerSupabase();
-  if (!supabase) return { ok: false, error: GENERIC_ERROR };
+  if (!supabase) return { ok: false, code: GENERIC_ERROR };
 
   // Anonimiza los pedidos mientras `auth.uid()` todavía vale. Después de
   // borrar el usuario ya no habría forma de saber cuáles eran suyos.
   const { data: anonimizados, error: errorRpc } = await supabase.rpc("cancelar_mi_cuenta");
   if (errorRpc) {
     console.error("[cancelarMiCuenta] rpc", errorRpc.message);
-    return { ok: false, error: GENERIC_ERROR };
+    return { ok: false, code: GENERIC_ERROR };
   }
 
   const service = createAdminClient();
-  if (!service) return { ok: false, error: GENERIC_ERROR };
+  if (!service) return { ok: false, code: GENERIC_ERROR };
 
   const { error: errorBorrado } = await service.auth.admin.deleteUser(claims.userId);
   if (errorBorrado) {
     console.error("[cancelarMiCuenta] deleteUser", errorBorrado.message);
-    return { ok: false, error: GENERIC_ERROR };
+    return { ok: false, code: GENERIC_ERROR };
   }
 
   // Los tokens ya no valen; esto sólo limpia las cookies.
@@ -119,13 +119,13 @@ export async function crearSolicitudArco(input: {
   detalle: string;
 }): Promise<ActionResult<{ mensaje: string }>> {
   if (!TIPOS.includes(input.tipo as ArcoTipo)) {
-    return { ok: false, error: "Elige el derecho que quieres ejercer." };
+    return { ok: false, code: "eligeDerecho" };
   }
-  if (!input.nombre.trim()) return { ok: false, error: "Necesitamos tu nombre." };
-  if (!isEmail(input.email)) return { ok: false, error: "Necesitamos un correo válido." };
+  if (!input.nombre.trim()) return { ok: false, code: "nombreSolicitud" };
+  if (!isEmail(input.email)) return { ok: false, code: "correoNecesario" };
 
   const supabase = createAdminClient();
-  if (!supabase) return { ok: false, error: GENERIC_ERROR };
+  if (!supabase) return { ok: false, code: GENERIC_ERROR };
 
   const { error } = await supabase.from("arco_requests").insert({
     tipo: input.tipo as ArcoTipo,
@@ -136,7 +136,7 @@ export async function crearSolicitudArco(input: {
 
   if (error) {
     console.error("[crearSolicitudArco]", error.message);
-    return { ok: false, error: GENERIC_ERROR };
+    return { ok: false, code: GENERIC_ERROR };
   }
 
   // Acuse al solicitante. Hasta ahora la cola era muda: la solicitud
@@ -162,14 +162,14 @@ export async function resolverSolicitudArco(input: {
   nota: string;
 }): Promise<ActionResult> {
   if (!ESTADOS.includes(input.status as ArcoStatus)) {
-    return { ok: false, error: GENERIC_ERROR };
+    return { ok: false, code: GENERIC_ERROR };
   }
 
   const admin = await adminOrNull();
-  if (!admin) return { ok: false, error: NO_AUTORIZADO };
+  if (!admin) return { ok: false, code: NO_AUTORIZADO };
 
   const supabase = await createServerSupabase();
-  if (!supabase) return { ok: false, error: GENERIC_ERROR };
+  if (!supabase) return { ok: false, code: GENERIC_ERROR };
 
   const cerrada = input.status === "atendida" || input.status === "rechazada";
 
@@ -187,9 +187,9 @@ export async function resolverSolicitudArco(input: {
 
   if (error) {
     console.error("[resolverSolicitudArco]", error.message);
-    return { ok: false, error: GENERIC_ERROR };
+    return { ok: false, code: GENERIC_ERROR };
   }
-  if (!data) return { ok: false, error: NO_AUTORIZADO };
+  if (!data) return { ok: false, code: NO_AUTORIZADO };
 
   await logAdminAction(admin, {
     action: "arco.resolucion",

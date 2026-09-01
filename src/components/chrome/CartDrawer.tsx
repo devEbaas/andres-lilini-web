@@ -5,6 +5,9 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState, useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
+import type { ErrorRef } from "@/lib/actions/types";
+import { useErrores } from "@/lib/errores";
+
 import { startCheckout } from "@/lib/actions/checkout";
 import { money } from "@/lib/format";
 import { useCart } from "@/lib/store/cart";
@@ -12,12 +15,13 @@ import { useToast } from "@/lib/store/toast";
 import { btnQuiet } from "@/components/ui/styles";
 
 export function CartDrawer() {
+  const err = useErrores();
   const t = useTranslations("cart");
   const locale = useLocale();
   const { lines, isOpen, close, setQty, remove, subtotal, shipping, total } = useCart();
   const { flash } = useToast();
   const [pending, startTransition] = useTransition();
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ErrorRef | null>(null);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -31,14 +35,14 @@ export function CartDrawer() {
   }, [isOpen, close]);
 
   const checkout = () => {
-    setError("");
+    setError(null);
     startTransition(async () => {
       const res = await startCheckout(
         lines.map((l) => ({ id: l.id, qty: l.qty })),
         locale,
       );
       if (!res.ok) {
-        setError(res.error);
+        setError(res.code);
         return;
       }
       // Redirigimos desde el cliente en vez de con `redirect()` en la acción:
@@ -162,7 +166,7 @@ export function CartDrawer() {
                   </div>
                   {error && (
                     <p className="m-0 text-[13px] text-danger-text" role="alert">
-                      {error}
+                      {err(error)}
                     </p>
                   )}
                   <button

@@ -12,16 +12,16 @@ export async function submitContact(input: {
   locale?: string;
 }): Promise<ActionResult> {
   if (!input.consent) {
-    return { ok: false, error: "Necesitamos tu consentimiento para responderte." };
+    return { ok: false, code: "consentimientoRespuesta" };
   }
   if (!input.nombre.trim()) {
-    return { ok: false, error: "Dinos cómo te llamas." };
+    return { ok: false, code: "nombreNecesario" };
   }
   if (!isEmail(input.email)) {
-    return { ok: false, error: "Necesitamos un correo válido para responderte." };
+    return { ok: false, code: "correoParaResponder" };
   }
   if (input.message.trim().length < 10) {
-    return { ok: false, error: "Cuéntanos un poco más: al menos diez caracteres." };
+    return { ok: false, code: "mensajeCorto" };
   }
 
   const supabase = createAdminClient();
@@ -37,7 +37,7 @@ export async function submitContact(input: {
 
   if (error) {
     console.error("[submitContact]", error.message);
-    return { ok: false, error: GENERIC_ERROR };
+    return { ok: false, code: GENERIC_ERROR };
   }
   return { ok: true };
 }

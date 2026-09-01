@@ -4,6 +4,8 @@ import { useState, useTransition } from "react";
 
 import { setEstadoPostulacion } from "@/lib/actions/admin";
 import type { ApplicationStatus } from "@/lib/supabase/types";
+import type { ErrorRef } from "@/lib/actions/types";
+import { useErrores } from "@/lib/errores";
 
 const ETIQUETAS: Record<ApplicationStatus, string> = {
   recibida: "Recibida",
@@ -20,19 +22,20 @@ export function EstadoPostulacion({
   id: string;
   inicial: ApplicationStatus;
 }) {
+  const err = useErrores();
   const [estado, setEstado] = useState<ApplicationStatus>(inicial);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ErrorRef | null>(null);
   const [pending, startTransition] = useTransition();
 
   const onChange = (nuevo: ApplicationStatus) => {
     const previo = estado;
     setEstado(nuevo);
-    setError("");
+    setError(null);
     startTransition(async () => {
       const res = await setEstadoPostulacion(id, nuevo);
       if (!res.ok) {
         setEstado(previo); // Revierte: la base manda, no la pantalla.
-        setError(res.error);
+        setError(res.code);
       }
     });
   };
@@ -54,7 +57,7 @@ export function EstadoPostulacion({
       </select>
       {error && (
         <span role="alert" className="text-[11px] text-danger-text">
-          {error}
+          {err(error)}
         </span>
       )}
     </div>

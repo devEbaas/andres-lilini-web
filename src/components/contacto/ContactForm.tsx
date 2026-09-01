@@ -4,6 +4,9 @@ import { motion } from "motion/react";
 import { useState, useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
+import type { ErrorRef } from "@/lib/actions/types";
+import { useErrores } from "@/lib/errores";
+
 import { submitContact } from "@/lib/actions/contact";
 import { CONTACT_TOPICS } from "@/lib/content/site";
 import { Spinner } from "@/components/ui/Spinner";
@@ -12,6 +15,7 @@ import { btnQuiet } from "@/components/ui/styles";
 const MAX = 800;
 
 export function ContactForm() {
+  const err = useErrores();
   const t = useTranslations("contact.form");
   const locale = useLocale();
   const tt = useTranslations("contact.topics");
@@ -20,17 +24,17 @@ export function ContactForm() {
   const [topic, setTopic] = useState<string>(CONTACT_TOPICS[0]);
   const [message, setMessage] = useState("");
   const [consent, setConsent] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ErrorRef | null>(null);
   const [sent, setSent] = useState(false);
   const [pending, startTransition] = useTransition();
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError(null);
     startTransition(async () => {
       const res = await submitContact({ nombre, email, topic, message, consent, locale });
       if (res.ok) setSent(true);
-      else setError(res.error);
+      else setError(res.code);
     });
   };
 
@@ -119,7 +123,7 @@ export function ContactForm() {
         aria-checked={consent}
         onClick={() => {
           setConsent((c) => !c);
-          setError("");
+          setError(null);
         }}
         className="flex min-h-11 cursor-pointer items-start gap-3.5 rounded-2xl border border-hairline bg-bg p-[15px] text-left"
       >
@@ -139,7 +143,7 @@ export function ContactForm() {
           role="alert"
           className="rounded-[14px] border border-danger/50 bg-danger/10 px-4 py-3.5 text-sm text-danger-text"
         >
-          {error}
+          {err(error)}
         </div>
       )}
 

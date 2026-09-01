@@ -4,10 +4,14 @@ import { Link } from "@/i18n/navigation";
 import { useState, useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
+import type { ErrorRef } from "@/lib/actions/types";
+import { useErrores } from "@/lib/errores";
+
 import { signUp } from "@/lib/actions/cuenta";
 import { Spinner } from "@/components/ui/Spinner";
 
 export function RegistroForm() {
+  const err = useErrores();
   const t = useTranslations("auth");
   const locale = useLocale();
   const [nombre, setNombre] = useState("");
@@ -15,17 +19,17 @@ export function RegistroForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [consent, setConsent] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ErrorRef | null>(null);
   const [hecho, setHecho] = useState("");
   const [pending, startTransition] = useTransition();
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError(null);
     startTransition(async () => {
       const res = await signUp({ nombre, apellido, email, password, consent, locale });
       if (res.ok) setHecho(res.data.mensaje);
-      else setError(res.error);
+      else setError(res.code);
     });
   };
 
@@ -96,7 +100,7 @@ export function RegistroForm() {
         aria-checked={consent}
         onClick={() => {
           setConsent((c) => !c);
-          setError("");
+          setError(null);
         }}
         className="flex min-h-11 cursor-pointer items-start gap-3.5 rounded-2xl border border-hairline bg-bg p-[15px] text-left"
       >
@@ -125,7 +129,7 @@ export function RegistroForm() {
           role="alert"
           className="rounded-[14px] border border-danger/50 bg-danger/10 px-4 py-3.5 text-sm text-danger-text"
         >
-          {error}
+          {err(error)}
         </div>
       )}
 

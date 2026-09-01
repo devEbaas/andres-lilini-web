@@ -5,10 +5,10 @@ import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { safeNext } from "@/lib/auth/redirect";
 import { conIdioma } from "@/i18n/rutas";
-import { normalizaLocale } from "./types";
+import { normalizaLocale, type ErrorRef } from "./types";
 
-const CODIGO_MAL = "Código incorrecto o caducado. Prueba con el siguiente.";
-const FALLO = "No pudimos verificar el código. Inténtalo de nuevo.";
+const CODIGO_MAL = "codigoMal";
+const FALLO = "codigoNoVerificado";
 
 /**
  * Completa el segundo factor de una sesión que ya pasó la contraseña.
@@ -21,28 +21,28 @@ export async function verificarMfa(input: {
   next?: string;
   /** Igual que en `signIn`: la acción no puede resolver el idioma sola. */
   locale?: string;
-}): Promise<{ ok: false; error: string }> {
+}): Promise<{ ok: false; code: ErrorRef }> {
   const code = input.code.replace(/\s/g, "");
-  if (!/^\d{6}$/.test(code)) return { ok: false, error: CODIGO_MAL };
+  if (!/^\d{6}$/.test(code)) return { ok: false, code: CODIGO_MAL };
 
   const supabase = await createServerSupabase();
-  if (!supabase) return { ok: false, error: FALLO };
+  if (!supabase) return { ok: false, code: FALLO };
 
   const { data: factores, error: errorFactores } = await supabase.auth.mfa.listFactors();
   if (errorFactores) {
     console.error("[verificarMfa] listFactors", errorFactores.message);
-    return { ok: false, error: FALLO };
+    return { ok: false, code: FALLO };
   }
 
   const totp = factores?.totp?.[0];
-  if (!totp) return { ok: false, error: FALLO };
+  if (!totp) return { ok: false, code: FALLO };
 
   const { data: reto, error: errorReto } = await supabase.auth.mfa.challenge({
     factorId: totp.id,
   });
   if (errorReto || !reto) {
     console.error("[verificarMfa] challenge", errorReto?.message);
-    return { ok: false, error: FALLO };
+    return { ok: false, code: FALLO };
   }
 
   const { error: errorVerify } = await supabase.auth.mfa.verify({
@@ -54,7 +54,7 @@ export async function verificarMfa(input: {
     // Sin detalle al navegador: un código malo y uno caducado se responden
     // igual, como en el login.
     console.error("[verificarMfa] verify", errorVerify.message);
-    return { ok: false, error: CODIGO_MAL };
+    return { ok: false, code: CODIGO_MAL };
   }
 
   const { data: verificado } = await supabase.auth.getClaims();
