@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import { adminOrNull } from "@/lib/auth/dal";
 import { logAdminAction } from "@/lib/auth/audit";
+import { rutaCon } from "@/i18n/rutas";
 import { createAdminClient } from "@/lib/supabase/admin";
 import {
   ALCANCES_IMAGEN,
@@ -71,7 +72,8 @@ export async function generarEnlaceExpediente(
     meta: { expira: expira.toISOString() },
   });
 
-  const url = `${siteUrl()}/expediente/${token}`;
+  // El idioma que guardó la postulación, como el correo que lo lleva.
+  const url = `${siteUrl()}${rutaCon("/expediente/[token]", data.locale, { token })}`;
 
   // Se intenta mandar y se dice si salió. El enlace se devuelve igualmente:
   // sin correo configurado —o si el envío falla— el admin lo copia y lo

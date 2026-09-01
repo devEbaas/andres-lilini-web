@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import { adminOrNull } from "@/lib/auth/dal";
 import { logAdminAction } from "@/lib/auth/audit";
+import { rutaCon } from "@/i18n/rutas";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { TUTOR_DIAS } from "@/lib/content/jugador";
 import { enviarCorreo } from "@/lib/email/client";
@@ -116,7 +117,9 @@ export async function reemitirEnlaceTutor(
     meta: { expira: expira.toISOString() },
   });
 
-  const url = `${siteUrl()}/tutor/${token}`;
+  // En el idioma de la postulación, igual que la plantilla del correo: el
+  // enlace y el texto que lo acompaña tienen que llevar al mismo sitio.
+  const url = `${siteUrl()}${rutaCon("/tutor/[token]", fila.locale, { token })}`;
 
   // Se intenta mandar y se dice si salió. El enlace se devuelve igualmente:
   // sin correo configurado, el admin lo copia y lo hace llegar por donde

@@ -269,7 +269,8 @@
       "indumentaria": "Indumentaria",
       "equipamiento": "Equipamiento",
       "accesorios": "Accesorios"
-    }
+    },
+    "envioMetodo": "Envío estándar · 3 a 5 días hábiles"
   },
   "gracias": {
     "sinPedidoTitulo": "Todavía no hay nada que confirmar",
@@ -1234,6 +1235,11 @@
     "subidaFallida": "No pudimos subir el archivo. Inténtalo de nuevo.",
     "telefonoNecesario": "Necesitamos un teléfono.",
     "tutorYaAutorizo": "El tutor ya autorizó esta postulación."
+  },
+  "avisos": {
+    "revisaCorreo": "Si el correo es válido, te enviamos un enlace para confirmar la cuenta.",
+    "enlaceContrasena": "Si el correo tiene cuenta, te enviamos un enlace para cambiarla.",
+    "arcoRecibida": "Recibimos tu solicitud. Te escribiremos para acreditar tu identidad antes de atenderla."
   },
   "email": {
     "marca": "Andrés Lillini",

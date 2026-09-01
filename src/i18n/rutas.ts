@@ -88,3 +88,25 @@ export function conIdioma(interna: string, locale: Locale): string {
   if (locale === routing.defaultLocale) return path;
   return path === "/" ? `/${locale}` : `/${locale}${path}`;
 }
+
+/**
+ * Igual, pero sustituyendo los parámetros de una ruta dinámica.
+ *
+ * `rutaCon("/tutor/[token]", "en", { token: "abc" })` → `/en/guardian/abc`
+ *
+ * Existe para lo que sale del sitio: las URLs de vuelta de Stripe, los enlaces
+ * de los correos y los `redirectTo` de Supabase. Todas ellas se escribían a
+ * mano en español, así que quien compraba o se registraba en inglés volvía al
+ * sitio en español sin haber pedido el cambio.
+ */
+export function rutaCon(
+  interna: string,
+  locale: Locale,
+  params: Record<string, string> = {},
+): string {
+  let ruta = conIdioma(interna, locale);
+  for (const [clave, valor] of Object.entries(params)) {
+    ruta = ruta.replace(`[${clave}]`, encodeURIComponent(valor));
+  }
+  return ruta;
+}
