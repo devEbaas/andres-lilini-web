@@ -5,25 +5,27 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
 import { PRODUCT_THUMBS } from "@/lib/content/tienda";
-import { getProduct, getProducts } from "@/lib/data/products";
+import { getProduct, getProductIds } from "@/lib/data/products";
 import { money } from "@/lib/format";
 import { PhotoSlot } from "@/components/ui/PhotoSlot";
 import { ProductActions } from "@/components/tienda/ProductActions";
-import { fijarIdioma } from "@/i18n/servidor";
+import { fijarIdioma, localeActual } from "@/i18n/servidor";
 
-type Params = { params: Promise<{ id: string }> };
+type Params = { params: Promise<{ lang: string; id: string }> };
 
 // Next exige un literal aquí: 5 minutos de caché para el catálogo.
 export const revalidate = 300;
 
 export async function generateStaticParams() {
-  const products = await getProducts();
-  return products.map((p) => ({ id: p.id }));
+  // Sólo el segmento propio: el `lang` lo aporta `generateStaticParams` del
+  // layout raíz y Next combina ambos.
+  const ids = await getProductIds();
+  return ids.map((id) => ({ id }));
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
-  const { id } = await params;
-  const product = await getProduct(id);
+  const { lang, id } = await params;
+  const product = await getProduct(id, lang === "en" ? "en" : "es");
   if (!product) return { title: "Producto no encontrado" };
   return { title: product.name, description: product.desc };
 }
@@ -33,9 +35,10 @@ export default async function ProductPage({ params }: Params) {
   // se vuelve dinámica al resolver el locale por cabecera.
   await fijarIdioma();
   const t = await getTranslations("store");
+  const tc = await getTranslations("store.cats");
 
   const { id } = await params;
-  const product = await getProduct(id);
+  const product = await getProduct(id, await localeActual());
   if (!product) notFound();
 
   return (
@@ -65,7 +68,7 @@ export default async function ProductPage({ params }: Params) {
 
           <div>
             <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
-              {product.cat}
+              {tc(product.catKey)}
             </span>
             <h1 className="m-0 my-3.5 mb-2.5 font-display text-[clamp(34px,5vw,72px)] uppercase leading-[0.92]">
               {product.name}

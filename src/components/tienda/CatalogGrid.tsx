@@ -12,8 +12,9 @@ import { chip, chipOff, chipOn } from "@/components/ui/styles";
 
 export function CatalogGrid({ products }: { products: Product[] }) {
   const t = useTranslations("store");
-  const [cat, setCat] = useState<string>("Todo");
-  const shown = products.filter((p) => cat === "Todo" || p.cat === cat);
+  const tc = useTranslations("store.cats");
+  const [cat, setCat] = useState<string>("todo");
+  const shown = products.filter((p) => cat === "todo" || p.catKey === cat);
 
   return (
     <>
@@ -31,7 +32,7 @@ export function CatalogGrid({ products }: { products: Product[] }) {
             onClick={() => setCat(c)}
             className={`${chip} ${cat === c ? chipOn : chipOff}`}
           >
-            {c}
+            {tc(c)}
           </button>
         ))}
       </div>
@@ -64,7 +65,7 @@ export function CatalogGrid({ products }: { products: Product[] }) {
                 </PhotoSlot>
                 <div className="p-5">
                   <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-accent">
-                    {p.cat}
+                    {tc(p.catKey)}
                   </span>
                   <h3 className="m-0 my-2.5 mb-1 text-[17px] font-bold">{p.name}</h3>
                   <p className="m-0 mb-3.5 text-sm leading-[1.6] text-muted">{p.sub}</p>

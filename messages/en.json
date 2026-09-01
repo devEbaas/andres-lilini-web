@@ -191,12 +191,30 @@
       }
     },
     "gallery": {
-      "principal": { "label": "Lead photo · field session at dawn", "tag": "Training" },
-      "retrato": { "label": "Vertical portrait · tactical board", "tag": "Method" },
-      "detalle": { "label": "Detail · talking with a youth player", "tag": "Development" },
-      "vestidor": { "label": "Square photo · dressing room", "tag": "Dressing room" },
-      "visorias": { "label": "Square photo · regional trial", "tag": "Trials" },
-      "panoramica": { "label": "Panoramic · full stadium, match night", "tag": "Match day" }
+      "principal": {
+        "label": "Lead photo · field session at dawn",
+        "tag": "Training"
+      },
+      "retrato": {
+        "label": "Vertical portrait · tactical board",
+        "tag": "Method"
+      },
+      "detalle": {
+        "label": "Detail · talking with a youth player",
+        "tag": "Development"
+      },
+      "vestidor": {
+        "label": "Square photo · dressing room",
+        "tag": "Dressing room"
+      },
+      "visorias": {
+        "label": "Square photo · regional trial",
+        "tag": "Trials"
+      },
+      "panoramica": {
+        "label": "Panoramic · full stadium, match night",
+        "tag": "Match day"
+      }
     },
     "pillars": {
       "eyebrow": "03 — Method",
@@ -204,9 +222,18 @@
       "lead": "Fifteen attributes, three phases and one principle: talent without context is lost. The program assesses technique, mindset and environment with the same rigour.",
       "cta": "See the program",
       "items": {
-        "detectar": { "title": "Scout", "body": "Finding the player where nobody looks: municipal leagues, school tournaments, academies with no structure." },
-        "desarrollar": { "title": "Develop", "body": "An individual plan measured every quarter, covering physical load, technique and academic support." },
-        "sostener": { "title": "Sustain", "body": "The debut isn't the finish line. Follow-up on contract, family and mental health through the first three years." }
+        "detectar": {
+          "title": "Scout",
+          "body": "Finding the player where nobody looks: municipal leagues, school tournaments, academies with no structure."
+        },
+        "desarrollar": {
+          "title": "Develop",
+          "body": "An individual plan measured every quarter, covering physical load, technique and academic support."
+        },
+        "sostener": {
+          "title": "Sustain",
+          "body": "The debut isn't the finish line. Follow-up on contract, family and mental health through the first three years."
+        }
       }
     }
   },
@@ -218,13 +245,24 @@
     "agotado": "Sold out",
     "sinPiezas": "No items in this category yet.",
     "volver": "← Back to the catalogue",
-    "thumbs": { "detalle1": "Detail 1", "detalle2": "Detail 2", "enUso": "In use" },
+    "thumbs": {
+      "detalle1": "Detail 1",
+      "detalle2": "Detail 2",
+      "enUso": "In use"
+    },
     "envioNota": "Standard shipping $120 MXN · Returns within 30 days · Invoicing available",
     "quitarUnidad": "Remove one unit",
     "agregarUnidad": "Add one unit",
     "anadido": "Added ✓",
     "anadir": "Add to bag",
-    "anadidoToast": "Product added to your bag"
+    "anadidoToast": "Product added to your bag",
+    "cats": {
+      "todo": "All",
+      "metodologia": "Method",
+      "indumentaria": "Apparel",
+      "equipamiento": "Equipment",
+      "accesorios": "Accessories"
+    }
   },
   "gracias": {
     "sinPedidoTitulo": "Nothing to confirm yet",
@@ -249,91 +287,184 @@
     "fechaActualizacion": "25 August 2026",
     "avisoLegal": "Courtesy translation. The Spanish version is the only legally binding one.",
     "verOriginal": "Read the Spanish original",
-
     "prensa": {
       "label": "Press",
       "meta": "Press room",
       "title": "Press materials",
       "lead": "Verifiable biography, career data and how to request an interview.",
       "s": {
-        "bio": { "h": "Short biography", "p": "Andrés Lillini (Argentina, 1975) is a football coach and talent developer. He has led academy departments in Mexico, Argentina and Russia, was head coach of a Liga MX first team for two and a half years, and currently leads the youth national team programme in Mexico." },
-        "datos": { "h": "Verifiable data", "p": "102 matches managed in the Mexican first division; one league final; fifteen academy players debuting under his management; development spells at Morelia, Boca Juniors, CSKA Moscow and Pumas." },
-        "materiales": { "h": "Available materials", "p": "High-resolution portraits with mandatory credit, two field photographs, the program logo in light and dark versions, and a career summary in PDF." },
-        "entrevistas": { "h": "Interview requests", "p": "Write through the contact form choosing the Press and media topic. State the outlet, format, estimated duration and deadline; we reply within 24 business hours." }
+        "bio": {
+          "h": "Short biography",
+          "p": "Andrés Lillini (Argentina, 1975) is a football coach and talent developer. He has led academy departments in Mexico, Argentina and Russia, was head coach of a Liga MX first team for two and a half years, and currently leads the youth national team programme in Mexico."
+        },
+        "datos": {
+          "h": "Verifiable data",
+          "p": "102 matches managed in the Mexican first division; one league final; fifteen academy players debuting under his management; development spells at Morelia, Boca Juniors, CSKA Moscow and Pumas."
+        },
+        "materiales": {
+          "h": "Available materials",
+          "p": "High-resolution portraits with mandatory credit, two field photographs, the program logo in light and dark versions, and a career summary in PDF."
+        },
+        "entrevistas": {
+          "h": "Interview requests",
+          "p": "Write through the contact form choosing the Press and media topic. State the outlet, format, estimated duration and deadline; we reply within 24 business hours."
+        }
       }
     },
-
     "faq": {
       "label": "FAQ",
       "meta": "Help",
       "title": "Frequently asked questions",
       "lead": "Program, store, shipping, open call and privacy.",
       "preguntas": {
-        "edad": { "q": "How old do I need to be to apply to the program?", "a": "We assess players aged 12 to 21. Applicants under 18 need consent from a parent or legal guardian as part of the form." },
-        "costo": { "q": "How much does it cost to apply?", "a": "Nothing. The application and the initial assessment are free. If you move on to an in-person session, we'll tell you in advance which costs the program covers." },
-        "video": { "q": "What should the highlights video show?", "a": "Five to eight minutes of real match play, not just goals: off-the-ball movement, duels, decisions under pressure. A well-framed phone video is enough." },
-        "pedido": { "q": "How long does my order take?", "a": "Three to five business days within Mexico once payment is confirmed. You'll get a tracking number by email." },
-        "devolucion": { "q": "Can I return a product?", "a": "Yes, within 30 calendar days, unused and in its original packaging. We cover the return shipping if the mistake was ours." },
-        "propuestas": { "q": "Can I send more than one entry to the open call?", "a": "No. Each participant may send a single entry; if you send two, we consider the first one valid." },
-        "datosMenor": { "q": "What do you do with a minor's data?", "a": "It is used solely for the sporting assessment, stored encrypted for the duration of the open call, and deleted at the guardian's request at any time." }
+        "edad": {
+          "q": "How old do I need to be to apply to the program?",
+          "a": "We assess players aged 12 to 21. Applicants under 18 need consent from a parent or legal guardian as part of the form."
+        },
+        "costo": {
+          "q": "How much does it cost to apply?",
+          "a": "Nothing. The application and the initial assessment are free. If you move on to an in-person session, we'll tell you in advance which costs the program covers."
+        },
+        "video": {
+          "q": "What should the highlights video show?",
+          "a": "Five to eight minutes of real match play, not just goals: off-the-ball movement, duels, decisions under pressure. A well-framed phone video is enough."
+        },
+        "pedido": {
+          "q": "How long does my order take?",
+          "a": "Three to five business days within Mexico once payment is confirmed. You'll get a tracking number by email."
+        },
+        "devolucion": {
+          "q": "Can I return a product?",
+          "a": "Yes, within 30 calendar days, unused and in its original packaging. We cover the return shipping if the mistake was ours."
+        },
+        "propuestas": {
+          "q": "Can I send more than one entry to the open call?",
+          "a": "No. Each participant may send a single entry; if you send two, we consider the first one valid."
+        },
+        "datosMenor": {
+          "q": "What do you do with a minor's data?",
+          "a": "It is used solely for the sporting assessment, stored encrypted for the duration of the open call, and deleted at the guardian's request at any time."
+        }
       }
     },
-
     "patrocinios": {
       "label": "Sponsorship",
       "meta": "Partnerships",
       "title": "Sponsorship and partnerships",
       "lead": "How to work with a project that serves players aged 12 to 21.",
       "s": {
-        "ofrecemos": { "h": "What we offer", "p": "Presence at trials, documentary content of the development process, and access to an audience concentrated among families, clubs and Spanish-speaking sports media." },
-        "formatos": { "h": "Forms of collaboration", "p": "Named scholarship sponsorship, sports equipment supply, logistical support at regional trials, and co-production of educational content for coaches." },
-        "noHacemos": { "h": "What we don't do", "p": "We do not sell minors' data, we do not place betting or alcohol brands in materials aimed at players, and we do not sell promises of a transfer." },
-        "siguiente": { "h": "Next step", "p": "Write through the contact form with the Sponsorship topic. We'll send the dossier with reach, audited figures and the season's activity calendar." }
+        "ofrecemos": {
+          "h": "What we offer",
+          "p": "Presence at trials, documentary content of the development process, and access to an audience concentrated among families, clubs and Spanish-speaking sports media."
+        },
+        "formatos": {
+          "h": "Forms of collaboration",
+          "p": "Named scholarship sponsorship, sports equipment supply, logistical support at regional trials, and co-production of educational content for coaches."
+        },
+        "noHacemos": {
+          "h": "What we don't do",
+          "p": "We do not sell minors' data, we do not place betting or alcohol brands in materials aimed at players, and we do not sell promises of a transfer."
+        },
+        "siguiente": {
+          "h": "Next step",
+          "p": "Write through the contact form with the Sponsorship topic. We'll send the dossier with reach, audited figures and the season's activity calendar."
+        }
       }
     },
-
     "privacidad": {
       "label": "Privacy",
       "meta": "Legal",
       "title": "Privacy notice",
       "lead": "What data we collect, what we use it for, and how to exercise your rights.",
       "s": {
-        "responsable": { "h": "Data controller", "p": "The controller of personal data collected through this site is the office of Andrés Lillini, with address in Mexico City." },
-        "datos": { "h": "Data we collect", "p": "Identification and contact data, sporting data voluntarily provided in the program form, and billing and shipping data in the case of store purchases." },
-        "menores": { "h": "Minors", "p": "Every application from a person under 18 requires the express consent of their parent or legal guardian, including full name, relationship and a verifiable means of contact." },
-        "consentimientoTutor": { "h": "How we obtain guardian consent", "p": "The form determines minority from the date of birth and, if the applicant is a minor, will not accept submission without the guardian's full name, relationship, a contact phone number and express authorisation ticked separately from the other consents. That data is recorded together with the submission date. Before any in-person activity we contact the guardian through that channel to confirm the authorisation." },
-        "finalidades": { "h": "Purposes", "p": "Assessing sporting applications, managing orders, responding to contact requests and, if you authorise it, sending you the newsletter. We do not sell or transfer data to third parties for advertising purposes." },
-        "conservacion": { "h": "Retention", "p": "Order data is retained for as long as the tax obligation to keep accounting records lasts, even if you cancel your account. In that case the email address and shipping address are deleted, and only amounts, dates and status remain, which identify no one." },
-        "encargados": { "h": "Processors", "p": "Payments are processed by Stripe, the database and storage are hosted on Supabase, and the site is served from Vercel. Each one processes the data solely to provide us with that service." },
-        "derechos": { "h": "Rights", "p": "You may request access, rectification, cancellation or objection to the processing of your data through the rights form on this site. Before releasing or deleting information we verify the identity of the requester. We handle requests within a maximum of twenty business days." },
-        "conCuenta": { "h": "If you have an account", "p": "From the privacy section of your account you can download all your data and cancel the account immediately, with no waiting. Forms you submitted without being signed in are handled through the rights form." }
+        "responsable": {
+          "h": "Data controller",
+          "p": "The controller of personal data collected through this site is the office of Andrés Lillini, with address in Mexico City."
+        },
+        "datos": {
+          "h": "Data we collect",
+          "p": "Identification and contact data, sporting data voluntarily provided in the program form, and billing and shipping data in the case of store purchases."
+        },
+        "menores": {
+          "h": "Minors",
+          "p": "Every application from a person under 18 requires the express consent of their parent or legal guardian, including full name, relationship and a verifiable means of contact."
+        },
+        "consentimientoTutor": {
+          "h": "How we obtain guardian consent",
+          "p": "The form determines minority from the date of birth and, if the applicant is a minor, will not accept submission without the guardian's full name, relationship, a contact phone number and express authorisation ticked separately from the other consents. That data is recorded together with the submission date. Before any in-person activity we contact the guardian through that channel to confirm the authorisation."
+        },
+        "finalidades": {
+          "h": "Purposes",
+          "p": "Assessing sporting applications, managing orders, responding to contact requests and, if you authorise it, sending you the newsletter. We do not sell or transfer data to third parties for advertising purposes."
+        },
+        "conservacion": {
+          "h": "Retention",
+          "p": "Order data is retained for as long as the tax obligation to keep accounting records lasts, even if you cancel your account. In that case the email address and shipping address are deleted, and only amounts, dates and status remain, which identify no one."
+        },
+        "encargados": {
+          "h": "Processors",
+          "p": "Payments are processed by Stripe, the database and storage are hosted on Supabase, and the site is served from Vercel. Each one processes the data solely to provide us with that service."
+        },
+        "derechos": {
+          "h": "Rights",
+          "p": "You may request access, rectification, cancellation or objection to the processing of your data through the rights form on this site. Before releasing or deleting information we verify the identity of the requester. We handle requests within a maximum of twenty business days."
+        },
+        "conCuenta": {
+          "h": "If you have an account",
+          "p": "From the privacy section of your account you can download all your data and cancel the account immediately, with no waiting. Forms you submitted without being signed in are handled through the rights form."
+        }
       }
     },
-
     "terminos": {
       "label": "Terms",
       "meta": "Legal",
       "title": "Terms and conditions",
       "lead": "Conditions of use for the site, the store and the athlete program.",
       "s": {
-        "uso": { "h": "Use of the site", "p": "The content of this site is informational. Applying to the program does not guarantee an in-person assessment, selection, a contract or sporting representation of any kind." },
-        "pagos": { "h": "Purchases and payments", "p": "Prices are shown in Mexican pesos with taxes included. Payment is processed on an external gateway; we do not store card details on our servers." },
-        "envios": { "h": "Shipping and returns", "p": "Standard shipping of three to five business days within Mexico. We accept returns within thirty calendar days, with the product unused and in its original packaging." },
-        "propiedad": { "h": "Intellectual property", "p": "The program's methodological materials, texts and trademarks belong to their owner and may not be reproduced for commercial purposes without written authorisation." }
+        "uso": {
+          "h": "Use of the site",
+          "p": "The content of this site is informational. Applying to the program does not guarantee an in-person assessment, selection, a contract or sporting representation of any kind."
+        },
+        "pagos": {
+          "h": "Purchases and payments",
+          "p": "Prices are shown in Mexican pesos with taxes included. Payment is processed on an external gateway; we do not store card details on our servers."
+        },
+        "envios": {
+          "h": "Shipping and returns",
+          "p": "Standard shipping of three to five business days within Mexico. We accept returns within thirty calendar days, with the product unused and in its original packaging."
+        },
+        "propiedad": {
+          "h": "Intellectual property",
+          "p": "The program's methodological materials, texts and trademarks belong to their owner and may not be reproduced for commercial purposes without written authorisation."
+        }
       }
     },
-
     "bases": {
       "label": "Open call rules",
       "meta": "Legal",
       "title": "Open call rules",
       "lead": "Full rules of the 2027 Development Scholarship.",
       "s": {
-        "quien": { "h": "Who can take part", "p": "Players aged 12 to 21 resident in Mexico, without a professional contract in force at the closing date. Participation is free." },
-        "como": { "h": "How to take part", "p": "Complete the entry form and attach a file of up to 25 MB in PDF, JPG, PNG or MP4 format. Each participant may send a single entry." },
-        "criterios": { "h": "Selection criteria", "p": "A panel of three program assessors scores sporting potential, context and academic commitment. The decision is final and is communicated by email." },
-        "premio": { "h": "Prize", "p": "Ten places with methodological follow-up for one year, full equipment, two in-person camps and academic support. The scholarship is personal and non-transferable." },
-        "calendario": { "h": "Calendar", "p": "The open call closes on 30 November 2026. The shortlist is published on 15 December 2026 and the final results on 20 January 2027." }
+        "quien": {
+          "h": "Who can take part",
+          "p": "Players aged 12 to 21 resident in Mexico, without a professional contract in force at the closing date. Participation is free."
+        },
+        "como": {
+          "h": "How to take part",
+          "p": "Complete the entry form and attach a file of up to 25 MB in PDF, JPG, PNG or MP4 format. Each participant may send a single entry."
+        },
+        "criterios": {
+          "h": "Selection criteria",
+          "p": "A panel of three program assessors scores sporting potential, context and academic commitment. The decision is final and is communicated by email."
+        },
+        "premio": {
+          "h": "Prize",
+          "p": "Ten places with methodological follow-up for one year, full equipment, two in-person camps and academic support. The scholarship is personal and non-transferable."
+        },
+        "calendario": {
+          "h": "Calendar",
+          "p": "The open call closes on 30 November 2026. The shortlist is published on 15 December 2026 and the final results on 20 January 2027."
+        }
       }
     }
   },
@@ -400,79 +531,273 @@
     "rubricaEyebrow": "Assessment rubric",
     "rubricaTitulo": "Fifteen attributes, one by one",
     "intro": {
-      "evaluamos": { "title": "What we assess", "body": "Fifteen technical, physical and mental attributes, plus the player's family and academic context." },
-      "tarda": { "title": "How long it takes", "body": "Ten minutes to fill in the form. A reasoned answer within 15 business days." },
-      "menores": { "title": "Under 18", "body": "Every application from a player under 18 requires signed consent from a legal guardian." }
+      "evaluamos": {
+        "title": "What we assess",
+        "body": "Fifteen technical, physical and mental attributes, plus the player's family and academic context."
+      },
+      "tarda": {
+        "title": "How long it takes",
+        "body": "Ten minutes to fill in the form. A reasoned answer within 15 business days."
+      },
+      "menores": {
+        "title": "Under 18",
+        "body": "Every application from a player under 18 requires signed consent from a legal guardian."
+      }
     },
     "rubric": {
-      "velocidad": { "n": "Speed", "d": "Acceleration over the first five metres and top speed with the ball." },
-      "fuerza": { "n": "Strength", "d": "Ability to win duels and hold the body under contact." },
-      "pase": { "n": "Passing accuracy", "d": "Quality of the short and long ball under pressure, with both feet." },
-      "golpeo": { "n": "Striking", "d": "Power and direction in shooting, crossing and set pieces." },
-      "atletismo": { "n": "Athleticism", "d": "Coordination, jumping, change of direction and repeated-effort endurance." },
-      "iq": { "n": "Game IQ", "d": "Reading space, decision-making and anticipation off the ball." },
-      "defensa": { "n": "Defending", "d": "Pressing, covering, man-marking and recovery after losing the ball." },
-      "mecanica": { "n": "Mechanics", "d": "Base technique: control, dribbling, receiving body shape and posture." },
-      "ofensivo": { "n": "Attacking threat", "d": "Ability to create and finish goalscoring situations." },
-      "consistencia": { "n": "Consistency", "d": "Sustained performance across a full season." },
-      "liderazgo": { "n": "Leadership", "d": "Influence on the group on and off the pitch." },
-      "aprender": { "n": "Ability to learn", "d": "How quickly a correction is absorbed and repeated." },
-      "pasion": { "n": "Passion", "d": "A real bond with the game beyond the contract and the trophy cabinet." },
-      "mental": { "n": "Mental strength", "d": "Response to mistakes, to being benched and to public criticism." },
-      "etica": { "n": "Work ethic", "d": "What the player does when nobody is assessing him." }
+      "velocidad": {
+        "n": "Speed",
+        "d": "Acceleration over the first five metres and top speed with the ball."
+      },
+      "fuerza": {
+        "n": "Strength",
+        "d": "Ability to win duels and hold the body under contact."
+      },
+      "pase": {
+        "n": "Passing accuracy",
+        "d": "Quality of the short and long ball under pressure, with both feet."
+      },
+      "golpeo": {
+        "n": "Striking",
+        "d": "Power and direction in shooting, crossing and set pieces."
+      },
+      "atletismo": {
+        "n": "Athleticism",
+        "d": "Coordination, jumping, change of direction and repeated-effort endurance."
+      },
+      "iq": {
+        "n": "Game IQ",
+        "d": "Reading space, decision-making and anticipation off the ball."
+      },
+      "defensa": {
+        "n": "Defending",
+        "d": "Pressing, covering, man-marking and recovery after losing the ball."
+      },
+      "mecanica": {
+        "n": "Mechanics",
+        "d": "Base technique: control, dribbling, receiving body shape and posture."
+      },
+      "ofensivo": {
+        "n": "Attacking threat",
+        "d": "Ability to create and finish goalscoring situations."
+      },
+      "consistencia": {
+        "n": "Consistency",
+        "d": "Sustained performance across a full season."
+      },
+      "liderazgo": {
+        "n": "Leadership",
+        "d": "Influence on the group on and off the pitch."
+      },
+      "aprender": {
+        "n": "Ability to learn",
+        "d": "How quickly a correction is absorbed and repeated."
+      },
+      "pasion": {
+        "n": "Passion",
+        "d": "A real bond with the game beyond the contract and the trophy cabinet."
+      },
+      "mental": {
+        "n": "Mental strength",
+        "d": "Response to mistakes, to being benched and to public criticism."
+      },
+      "etica": {
+        "n": "Work ethic",
+        "d": "What the player does when nobody is assessing him."
+      }
     },
     "steps": {
-      "identidad": { "short": "Identity", "title": "Identity and contact" },
-      "perfil": { "short": "Profile", "title": "Sporting profile" },
-      "video": { "short": "Video", "title": "Performance and video" },
-      "medibles": { "short": "Metrics", "title": "Metrics and availability" },
-      "estudios": { "short": "Studies", "title": "Academic context" },
-      "consentimientos": { "short": "Consents", "title": "Consents" }
+      "identidad": {
+        "short": "Identity",
+        "title": "Identity and contact"
+      },
+      "perfil": {
+        "short": "Profile",
+        "title": "Sporting profile"
+      },
+      "video": {
+        "short": "Video",
+        "title": "Performance and video"
+      },
+      "medibles": {
+        "short": "Metrics",
+        "title": "Metrics and availability"
+      },
+      "estudios": {
+        "short": "Studies",
+        "title": "Academic context"
+      },
+      "consentimientos": {
+        "short": "Consents",
+        "title": "Consents"
+      }
     },
     "f": {
-      "nombre": { "label": "Full name", "ph": "First and last name" },
-      "nac": { "label": "Date of birth" },
-      "pais": { "label": "Country of residence" },
-      "nacionalidad": { "label": "Nationality", "ph": "e.g. Mexican" },
-      "estado": { "label": "State or province", "ph": "e.g. Jalisco" },
-      "ciudad": { "label": "City", "ph": "e.g. Guadalajara" },
-      "email": { "label": "Email address", "ph": "you@domain.com" },
-      "tel": { "label": "Phone with country code", "ph": "+52 55 0000 0000" },
-      "estatura": { "label": "Height (cm)", "ph": "175" },
-      "peso": { "label": "Weight (kg)", "ph": "68" },
-      "pos1": { "label": "Main position" },
-      "pos2": { "label": "Secondary position" },
-      "pie": { "label": "Dominant foot" },
-      "equipo": { "label": "Current team", "ph": "Club name" },
-      "liga": { "label": "League or category", "ph": "e.g. Liga TDP U-20" },
-      "anios": { "label": "Years playing", "ph": "8" },
-      "nivel": { "label": "Highest level reached" },
-      "dt": { "label": "Current coach and contact", "ph": "Name and phone" },
-      "clubes": { "label": "Previous clubs", "hint": "Optional. How many clubs and how long you stayed at each says as much as the current one." },
-      "video": { "label": "Highlights video URL", "ph": "YouTube, Vimeo or public Drive", "hint": "Five to eight minutes of real match play, not just goals." },
-      "premios": { "label": "Awards and honours", "ph": "Tournaments, individual honours, call-ups" },
-      "stats": { "label": "Recent statistics", "ph": "Matches, minutes, goals, assists from last season" },
-      "fortalezas": { "label": "Your three strengths", "ph": "e.g. change of pace, through balls, counter-pressing" },
-      "links": { "label": "Additional links", "ph": "Scouting platform profile, social media" },
-      "vel": { "label": "30 m sprint (s)", "ph": "4.1", "hint": "Optional" },
-      "salto": { "label": "Vertical jump (cm)", "ph": "52", "hint": "Optional" },
-      "yoyo": { "label": "Endurance test (level)", "ph": "e.g. Yo-Yo 19.5", "hint": "Optional" },
-      "fuerza": { "label": "Max squat (kg)", "ph": "95", "hint": "Optional" },
-      "viaje": { "label": "Availability to travel" },
-      "reubic": { "label": "Availability to relocate" },
-      "desde": { "label": "Available from" },
-      "hasta": { "label": "Available until" },
-      "escolaridad": { "label": "Current education level" },
-      "estudia": { "label": "Are you still studying?" },
-      "turno": { "label": "School shift", "hint": "Determines whether you can train in the morning or the afternoon." },
-      "escuela": { "label": "School or institution", "ph": "Name of the school" },
-      "tutor": { "label": "Guardian's full name", "ph": "Father, mother or legal guardian" },
-      "tutorTel": { "label": "Guardian's phone", "ph": "+52 55 0000 0000" },
-      "parentesco": { "label": "Relationship" },
-      "tutorEmail": { "label": "Guardian's email", "ph": "email@domain.com", "hint": "We send them a link to authorise the application." },
-      "okPriv": { "label": "", "ph": "I have read and accept the privacy notice and the processing of the sporting data included here." },
-      "okVerdad": { "label": "", "ph": "I declare that the information and video submitted are truthful and authored by me or my guardian." },
-      "okTutor": { "label": "", "ph": "My parent or legal guardian knows about this application and expressly authorises the processing of my data." }
+      "nombre": {
+        "label": "Full name",
+        "ph": "First and last name"
+      },
+      "nac": {
+        "label": "Date of birth"
+      },
+      "pais": {
+        "label": "Country of residence"
+      },
+      "nacionalidad": {
+        "label": "Nationality",
+        "ph": "e.g. Mexican"
+      },
+      "estado": {
+        "label": "State or province",
+        "ph": "e.g. Jalisco"
+      },
+      "ciudad": {
+        "label": "City",
+        "ph": "e.g. Guadalajara"
+      },
+      "email": {
+        "label": "Email address",
+        "ph": "you@domain.com"
+      },
+      "tel": {
+        "label": "Phone with country code",
+        "ph": "+52 55 0000 0000"
+      },
+      "estatura": {
+        "label": "Height (cm)",
+        "ph": "175"
+      },
+      "peso": {
+        "label": "Weight (kg)",
+        "ph": "68"
+      },
+      "pos1": {
+        "label": "Main position"
+      },
+      "pos2": {
+        "label": "Secondary position"
+      },
+      "pie": {
+        "label": "Dominant foot"
+      },
+      "equipo": {
+        "label": "Current team",
+        "ph": "Club name"
+      },
+      "liga": {
+        "label": "League or category",
+        "ph": "e.g. Liga TDP U-20"
+      },
+      "anios": {
+        "label": "Years playing",
+        "ph": "8"
+      },
+      "nivel": {
+        "label": "Highest level reached"
+      },
+      "dt": {
+        "label": "Current coach and contact",
+        "ph": "Name and phone"
+      },
+      "clubes": {
+        "label": "Previous clubs",
+        "hint": "Optional. How many clubs and how long you stayed at each says as much as the current one."
+      },
+      "video": {
+        "label": "Highlights video URL",
+        "ph": "YouTube, Vimeo or public Drive",
+        "hint": "Five to eight minutes of real match play, not just goals."
+      },
+      "premios": {
+        "label": "Awards and honours",
+        "ph": "Tournaments, individual honours, call-ups"
+      },
+      "stats": {
+        "label": "Recent statistics",
+        "ph": "Matches, minutes, goals, assists from last season"
+      },
+      "fortalezas": {
+        "label": "Your three strengths",
+        "ph": "e.g. change of pace, through balls, counter-pressing"
+      },
+      "links": {
+        "label": "Additional links",
+        "ph": "Scouting platform profile, social media"
+      },
+      "vel": {
+        "label": "30 m sprint (s)",
+        "ph": "4.1",
+        "hint": "Optional"
+      },
+      "salto": {
+        "label": "Vertical jump (cm)",
+        "ph": "52",
+        "hint": "Optional"
+      },
+      "yoyo": {
+        "label": "Endurance test (level)",
+        "ph": "e.g. Yo-Yo 19.5",
+        "hint": "Optional"
+      },
+      "fuerza": {
+        "label": "Max squat (kg)",
+        "ph": "95",
+        "hint": "Optional"
+      },
+      "viaje": {
+        "label": "Availability to travel"
+      },
+      "reubic": {
+        "label": "Availability to relocate"
+      },
+      "desde": {
+        "label": "Available from"
+      },
+      "hasta": {
+        "label": "Available until"
+      },
+      "escolaridad": {
+        "label": "Current education level"
+      },
+      "estudia": {
+        "label": "Are you still studying?"
+      },
+      "turno": {
+        "label": "School shift",
+        "hint": "Determines whether you can train in the morning or the afternoon."
+      },
+      "escuela": {
+        "label": "School or institution",
+        "ph": "Name of the school"
+      },
+      "tutor": {
+        "label": "Guardian's full name",
+        "ph": "Father, mother or legal guardian"
+      },
+      "tutorTel": {
+        "label": "Guardian's phone",
+        "ph": "+52 55 0000 0000"
+      },
+      "parentesco": {
+        "label": "Relationship"
+      },
+      "tutorEmail": {
+        "label": "Guardian's email",
+        "ph": "email@domain.com",
+        "hint": "We send them a link to authorise the application."
+      },
+      "okPriv": {
+        "label": "",
+        "ph": "I have read and accept the privacy notice and the processing of the sporting data included here."
+      },
+      "okVerdad": {
+        "label": "",
+        "ph": "I declare that the information and video submitted are truthful and authored by me or my guardian."
+      },
+      "okTutor": {
+        "label": "",
+        "ph": "My parent or legal guardian knows about this application and expressly authorises the processing of my data."
+      }
     },
     "form": {
       "recibidaTitulo": "Application received",
@@ -503,12 +828,32 @@
     "lead": "We work with neighbourhood clubs, schools and municipal leagues so that scouting arrives before cost makes it impossible.",
     "ctaTitulo": "Does your school, league or organisation want to work with us?",
     "cta": "Propose a collaboration",
-    "estados": { "enCurso": "Ongoing", "abierta": "Open", "piloto": "Pilot" },
+    "estados": {
+      "enCurso": "Ongoing",
+      "abierta": "Open",
+      "piloto": "Pilot"
+    },
     "campanas": {
-      "canchas": { "title": "Neighbourhood pitches", "photo": "4:3 photo · refurbished community pitch", "body": "Refurbishing surfaces and goals at community clubs in three states, with equipment supply and training for the local coach." },
-      "visorias": { "title": "Free trials", "photo": "4:3 photo · queue of players at a trial", "body": "Free scouting days in municipalities with no representation in youth leagues. Travel and meals covered for the player and one companion." },
-      "entrenadores": { "title": "Coach education", "photo": "4:3 photo · classroom of coaches", "body": "An in-person course on development methodology for school and municipal league coaches, with remote follow-up for one year." },
-      "beca": { "title": "Parallel academic scholarship", "photo": "4:3 photo · player studying", "body": "Compulsory academic support for every scholarship holder: no academic progress, no sporting continuity." }
+      "canchas": {
+        "title": "Neighbourhood pitches",
+        "photo": "4:3 photo · refurbished community pitch",
+        "body": "Refurbishing surfaces and goals at community clubs in three states, with equipment supply and training for the local coach."
+      },
+      "visorias": {
+        "title": "Free trials",
+        "photo": "4:3 photo · queue of players at a trial",
+        "body": "Free scouting days in municipalities with no representation in youth leagues. Travel and meals covered for the player and one companion."
+      },
+      "entrenadores": {
+        "title": "Coach education",
+        "photo": "4:3 photo · classroom of coaches",
+        "body": "An in-person course on development methodology for school and municipal league coaches, with remote follow-up for one year."
+      },
+      "beca": {
+        "title": "Parallel academic scholarship",
+        "photo": "4:3 photo · player studying",
+        "body": "Compulsory academic support for every scholarship holder: no academic progress, no sporting continuity."
+      }
     }
   },
   "convocatoria": {
@@ -519,9 +864,18 @@
     "leerBases": "Read the rules",
     "formatos": "Accepted formats: PDF, JPG, PNG or MP4 · maximum 25 MB per file.",
     "brief": {
-      "pedimos": { "title": "What we ask for", "body": "A five to eight minute match video and a one-page letter: who you are, where you play and what you need to keep going." },
-      "requisitos": { "title": "Technical requirements", "body": "PDF, JPG, PNG or MP4 up to 25 MB. If your video is bigger, share a public link in the corresponding field." },
-      "eleccion": { "title": "How we choose", "body": "Three program assessors score sporting potential, context and academic commitment. Shortlist on 15 December." }
+      "pedimos": {
+        "title": "What we ask for",
+        "body": "A five to eight minute match video and a one-page letter: who you are, where you play and what you need to keep going."
+      },
+      "requisitos": {
+        "title": "Technical requirements",
+        "body": "PDF, JPG, PNG or MP4 up to 25 MB. If your video is bigger, share a public link in the corresponding field."
+      },
+      "eleccion": {
+        "title": "How we choose",
+        "body": "Three program assessors score sporting potential, context and academic commitment. Shortlist on 15 December."
+      }
     },
     "checks": {
       "bases": "I accept the rules of the open call and the panel's decision.",
@@ -614,7 +968,12 @@
   "account": {
     "eyebrow": "Account",
     "titulo": "My account",
-    "secciones": { "perfil": "Profile", "pedidos": "My orders", "password": "Password", "privacidad": "Privacy" },
+    "secciones": {
+      "perfil": "Profile",
+      "pedidos": "My orders",
+      "password": "Password",
+      "privacidad": "Privacy"
+    },
     "datosTitulo": "Your details",
     "datosLead": "We only use this for shipping and to reply to you. Your email is changed through support, because it's the key to the account.",
     "nombre": "First name",
@@ -632,8 +991,19 @@
     "noCoinciden": "The two passwords don't match.",
     "contrasenaActualizada": "Password updated.",
     "cambiarContrasena": "Change password",
-    "pedidosCols": { "pedido": "Order", "fecha": "Date", "articulos": "Items", "estado": "Status", "total": "Total" },
-    "pedidosEstado": { "pagado": "Paid", "iniciado": "Incomplete", "expirado": "Expired", "pendiente": "Pending" },
+    "pedidosCols": {
+      "pedido": "Order",
+      "fecha": "Date",
+      "articulos": "Items",
+      "estado": "Status",
+      "total": "Total"
+    },
+    "pedidosEstado": {
+      "pagado": "Paid",
+      "iniciado": "Incomplete",
+      "expirado": "Expired",
+      "pendiente": "Pending"
+    },
     "pedidosError": "We couldn't load your orders.",
     "pedidosVacio": "You have no orders yet. The ones you place will appear here.",
     "privDatosTitulo": "Your data",
@@ -694,10 +1064,22 @@
     "enviando": "Sending",
     "enviar": "Send request",
     "tipos": {
-      "acceso": { "n": "Access", "d": "Find out what data of yours we hold." },
-      "rectificacion": { "n": "Rectification", "d": "Correct an incorrect detail." },
-      "cancelacion": { "n": "Deletion", "d": "Have us delete your data." },
-      "oposicion": { "n": "Objection", "d": "Have us stop using it for something." }
+      "acceso": {
+        "n": "Access",
+        "d": "Find out what data of yours we hold."
+      },
+      "rectificacion": {
+        "n": "Rectification",
+        "d": "Correct an incorrect detail."
+      },
+      "cancelacion": {
+        "n": "Deletion",
+        "d": "Have us delete your data."
+      },
+      "oposicion": {
+        "n": "Objection",
+        "d": "Have us stop using it for something."
+      }
     }
   },
   "expediente": {

@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "check:messages": "node scripts/check-messages.mjs",
+    "check:catalogo": "node scripts/check-catalogo.mjs",
     "db:link": "supabase link --project-ref cwtiokhjyclexedugjmb",
     "db:push": "supabase db push",
     "db:diff": "supabase db diff",

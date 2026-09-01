@@ -3,7 +3,7 @@
 import { Link } from "@/i18n/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState, useTransition } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { startCheckout } from "@/lib/actions/checkout";
 import { money } from "@/lib/format";
@@ -13,6 +13,7 @@ import { btnQuiet } from "@/components/ui/styles";
 
 export function CartDrawer() {
   const t = useTranslations("cart");
+  const locale = useLocale();
   const { lines, isOpen, close, setQty, remove, subtotal, shipping, total } = useCart();
   const { flash } = useToast();
   const [pending, startTransition] = useTransition();
@@ -32,7 +33,10 @@ export function CartDrawer() {
   const checkout = () => {
     setError("");
     startTransition(async () => {
-      const res = await startCheckout(lines.map((l) => ({ id: l.id, qty: l.qty })));
+      const res = await startCheckout(
+        lines.map((l) => ({ id: l.id, qty: l.qty })),
+        locale,
+      );
       if (!res.ok) {
         setError(res.error);
         return;

@@ -3,6 +3,9 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getClaims } from "@/lib/auth/dal";
 import { SHIPPING_MXN } from "@/lib/content/site";
+import { hasLocale } from "next-intl";
+
+import { routing } from "@/i18n/routing";
 import { getProducts } from "@/lib/data/products";
 import { getStripe, siteUrl, toCents } from "@/lib/stripe/client";
 import { GENERIC_ERROR, type ActionResult } from "./types";
@@ -20,12 +23,18 @@ const CHECKOUT_ERROR = "No pudimos abrir la pasarela de pago. Inténtalo de nuev
 
 export async function startCheckout(
   lines: CartLineInput[],
+  /**
+   * Idioma del comprador. Llega del formulario porque una Server Action no
+   * puede resolverlo: sólo decide con qué nombre viaja el producto a Stripe y
+   * qué queda registrado en el pedido, nunca un precio ni un permiso.
+   */
+  locale?: string,
 ): Promise<ActionResult<CheckoutResult>> {
   if (!lines.length) return { ok: false, error: "Tu bolsa está vacía." };
 
   // Los precios se recalculan contra el catálogo: lo que manda el navegador
   // sólo dice *qué* y *cuánto*, nunca a qué precio.
-  const catalog = await getProducts();
+  const catalog = await getProducts(hasLocale(routing.locales, locale) ? locale : routing.defaultLocale);
   const items = lines.flatMap((l) => {
     const p = catalog.find((c) => c.id === l.id);
     if (!p || p.out) return [];

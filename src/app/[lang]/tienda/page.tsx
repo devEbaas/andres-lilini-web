@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 
 import { getProducts } from "@/lib/data/products";
 import { CatalogGrid } from "@/components/tienda/CatalogGrid";
-import { fijarIdioma } from "@/i18n/servidor";
+import { fijarIdioma, localeActual } from "@/i18n/servidor";
 
 // Next exige un literal aquí: 5 minutos de caché para el catálogo.
 export const revalidate = 300;
@@ -21,7 +21,7 @@ export default async function TiendaPage() {
   await fijarIdioma();
 
   const t = await getTranslations("store");
-  const products = await getProducts();
+  const products = await getProducts(await localeActual());
 
   return (
     <>

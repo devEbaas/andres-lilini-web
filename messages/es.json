@@ -255,7 +255,14 @@
     "agregarUnidad": "Agregar una unidad",
     "anadido": "Añadido ✓",
     "anadir": "Añadir a la bolsa",
-    "anadidoToast": "Producto añadido a la bolsa"
+    "anadidoToast": "Producto añadido a la bolsa",
+    "cats": {
+      "todo": "Todo",
+      "metodologia": "Metodología",
+      "indumentaria": "Indumentaria",
+      "equipamiento": "Equipamiento",
+      "accesorios": "Accesorios"
+    }
   },
   "gracias": {
     "sinPedidoTitulo": "Todavía no hay nada que confirmar",
