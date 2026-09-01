@@ -1,18 +1,17 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 
 import { crearSolicitudArco } from "@/lib/actions/privacidad";
 import { Spinner } from "@/components/ui/Spinner";
 
-const DERECHOS = [
-  { v: "acceso", label: "Acceso", ayuda: "Saber qué datos tuyos tenemos." },
-  { v: "rectificacion", label: "Rectificación", ayuda: "Corregir un dato incorrecto." },
-  { v: "cancelacion", label: "Cancelación", ayuda: "Que borremos tus datos." },
-  { v: "oposicion", label: "Oposición", ayuda: "Que dejemos de usarlos para algo." },
-];
+// Los valores están fijados por el CHECK de `arco_solicitudes.tipo`: se
+// guardan tal cual y sólo el rótulo se traduce, desde `derechos.tipos`.
+const DERECHOS = ["acceso", "rectificacion", "cancelacion", "oposicion"] as const;
 
 export function DerechosForm() {
+  const t = useTranslations("derechos");
   const [tipo, setTipo] = useState("acceso");
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
@@ -37,40 +36,39 @@ export function DerechosForm() {
         <div className="mx-auto mb-5 grid size-14 place-items-center rounded-full bg-gradient-accent text-2xl font-extrabold text-on-accent">
           ✓
         </div>
-        <h3 className="m-0 mb-2.5 font-display text-[26px] uppercase">Solicitud recibida</h3>
+        <h3 className="m-0 mb-2.5 font-display text-[26px] uppercase">{t("recibida")}</h3>
         <p className="m-0 leading-[1.7] text-muted">{hecho}</p>
       </div>
     );
   }
 
-  const actual = DERECHOS.find((d) => d.v === tipo);
 
   return (
     <form onSubmit={onSubmit} noValidate className="grid gap-[18px]">
       <div className="grid gap-[9px]">
-        <span className="label-caps">Qué quieres ejercer</span>
+        <span className="label-caps">{t("queEjercer")}</span>
         <div className="flex flex-wrap gap-2">
           {DERECHOS.map((d) => (
             <button
-              key={d.v}
+              key={d}
               type="button"
-              onClick={() => setTipo(d.v)}
-              aria-pressed={tipo === d.v}
+              onClick={() => setTipo(d)}
+              aria-pressed={tipo === d}
               className={`min-h-11 cursor-pointer rounded-full border px-[18px] text-[11px] font-extrabold uppercase tracking-[0.12em] transition ${
-                tipo === d.v
+                tipo === d
                   ? "border-accent bg-panel-2 text-ink"
                   : "border-hairline bg-transparent text-muted hover:text-ink"
               }`}
             >
-              {d.label}
+              {t(`tipos.${d}.n`)}
             </button>
           ))}
         </div>
-        {actual && <span className="text-xs leading-[1.7] text-muted">{actual.ayuda}</span>}
+        <span className="text-xs leading-[1.7] text-muted">{t(`tipos.${tipo}.d`)}</span>
       </div>
 
       <label className="flex flex-col gap-[9px]">
-        <span className="label-caps">Nombre completo</span>
+        <span className="label-caps">{t("nombre")}</span>
         <input
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
@@ -79,26 +77,26 @@ export function DerechosForm() {
       </label>
 
       <label className="flex flex-col gap-[9px]">
-        <span className="label-caps">Correo con el que nos escribiste</span>
+        <span className="label-caps">{t("correo")}</span>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="tucorreo@dominio.com"
+          placeholder={t("correoPh")}
           className="field !bg-bg"
         />
         <span className="font-mono text-[10px] leading-[1.7] text-muted">
-          Es la única forma de encontrar tus datos si nunca tuviste cuenta.
+          {t("correoAyuda")}
         </span>
       </label>
 
       <label className="flex flex-col gap-[9px]">
-        <span className="label-caps">Detalle</span>
+        <span className="label-caps">{t("detalle")}</span>
         <textarea
           rows={4}
           value={detalle}
           onChange={(e) => setDetalle(e.target.value.slice(0, 2000))}
-          placeholder="Qué dato concreto y, si aplica, cómo debería quedar."
+          placeholder={t("detallePh")}
           className="field !bg-bg resize-y leading-[1.6]"
         />
       </label>
@@ -118,7 +116,7 @@ export function DerechosForm() {
         className="flex min-h-[52px] cursor-pointer items-center justify-center gap-2.5 rounded-full border-0 bg-gradient-accent text-xs font-extrabold uppercase tracking-[0.18em] text-on-accent disabled:opacity-60"
       >
         {pending && <Spinner />}
-        {pending ? "Enviando" : "Enviar solicitud"}
+        {pending ? t("enviando") : t("enviar")}
       </button>
     </form>
   );

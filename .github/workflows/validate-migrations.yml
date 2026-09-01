@@ -9,6 +9,10 @@ on:
       - "supabase/migrations/**"
       - "supabase/config.toml"
       - ".github/workflows/validate-migrations.yml"
+      # El catálogo semilla espeja la migración: si cambia uno sin el otro,
+      # este workflow es el que lo caza.
+      - "src/lib/content/tienda.ts"
+      - "scripts/check-catalogo.mjs"
   workflow_dispatch:
 
 jobs:
@@ -17,6 +21,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      # El catálogo semilla de la aplicación y el bloque de traducciones de la
+      # migración dicen lo mismo a propósito. Se comprueba antes de levantar
+      # nada: es barato y falla en segundos.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Comprobar que la semilla y la migración no se separaron
+        run: node scripts/check-catalogo.mjs
 
       - uses: supabase/setup-cli@v1
         with:

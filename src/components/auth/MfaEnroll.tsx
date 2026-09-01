@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import QRCode from "qrcode";
+import { useTranslations } from "next-intl";
 
 import { createBrowserSupabase } from "@/lib/supabase/browser";
 import { Spinner } from "@/components/ui/Spinner";
@@ -41,6 +42,7 @@ async function dibujarQr(uri: string): Promise<string> {
 }
 
 export function MfaEnroll({ activo }: { activo: boolean }) {
+  const t = useTranslations("mfa");
   const [tieneFactor, setTieneFactor] = useState(activo);
   const [pendiente, setPendiente] = useState<Pendiente | null>(null);
   const [codigo, setCodigo] = useState("");
@@ -79,7 +81,7 @@ export function MfaEnroll({ activo }: { activo: boolean }) {
     setCargando(false);
 
     if (e || !data) {
-      setError("No pudimos generar el código. Inténtalo de nuevo.");
+      setError(t("errorGenerar"));
       return;
     }
     // El QR es un extra, no el mecanismo: lo que enrola de verdad es el
@@ -107,7 +109,7 @@ export function MfaEnroll({ activo }: { activo: boolean }) {
     });
     if (eReto || !reto) {
       setCargando(false);
-      setError("No pudimos verificar el código. Inténtalo de nuevo.");
+      setError(t("errorVerificar"));
       return;
     }
 
@@ -120,7 +122,7 @@ export function MfaEnroll({ activo }: { activo: boolean }) {
 
     if (eVerify) {
       setCodigo("");
-      setError("Código incorrecto o caducado. Prueba con el siguiente.");
+      setError(t("codigoMal"));
       return;
     }
 
@@ -160,11 +162,11 @@ export function MfaEnroll({ activo }: { activo: boolean }) {
     return (
       <div className="grid gap-4">
         <p className="m-0 text-sm leading-[1.7] text-accent">
-          Segundo factor activo. Cada acceso pedirá el código de tu aplicación.
+          {t("activo")}
         </p>
         {aviso}
         <button type="button" onClick={quitar} disabled={cargando} className={btnQuiet}>
-          {cargando ? "Quitando…" : "Quitar el segundo factor"}
+          {cargando ? t("quitando") : t("quitar")}
         </button>
       </div>
     );
@@ -174,7 +176,7 @@ export function MfaEnroll({ activo }: { activo: boolean }) {
     return (
       <form onSubmit={confirmar} className="grid gap-[18px]">
         <p className="m-0 text-sm leading-[1.7] text-muted">
-          Escanea el código con Google Authenticator, 1Password o la app que uses.
+          {t("escanea")}
         </p>
 
         {pendiente.qr ? (
@@ -185,7 +187,7 @@ export function MfaEnroll({ activo }: { activo: boolean }) {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={pendiente.qr}
-              alt="Código QR para configurar el segundo factor"
+              alt={t("qrAlt")}
               width={200}
               height={200}
               className="block size-[200px]"
@@ -193,9 +195,7 @@ export function MfaEnroll({ activo }: { activo: boolean }) {
           </div>
         ) : (
           <p className="m-0 rounded-[14px] border border-hairline bg-bg px-4 py-3.5 text-sm leading-[1.7] text-muted">
-            No pudimos dibujar el código QR. Da igual: añade la cuenta a mano con el
-            secreto de aquí abajo, o toca el enlace si estás en el móvil. El resultado
-            es exactamente el mismo: lo que enrola es el secreto, no la imagen.
+            {t("sinQr")}
           </p>
         )}
 
@@ -206,12 +206,12 @@ export function MfaEnroll({ activo }: { activo: boolean }) {
               pendiente.qr ? "nav:hidden" : ""
             }`}
           >
-            Abrir directamente en la app de autenticación
+            {t("abrirApp")}
           </a>
         )}
 
         <label className="flex flex-col gap-[9px]">
-          <span className="label-caps">Si no puedes escanear</span>
+          <span className="label-caps">{t("siNoEscaneas")}</span>
           <input
             readOnly
             value={pendiente.secreto}
@@ -221,14 +221,14 @@ export function MfaEnroll({ activo }: { activo: boolean }) {
         </label>
 
         <label className="flex flex-col gap-[9px]">
-          <span className="label-caps">Código de la app</span>
+          <span className="label-caps">{t("codigoApp")}</span>
           <input
             inputMode="numeric"
             autoComplete="one-time-code"
             maxLength={6}
             value={codigo}
             onChange={(e) => setCodigo(e.target.value.replace(/\D/g, "").slice(0, 6))}
-            placeholder="000000"
+            placeholder={t("codigoPh")}
             className="field !bg-bg text-center font-mono !text-[22px] tracking-[0.5em]"
           />
         </label>
@@ -242,10 +242,10 @@ export function MfaEnroll({ activo }: { activo: boolean }) {
             className="flex min-h-[48px] flex-1 cursor-pointer items-center justify-center gap-2.5 rounded-full border-0 bg-gradient-accent text-xs font-extrabold uppercase tracking-[0.18em] text-on-accent disabled:opacity-60"
           >
             {cargando && <Spinner />}
-            {cargando ? "Activando" : "Activar"}
+            {cargando ? t("activando") : t("activar")}
           </button>
           <button type="button" onClick={cancelar} className={btnQuiet}>
-            Cancelar
+            {t("cancelar")}
           </button>
         </div>
       </form>
@@ -255,8 +255,7 @@ export function MfaEnroll({ activo }: { activo: boolean }) {
   return (
     <div className="grid gap-4">
       <p className="m-0 text-sm leading-[1.7] text-muted">
-        Sin segundo factor, quien consiga tu contraseña entra al panel y ve las
-        direcciones de todos los clientes.
+        {t("porQue")}
       </p>
       {aviso}
       <button
@@ -266,7 +265,7 @@ export function MfaEnroll({ activo }: { activo: boolean }) {
         className="flex min-h-[48px] cursor-pointer items-center justify-center gap-2.5 rounded-full border-0 bg-gradient-accent text-xs font-extrabold uppercase tracking-[0.18em] text-on-accent disabled:opacity-60"
       >
         {cargando && <Spinner />}
-        {cargando ? "Generando" : "Activar segundo factor"}
+        {cargando ? t("generando") : t("activarTitulo")}
       </button>
     </div>
   );

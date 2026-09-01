@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { useRef, useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 
 import { submitConvocatoria } from "@/lib/actions/convocatoria";
 import {
@@ -101,6 +102,9 @@ export function ConvocatoriaForm() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [dragging, setDragging] = useState(false);
+  const t = useTranslations("convocatoria.form");
+  const tv = useTranslations("vocab");
+  const tc = useTranslations("convocatoria.checks");
   const [pais, setPais] = useState("México");
   const [nacimiento, setNacimiento] = useState("");
   const [checks, setChecks] = useState<Record<string, boolean>>({});
@@ -117,11 +121,11 @@ export function ConvocatoriaForm() {
   const takeFile = (f: File | null | undefined) => {
     if (!f) return;
     if (f.size > UPLOAD_MAX_BYTES) {
-      setError("El archivo supera los 25 MB permitidos.");
+      setError(t("archivoGrande"));
       return;
     }
     if (!UPLOAD_ACCEPT.includes(f.type)) {
-      setError("Formato no admitido. Usa PDF, JPG, PNG o MP4.");
+      setError(t("formatoMal"));
       return;
     }
     setError("");
@@ -159,14 +163,13 @@ export function ConvocatoriaForm() {
           ✓
         </div>
         <h2 className="m-0 mb-3 font-display text-[clamp(26px,4vw,44px)] uppercase">
-          Participación registrada
+          {t("registradaTitulo")}
         </h2>
         <p className="mx-auto m-0 mb-[22px] max-w-[44ch] leading-[1.7] text-muted">
-          El jurado publica la lista corta el 15 de diciembre. Te avisamos por correo pase lo que
-          pase.
+          {t("registradaTexto")}
         </p>
         <div className="inline-block rounded-[14px] border border-dashed border-hairline-strong p-[15px] font-mono text-[13px] tracking-[0.14em]">
-          FOLIO · CV-2026-{folio}
+          {t("folio", { folio })}
         </div>
       </motion.div>
     );
@@ -185,22 +188,22 @@ export function ConvocatoriaForm() {
       className="rounded-[26px] border border-hairline bg-white/[0.03] p-[clamp(24px,3.5vw,44px)] shadow-deep backdrop-blur-[14px]"
     >
       <h2 className="m-0 mb-[26px] font-display text-[clamp(24px,3.4vw,40px)] uppercase">
-        Tu participación
+        {t("titulo")}
       </h2>
 
       {/* ── Identidad ── */}
       <div className={rejilla}>
-        <Campo label="Nombre completo" name="nombre" errores={errores}>
-          <input name="nombre" placeholder="Nombre y apellidos" className="field" />
+        <Campo label={t("nombre")} name="nombre" errores={errores}>
+          <input name="nombre" placeholder={t("nombrePh")} className="field" />
         </Campo>
-        <Campo label="Correo" name="email" errores={errores}>
-          <input name="email" type="email" placeholder="tucorreo@dominio.com" className="field" />
+        <Campo label={t("correo")} name="email" errores={errores}>
+          <input name="email" type="email" placeholder={t("correoPh")} className="field" />
         </Campo>
         <Campo
-          label="Fecha de nacimiento"
+          label={t("nacimiento")}
           name="nacimiento"
           errores={errores}
-          hint={`De ${EDAD_MIN} a ${EDAD_MAX} años al cierre de la convocatoria.`}
+          hint={t("nacimientoHint", { min: EDAD_MIN, max: EDAD_MAX })}
         >
           <input
             name="nacimiento"
@@ -214,7 +217,7 @@ export function ConvocatoriaForm() {
 
       {/* ── Residencia ── */}
       <div className={`mt-5 ${rejilla}`}>
-        <Campo label="País de residencia" name="pais" errores={errores}>
+        <Campo label={t("pais")} name="pais" errores={errores}>
           <select
             name="pais"
             value={pais}
@@ -223,16 +226,16 @@ export function ConvocatoriaForm() {
           >
             {PAISES.map((p) => (
               <option key={p} value={p}>
-                {p}
+                {tv(p)}
               </option>
             ))}
           </select>
         </Campo>
         {pais === "México" && (
-          <Campo label="Estado" name="estado" errores={errores}>
+          <Campo label={t("estado")} name="estado" errores={errores}>
             <select name="estado" defaultValue="" className="field appearance-none">
               <option value="" disabled>
-                Elige tu estado
+                {t("eligeEstado")}
               </option>
               {ESTADOS_MX.map((e) => (
                 <option key={e} value={e}>
@@ -245,94 +248,93 @@ export function ConvocatoriaForm() {
       </div>
 
       {/* ── Perfil deportivo ── */}
-      <h3 className="mb-4 mt-8 font-display text-lg uppercase">Perfil deportivo</h3>
+      <h3 className="mb-4 mt-8 font-display text-lg uppercase">{t("perfilTitulo")}</h3>
       <div className={rejilla}>
-        <Campo label="Categoría" name="categoria" errores={errores}>
+        <Campo label={t("categoria")} name="categoria" errores={errores}>
           <select name="categoria" defaultValue="" className="field appearance-none">
             <option value="" disabled>
-              Elige una
+              {t("eligeUna")}
             </option>
             {CATEGORIAS.map((c) => (
               <option key={c} value={c}>
-                {c}
+                {tv(c)}
               </option>
             ))}
           </select>
         </Campo>
-        <Campo label="Posición principal" name="posicion" errores={errores}>
+        <Campo label={t("posicion")} name="posicion" errores={errores}>
           <select name="posicion" defaultValue="" className="field appearance-none">
             <option value="" disabled>
-              Elige una
+              {t("eligeUna")}
             </option>
             {POSICIONES.map((p) => (
               <option key={p} value={p}>
-                {p}
+                {tv(p)}
               </option>
             ))}
           </select>
         </Campo>
-        <Campo label="Pie dominante" name="pie" errores={errores}>
+        <Campo label={t("pie")} name="pie" errores={errores}>
           <select name="pie" defaultValue="" className="field appearance-none">
             <option value="" disabled>
-              Elige uno
+              {t("eligeUno")}
             </option>
             {PIES.map((p) => (
               <option key={p} value={p}>
-                {p}
+                {tv(p)}
               </option>
             ))}
           </select>
         </Campo>
-        <Campo label="Equipo actual" name="club" errores={errores}>
-          <input name="club" placeholder="Nombre del club o escuela" className="field" />
+        <Campo label={t("club")} name="club" errores={errores}>
+          <input name="club" placeholder={t("clubPh")} className="field" />
         </Campo>
-        <Campo label="Liga (opcional)" name="liga" errores={errores}>
-          <input name="liga" placeholder="Ej. Liga municipal Sub-17" className="field" />
+        <Campo label={t("liga")} name="liga" errores={errores}>
+          <input name="liga" placeholder={t("ligaPh")} className="field" />
         </Campo>
       </div>
 
       {/* ── Tutor, sólo si es menor ── */}
       {esMenor && (
         <>
-          <h3 className="mb-3 mt-8 font-display text-lg uppercase">Tu padre, madre o tutor</h3>
+          <h3 className="mb-3 mt-8 font-display text-lg uppercase">{t("tutorTitulo")}</h3>
           <p className="mb-4 max-w-[62ch] text-sm leading-[1.7] text-muted">
-            Eres menor de edad, así que necesitamos sus datos y su autorización expresa. Sin eso
-            no podemos evaluar tu participación.
+            {t("tutorAviso")}
           </p>
           <div className={rejilla}>
-            <Campo label="Nombre completo" name="tutorNombre" errores={errores}>
-              <input name="tutorNombre" placeholder="Nombre y apellidos" className="field" />
+            <Campo label={t("nombre")} name="tutorNombre" errores={errores}>
+              <input name="tutorNombre" placeholder={t("nombrePh")} className="field" />
             </Campo>
-            <Campo label="Parentesco" name="tutorParentesco" errores={errores}>
+            <Campo label={t("tutorParentesco")} name="tutorParentesco" errores={errores}>
               <select name="tutorParentesco" defaultValue="" className="field appearance-none">
                 <option value="" disabled>
-                  Elige uno
+                  {t("eligeUno")}
                 </option>
                 {PARENTESCOS.map((p) => (
                   <option key={p} value={p}>
-                    {p}
+                    {tv(p)}
                   </option>
                 ))}
               </select>
             </Campo>
-            <Campo label="Teléfono" name="tutorTel" errores={errores}>
-              <input name="tutorTel" type="tel" placeholder="+52 55 0000 0000" className="field" />
+            <Campo label={t("tutorTel")} name="tutorTel" errores={errores}>
+              <input name="tutorTel" type="tel" placeholder={t("tutorTelPh")} className="field" />
             </Campo>
-            <Campo label="Correo (opcional)" name="tutorEmail" errores={errores}>
-              <input name="tutorEmail" type="email" placeholder="correo@dominio.com" className="field" />
+            <Campo label={t("tutorEmail")} name="tutorEmail" errores={errores}>
+              <input name="tutorEmail" type="email" placeholder={t("tutorEmailPh")} className="field" />
             </Campo>
           </div>
         </>
       )}
 
       {/* ── Propuesta ── */}
-      <h3 className="mb-4 mt-8 font-display text-lg uppercase">Tu historia</h3>
+      <h3 className="mb-4 mt-8 font-display text-lg uppercase">{t("historiaTitulo")}</h3>
       <div className={rejilla}>
-        <Campo label="Enlace de apoyo (opcional)" name="link" errores={errores} ancho>
-          <input name="link" placeholder="Video, portafolio o redes" className="field" />
+        <Campo label={t("link")} name="link" errores={errores} ancho>
+          <input name="link" placeholder={t("linkPh")} className="field" />
         </Campo>
         <Campo
-          label="Quién eres y qué necesitas para seguir"
+          label={t("propuesta")}
           name="propuesta"
           errores={errores}
           ancho
@@ -341,7 +343,7 @@ export function ConvocatoriaForm() {
             name="propuesta"
             rows={4}
             maxLength={600}
-            placeholder="Máximo 600 caracteres"
+            placeholder={t("propuestaPh")}
             className="field resize-y leading-[1.6]"
           />
         </Campo>
@@ -384,11 +386,9 @@ export function ConvocatoriaForm() {
         {!file ? (
           <div>
             <div className="mb-2.5 font-display text-[clamp(20px,2.6vw,30px)] uppercase">
-              Arrastra tu archivo
+              {t("arrastra")}
             </div>
-            <p className="m-0 text-sm text-muted">
-              o haz clic para elegirlo · PDF, JPG, PNG, MP4 · hasta 25 MB
-            </p>
+            <p className="m-0 text-sm text-muted">{t("arrastraHint")}</p>
           </div>
         ) : (
           <div className="flex items-center gap-4 text-left">
@@ -404,7 +404,7 @@ export function ConvocatoriaForm() {
             </div>
             <button
               type="button"
-              aria-label="Quitar archivo"
+              aria-label={t("quitarArchivo")}
               onClick={(e) => {
                 e.stopPropagation();
                 setFile(null);
@@ -422,7 +422,7 @@ export function ConvocatoriaForm() {
       <div className="mt-[22px] grid gap-2.5">
         <Casilla
           nombre="contrato"
-          label="Declaro que no tengo contrato profesional vigente."
+          label={t("contrato")}
           marcada={Boolean(checks.contrato)}
           onToggle={() => marcar("contrato")}
           error={errores.contrato}
@@ -430,7 +430,7 @@ export function ConvocatoriaForm() {
         {esMenor && (
           <Casilla
             nombre="tutor"
-            label="Mi padre, madre o tutor legal conoce esta participación y autoriza expresamente el tratamiento de mis datos."
+            label={t("tutorConsent")}
             marcada={Boolean(checks.tutor)}
             onToggle={() => marcar("tutor")}
             error={errores.tutor}
@@ -440,7 +440,7 @@ export function ConvocatoriaForm() {
           <Casilla
             key={c.k}
             nombre={c.k}
-            label={c.label}
+            label={tc(c.k)}
             marcada={Boolean(checks[c.k])}
             onToggle={() => marcar(c.k)}
             error={errores[c.k]}
@@ -462,7 +462,7 @@ export function ConvocatoriaForm() {
         disabled={pending}
         className="mt-6 min-h-[52px] w-full cursor-pointer rounded-full border-0 bg-gradient-accent text-xs font-extrabold uppercase tracking-[0.18em] text-on-accent disabled:opacity-60"
       >
-        {pending ? "Enviando…" : "Enviar participación"}
+        {pending ? t("enviando") : t("enviar")}
       </button>
     </form>
   );

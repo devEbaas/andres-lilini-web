@@ -2,6 +2,7 @@ import "server-only";
 import { redirect } from "next/navigation";
 
 import { createServerSupabase } from "@/lib/supabase/server";
+import { rutaLocal } from "@/i18n/servidor";
 import type { AppRole } from "@/lib/supabase/types";
 
 export type SessionClaims = {
@@ -65,11 +66,23 @@ export async function tieneMfa(): Promise<boolean> {
   return Boolean(data?.totp?.length);
 }
 
+/**
+ * Construye el destino del login conservando el idioma.
+ *
+ * `interna` es la ruta en su forma interna —`/cuenta`, `/admin`—; tanto el
+ * login como el `?next=` salen traducidos, así que quien navegaba en inglés
+ * vuelve a `/en/account` y no a la versión en español.
+ */
+async function alLogin(entrada: "/login" | "/login/mfa", interna: string): Promise<string> {
+  const [login, next] = await Promise.all([rutaLocal(entrada), rutaLocal(interna)]);
+  return `${login}?next=${encodeURIComponent(next)}`;
+}
+
 /** Exige sesión activa y con el segundo factor resuelto, si lo hay. */
 export async function requireUser(next: string): Promise<SessionClaims> {
   const claims = await getClaims();
   if (!claims || !claims.isActive) {
-    redirect(`/login?next=${encodeURIComponent(next)}`);
+    redirect(await alLogin("/login", next));
   }
 
   // Si el propio JWT ya dice aal2, el segundo factor está resuelto y no hay
@@ -81,7 +94,7 @@ export async function requireUser(next: string): Promise<SessionClaims> {
 
   // Una sesión a medio autenticar no vale como sesión.
   if (await mfaPendiente()) {
-    redirect(`/login/mfa?next=${encodeURIComponent(next)}`);
+    redirect(await alLogin("/login/mfa", next));
   }
 
   return claims;
@@ -96,7 +109,7 @@ export async function requireUser(next: string): Promise<SessionClaims> {
  */
 export async function requireAdmin(next: string): Promise<SessionClaims> {
   const claims = await requireUser(next);
-  if (claims.role !== "admin") redirect("/");
+  if (claims.role !== "admin") redirect(await rutaLocal("/"));
   return claims;
 }
 
