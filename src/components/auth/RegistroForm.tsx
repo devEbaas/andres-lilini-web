@@ -4,14 +4,15 @@ import { Link } from "@/i18n/navigation";
 import { useState, useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
-import type { ErrorRef } from "@/lib/actions/types";
-import { useErrores } from "@/lib/errores";
+import type { AvisoKey, ErrorRef } from "@/lib/actions/types";
+import { useAvisos, useErrores } from "@/lib/errores";
 
 import { signUp } from "@/lib/actions/cuenta";
 import { Spinner } from "@/components/ui/Spinner";
 
 export function RegistroForm() {
   const err = useErrores();
+  const aviso = useAvisos();
   const t = useTranslations("auth");
   const locale = useLocale();
   const [nombre, setNombre] = useState("");
@@ -20,7 +21,7 @@ export function RegistroForm() {
   const [password, setPassword] = useState("");
   const [consent, setConsent] = useState(false);
   const [error, setError] = useState<ErrorRef | null>(null);
-  const [hecho, setHecho] = useState("");
+  const [hecho, setHecho] = useState<AvisoKey | null>(null);
   const [pending, startTransition] = useTransition();
 
   const onSubmit = (e: React.FormEvent) => {
@@ -40,7 +41,7 @@ export function RegistroForm() {
           ✓
         </div>
         <h3 className="m-0 mb-2.5 font-display text-[26px] uppercase">{t("revisaCorreo")}</h3>
-        <p className="m-0 leading-[1.7] text-muted">{hecho}</p>
+        <p className="m-0 leading-[1.7] text-muted">{aviso(hecho)}</p>
       </div>
     );
   }

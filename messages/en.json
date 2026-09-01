@@ -269,7 +269,8 @@
       "indumentaria": "Apparel",
       "equipamiento": "Equipment",
       "accesorios": "Accessories"
-    }
+    },
+    "envioMetodo": "Standard shipping · 3 to 5 business days"
   },
   "gracias": {
     "sinPedidoTitulo": "Nothing to confirm yet",
@@ -1234,6 +1235,11 @@
     "subidaFallida": "We couldn't upload the file. Please try again.",
     "telefonoNecesario": "We need a phone number.",
     "tutorYaAutorizo": "The guardian has already authorised this application."
+  },
+  "avisos": {
+    "revisaCorreo": "If the address is valid, we've sent you a link to confirm the account.",
+    "enlaceContrasena": "If that address has an account, we've sent you a link to change the password.",
+    "arcoRecibida": "We've received your request. We'll write to you to verify your identity before acting on it."
   },
   "email": {
     "marca": "Andrés Lillini",

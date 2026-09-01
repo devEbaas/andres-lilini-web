@@ -1,28 +1,34 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+
+import type { AvisoKey } from "@/lib/actions/types";
+import { useAvisos } from "@/lib/errores";
 
 import { solicitarReset } from "@/lib/actions/cuenta";
 import { Spinner } from "@/components/ui/Spinner";
 
 export function RecuperarForm() {
   const t = useTranslations("auth");
+  const aviso = useAvisos();
+  const locale = useLocale();
   const [email, setEmail] = useState("");
-  const [hecho, setHecho] = useState("");
+  const [hecho, setHecho] = useState<AvisoKey | null>(null);
   const [pending, startTransition] = useTransition();
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     startTransition(async () => {
-      const res = await solicitarReset(email);
+      // El idioma decide a qué versión de /cuenta/password vuelve el enlace.
+      const res = await solicitarReset(email, locale);
       // Siempre ok: la respuesta no cambia según exista o no la cuenta.
       if (res.ok) setHecho(res.data.mensaje);
     });
   };
 
   if (hecho) {
-    return <p className="m-0 leading-[1.7] text-muted">{hecho}</p>;
+    return <p className="m-0 leading-[1.7] text-muted">{aviso(hecho)}</p>;
   }
 
   return (

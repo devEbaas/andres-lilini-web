@@ -16,6 +16,13 @@ export function normalizaLocale(valor: unknown): Locale {
 }
 
 /**
+ * Las claves del espacio `avisos`: lo que una acción responde cuando sale
+ * bien. Mismo motivo que `ErrorKey` — la acción dice *qué* pasó y el cliente
+ * decide en qué idioma se lee, porque una Server Action no conoce el suyo.
+ */
+export type AvisoKey = keyof (typeof mensajes)["avisos"];
+
+/**
  * Las claves del espacio `errors`, tomadas del catálogo español.
  *
  * Se derivan del propio JSON en vez de escribirse a mano: una clave que no

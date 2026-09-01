@@ -1,5 +1,8 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
+
+import { rutaCon } from "@/i18n/rutas";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getClaims } from "@/lib/auth/dal";
 import { SHIPPING_MXN } from "@/lib/content/site";
@@ -83,6 +86,7 @@ export async function startCheckout(
   if (!stripe) return { ok: true, data: { orderId, total, url: null } };
 
   const base = siteUrl();
+  const t = await getTranslations({ locale: idioma, namespace: "store" });
 
   try {
     const session = await stripe.checkout.sessions.create(
@@ -105,17 +109,20 @@ export async function startCheckout(
           {
             shipping_rate_data: {
               type: "fixed_amount",
-              display_name: "Envío estándar · 3 a 5 días hábiles",
+              display_name: t("envioMetodo"),
               fixed_amount: { amount: toCents(SHIPPING_MXN), currency: "mxn" },
             },
           },
         ],
         client_reference_id: orderId,
         metadata: { order_id: orderId },
-        success_url: `${base}/tienda/gracias?session_id={CHECKOUT_SESSION_ID}`,
+        // Se vuelve al idioma en el que se compró. Estaban escritas a mano en
+        // español, así que quien pagaba desde /en/store aterrizaba en la
+        // versión española del sitio sin haberlo pedido.
+        success_url: `${base}${rutaCon("/tienda/gracias", idioma)}?session_id={CHECKOUT_SESSION_ID}`,
         // Sin parámetros a propósito: /tienda es estática y leer searchParams
         // ahí la volvería dinámica. El cliente vuelve con su bolsa intacta.
-        cancel_url: `${base}/tienda`,
+        cancel_url: `${base}${rutaCon("/tienda", idioma)}`,
       },
       // Un doble clic en «Ir a pagar» no abre dos sesiones para el mismo pedido.
       { idempotencyKey: `order_${orderId}` },

@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 
-import type { ErrorRef } from "@/lib/actions/types";
+import type { AvisoKey, ErrorRef } from "@/lib/actions/types";
 
 /**
  * Traduce lo que devuelve una Server Action.
@@ -20,4 +20,15 @@ export function useErrores() {
     if (!e) return "";
     return typeof e === "string" ? t(e) : t(e.k, e.p);
   };
+}
+
+/**
+ * Lo mismo para el mensaje de éxito.
+ *
+ * Existe porque tres acciones devolvían la frase ya escrita, en español, y
+ * quien se registraba o pedía sus datos en inglés la recibía tal cual.
+ */
+export function useAvisos() {
+  const t = useTranslations("avisos");
+  return (a: AvisoKey) => t(a);
 }

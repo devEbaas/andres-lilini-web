@@ -11,7 +11,7 @@ import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/lib/supabase/env";
 import { enviarCorreo } from "@/lib/email/client";
 import { plantillaArco } from "@/lib/email/plantillas";
 import type { ArcoStatus, ArcoTipo } from "@/lib/supabase/types";
-import { GENERIC_ERROR, isEmail, normalizaLocale, type ActionResult } from "./types";
+import { GENERIC_ERROR, isEmail, normalizaLocale, type ActionResult, type AvisoKey } from "./types";
 
 const NO_SESION = "sesionCaducada";
 const NO_AUTORIZADO = "noAutorizado";
@@ -118,7 +118,7 @@ export async function crearSolicitudArco(input: {
   email: string;
   detalle: string;
   locale?: string;
-}): Promise<ActionResult<{ mensaje: string }>> {
+}): Promise<ActionResult<{ mensaje: AvisoKey }>> {
   if (!TIPOS.includes(input.tipo as ArcoTipo)) {
     return { ok: false, code: "eligeDerecho" };
   }
@@ -151,13 +151,7 @@ export async function crearSolicitudArco(input: {
     ...(await plantillaArco({ nombre: input.nombre.trim(), tipo: input.tipo }, locale)),
   });
 
-  return {
-    ok: true,
-    data: {
-      mensaje:
-        "Recibimos tu solicitud. Te escribiremos para acreditar tu identidad antes de atenderla.",
-    },
-  };
+  return { ok: true, data: { mensaje: "arcoRecibida" as AvisoKey } };
 }
 
 export async function resolverSolicitudArco(input: {
