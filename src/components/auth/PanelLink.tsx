@@ -1,11 +1,12 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import type { RutaEstatica } from "@/i18n/routing";
 import { useEffect, useState } from "react";
 
 import { createBrowserSupabase } from "@/lib/supabase/browser";
 
-type Estado = { href: string; label: string } | null;
+type Estado = { href: RutaEstatica; label: string } | null;
 
 /**
  * Atajo a la zona privada de quien ya tiene sesión.

@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect } from "react";
 
@@ -45,7 +45,7 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
           <nav className="my-auto flex flex-col gap-1.5">
             {NAV.map((item, i) => (
               <motion.div
-                key={item.href}
+                key={item.label}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.06 + i * 0.045, duration: 0.4, ease: [0.2, 0.7, 0.2, 1] }}

@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 
 import { CREDENTIALS } from "@/lib/content/home";
@@ -128,10 +128,14 @@ export function Hero() {
           <Link href="/programa" className={btnPrimary}>
             Postular a un atleta
           </Link>
-          <Link href="#trayectoria" className={btnSecondary}>
+          {/* Ancla dentro de la propia página: salto nativo, sin router. */}
+          <a href="#trayectoria" className={btnSecondary}>
             Ver trayectoria
-          </Link>
-          <Link href="/contenido/prensa" className={btnGhost}>
+          </a>
+          <Link
+            href={{ pathname: "/contenido/[doc]", params: { doc: "prensa" } }}
+            className={btnGhost}
+          >
             Prensa
           </Link>
         </motion.div>

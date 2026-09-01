@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { FOOTER_COLS, SOCIAL } from "@/lib/content/site";
 import { NewsletterForm } from "./NewsletterForm";
 
@@ -41,7 +41,7 @@ export function Footer() {
               <div className="label-caps mb-4">{col.title}</div>
               <div className="flex flex-col gap-[11px]">
                 {col.links.map((l) => (
-                  <Link key={l.href} href={l.href} className="text-sm text-ink hover:text-accent">
+                  <Link key={l.label} href={l.href} className="text-sm text-ink hover:text-accent">
                     {l.label}
                   </Link>
                 ))}
@@ -65,10 +65,16 @@ export function Footer() {
         <div className="mt-[34px] flex flex-wrap justify-between gap-x-[22px] gap-y-2 font-mono text-[11px] text-muted">
           <span>© 2026 Andrés Lillini. Todos los derechos reservados.</span>
           <span className="flex gap-5">
-            <Link href="/contenido/privacidad" className="text-muted hover:text-accent">
+            <Link
+              href={{ pathname: "/contenido/[doc]", params: { doc: "privacidad" } }}
+              className="text-muted hover:text-accent"
+            >
               Privacidad
             </Link>
-            <Link href="/contenido/terminos" className="text-muted hover:text-accent">
+            <Link
+              href={{ pathname: "/contenido/[doc]", params: { doc: "terminos" } }}
+              className="text-muted hover:text-accent"
+            >
               Términos
             </Link>
           </span>

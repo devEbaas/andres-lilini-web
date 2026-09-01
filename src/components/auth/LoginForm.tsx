@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useLocale } from "next-intl";
 
 import { signIn } from "@/lib/actions/auth";
 import { verificarMfa } from "@/lib/actions/mfa";
@@ -10,6 +11,9 @@ const inputCodigo =
   "field !bg-bg text-center font-mono !text-[22px] tracking-[0.5em]";
 
 export function LoginForm({ next }: { next?: string }) {
+  // Las acciones no pueden leer el idioma del segmento: se lo damos nosotros
+  // para que el destino por defecto caiga en la versión correcta del sitio.
+  const locale = useLocale();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [codigo, setCodigo] = useState("");
@@ -24,7 +28,7 @@ export function LoginForm({ next }: { next?: string }) {
       // En caso de éxito la acción redirige desde el servidor y esto no
       // vuelve: sólo se llega aquí si falta el segundo factor o si algo
       // falló.
-      const res = await signIn({ email, password, next });
+      const res = await signIn({ email, password, next, locale });
       if (!res.ok) {
         setError(res.error);
         return;
@@ -39,7 +43,7 @@ export function LoginForm({ next }: { next?: string }) {
     setError("");
     startTransition(async () => {
       // Sólo vuelve si el código no valía: al verificar, la acción redirige.
-      const res = await verificarMfa({ code: codigo, next });
+      const res = await verificarMfa({ code: codigo, next, locale });
       setCodigo("");
       setError(res.error);
     });

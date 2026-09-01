@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { useState, useTransition } from "react";
 
 import { cancelarMiCuenta } from "@/lib/actions/privacidad";
@@ -25,7 +25,7 @@ export function CancelarCuenta({ email }: { email: string }) {
         return;
       }
       router.refresh();
-      router.replace("/?baja=1");
+      router.replace({ pathname: "/", query: { baja: "1" } });
     });
   };
 

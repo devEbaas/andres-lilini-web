@@ -1,12 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import { useState } from "react";
 
-import { NAV } from "@/lib/content/site";
+import { NAV, type Route } from "@/lib/content/site";
 import { useCart } from "@/lib/store/cart";
 import { useToast } from "@/lib/store/toast";
 import { CartIcon } from "@/components/ui/CartIcon";
@@ -23,7 +22,9 @@ export function Header() {
 
   useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 40));
 
-  const isActive = (href: string) => href === pathname;
+  // Sólo las rutas sin ancla se marcan como activas: `/#trayectoria` vive
+  // dentro de la portada y no es una página distinta.
+  const isActive = (href: Route["href"]) => typeof href === "string" && href === pathname;
 
   return (
     <>
@@ -60,7 +61,7 @@ export function Header() {
           <nav className="ml-auto hidden gap-1 nav:flex">
             {NAV.map((item) => (
               <Link
-                key={item.href}
+                key={item.label}
                 href={item.href}
                 aria-current={isActive(item.href) ? "page" : undefined}
                 className={`rounded-full px-[13px] py-[11px] text-[11px] font-bold uppercase tracking-[0.18em] transition-colors duration-[250ms] hover:bg-panel-2 hover:text-ink ${

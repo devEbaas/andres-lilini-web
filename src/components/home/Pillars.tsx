@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { PILLARS } from "@/lib/content/home";
 import { Reveal } from "@/components/ui/Reveal";
 import { btnPrimary } from "@/components/ui/styles";

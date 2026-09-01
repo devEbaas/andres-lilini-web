@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 
@@ -49,7 +49,10 @@ export function CatalogGrid({ products }: { products: Product[] }) {
               transition={{ duration: 0.35, ease: [0.2, 0.7, 0.2, 1] }}
               className="overflow-hidden rounded-[22px] border border-hairline bg-panel transition-[transform,border-color,box-shadow] duration-[350ms] hover:-translate-y-[6px] hover:border-accent hover:shadow-soft"
             >
-              <Link href={`/tienda/${p.id}`} className="block text-ink hover:text-ink">
+              <Link
+                href={{ pathname: "/tienda/[id]", params: { id: p.id } }}
+                className="block text-ink hover:text-ink"
+              >
                 <PhotoSlot label={p.shot} ratio="1/1" className="border-0">
                   {p.out && (
                     <span className="absolute right-3.5 top-3.5 rounded-full border border-hairline-strong bg-bg px-3 py-[7px] text-[10px] font-extrabold uppercase tracking-[0.14em]">

@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useState, useTransition } from "react";
 
 import { signUp } from "@/lib/actions/cuenta";
@@ -105,7 +105,10 @@ export function RegistroForm() {
         </span>
         <span className="text-sm leading-[1.6] text-muted">
           Acepto el tratamiento de mis datos según el{" "}
-          <Link href="/contenido/privacidad" className="text-accent underline underline-offset-4">
+          <Link
+            href={{ pathname: "/contenido/[doc]", params: { doc: "privacidad" } }}
+            className="text-accent underline underline-offset-4"
+          >
             aviso de privacidad
           </Link>
           .
