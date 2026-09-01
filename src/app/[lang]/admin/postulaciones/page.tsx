@@ -2,6 +2,7 @@ import { createServerSupabase } from "@/lib/supabase/server";
 import { Celda, Idioma, Tabla, Vacio, fecha } from "@/components/admin/Tabla";
 import { EstadoPostulacion } from "@/components/admin/EstadoPostulacion";
 import { EnlaceExpediente } from "@/components/admin/EnlaceExpediente";
+import { EnlaceTutor } from "@/components/admin/EnlaceTutor";
 import { fijarIdioma } from "@/i18n/servidor";
 
 export default async function PostulacionesPage() {
@@ -71,6 +72,7 @@ export default async function PostulacionesPage() {
                 >
                   {a.tutor_verificado_at ? "Verificado" : "Sin verificar"}
                 </span>
+                <EnlaceTutor id={a.id} verificado={Boolean(a.tutor_verificado_at)} />
               </>
             ) : (
               "—"

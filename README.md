@@ -146,6 +146,10 @@ esas rutas no se vuelvan dinámicas al conectar Supabase.
   restringidos a PDF, JPG, PNG y MP4. `next.config.ts` sube el
   `bodySizeLimit` de Server Actions a 26 MB para que quepa el archivo.
 
+> **Estado:** esto es una demo para enseñar al cliente; el contenido es de
+> relleno y nada está productivo. Lo que falta para lanzarlo de verdad está en
+> [`docs/PARA-PRODUCCION.md`](docs/PARA-PRODUCCION.md).
+
 ## Idiomas
 
 El sitio es bilingüe. **El español vive en la raíz y el inglés bajo `/en`**, con

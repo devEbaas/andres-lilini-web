@@ -1222,9 +1222,11 @@
     "revisaCampos": "Revisa los campos marcados.",
     "sesionCaducada": "Tu sesión ha caducado. Vuelve a entrar.",
     "sinArchivo": "Esta participación no tiene archivo.",
+    "sinTutor": "Esta postulación no registró un tutor.",
     "soloMexico": "La convocatoria es sólo para residentes en México.",
     "subidaFallida": "No pudimos subir el archivo. Inténtalo de nuevo.",
-    "telefonoNecesario": "Necesitamos un teléfono."
+    "telefonoNecesario": "Necesitamos un teléfono.",
+    "tutorYaAutorizo": "El tutor ya autorizó esta postulación."
   },
   "email": {
     "marca": "Andrés Lillini",
