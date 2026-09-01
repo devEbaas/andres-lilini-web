@@ -160,6 +160,6 @@ internacionales.
 conservó un ciclo por si había que revertir; ya no la lee nadie y se puede
 eliminar con una migración de una línea.
 
-**El panel es monolingüe** por decisión: `/admin` y `/sistema` responden 404 en
-inglés. Si algún día lo opera alguien que no lea español, es una fase nueva —
-son unos 70 textos.
+**El panel es monolingüe** por decisión: `/admin` y `/sistema` piden el idioma
+español y redirigen si se abren en inglés. Si algún día lo opera alguien que no
+lea español, es una fase nueva — son unos 70 textos.
