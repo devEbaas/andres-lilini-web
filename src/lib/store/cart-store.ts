@@ -1,4 +1,15 @@
-export type CartLine = { id: string; name: string; price: number; qty: number };
+export type CartLine = {
+  id: string;
+  /** El nombre con el que se añadió. Respaldo de las líneas ya guardadas. */
+  name: string;
+  price: number;
+  qty: number;
+  /**
+   * El nombre en cada idioma, para que la bolsa se lea en el idioma activo y
+   * no en el que hubiera cuando se añadió el producto.
+   */
+  nombres?: Partial<Record<"es" | "en", string>>;
+};
 
 const STORAGE_KEY = "al.cart.v1";
 const EMPTY: CartLine[] = [];

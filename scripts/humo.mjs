@@ -97,10 +97,22 @@ for (const [es, en] of PARES) {
 }
 
 // ── Rutas internas: sólo español ──────────────────────────────
+//
+// No responden 404: el panel existe, sólo que en español. Negar que exista
+// dejaba sin salida a un admin que estuviera viendo el sitio en inglés, porque
+// el enlace «Panel» de la cabecera se renderiza en el idioma activo.
 console.log("Rutas internas");
-for (const ruta of ["/en/sistema", "/en/admin", "/en/admin/pedidos"]) {
-  const { estado } = await traer(ruta);
-  comprobar(`${ruta} responde 404`, estado === 404, `dio ${estado}`);
+for (const [ruta, esperado] of [
+  ["/en/sistema", "/sistema"],
+  ["/en/admin", "/admin"],
+  ["/en/admin/pedidos", "/admin/pedidos"],
+]) {
+  const { estado, destino } = await traer(ruta);
+  comprobar(
+    `${ruta} redirige al español`,
+    estado === 307 && (destino ?? "").endsWith(esperado),
+    `${estado} → ${destino}`,
+  );
 }
 {
   const { cuerpo } = await traer("/sistema");

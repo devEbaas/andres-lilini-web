@@ -17,6 +17,15 @@ export type Product = {
   shot: string;
   desc: string;
   out?: boolean;
+  /**
+   * El nombre en los dos idiomas.
+   *
+   * Lo necesita el carrito: guarda sus líneas en `localStorage` y se llenan
+   * con el idioma que hubiera al añadir. Sin esto, quien mete un producto
+   * navegando en español y cambia a inglés sigue viendo «Libro: Cantera
+   * primero» en su bolsa.
+   */
+  nombres: Record<Locale, string>;
 };
 
 /** Los cuatro campos que cambian con el idioma. */
@@ -187,6 +196,7 @@ export function desdeSemilla(s: Semilla, locale: Locale): Product {
     catKey: s.catKey,
     price: s.price,
     out: s.out,
+    nombres: { es: s.es.name, en: s.en.name },
     name: t.name,
     sub: t.sub,
     shot: t.shot,

@@ -28,11 +28,17 @@ export async function proxy(request: NextRequest) {
   const empiezaPor = (bases: readonly string[]) =>
     bases.some((p) => interna === p || interna.startsWith(`${p}/`));
 
-  // El panel y el sistema de diseño sólo existen en español. En otro idioma no
-  // son área privada sino ruta inexistente: se dejan pasar para que el layout
-  // responda 404. Si no, `/en/admin` mandaría al login y, tras entrar, el
-  // admin caería igualmente en un 404.
-  if (empiezaPor(RUTAS_SOLO_ES) && locale !== routing.defaultLocale) return response;
+  // El panel y el sistema de diseño sólo existen en español, pero **existen**:
+  // responder 404 sería mentir. Se redirige a la versión española.
+  //
+  // Importa porque el enlace «Panel» de la cabecera se renderiza en el idioma
+  // que se esté usando: un admin que estuviera viendo el sitio en inglés
+  // pulsaba y caía en un 404 sin más salida que editar la URL a mano.
+  if (empiezaPor(RUTAS_SOLO_ES) && locale !== routing.defaultLocale) {
+    const url = request.nextUrl.clone();
+    url.pathname = conIdioma(interna, routing.defaultLocale);
+    return NextResponse.redirect(url);
+  }
 
   const esPrivada = empiezaPor(AREAS_PRIVADAS);
   const esEntrada = RUTAS_DE_ENTRADA.includes(interna);

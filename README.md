@@ -198,8 +198,9 @@ español.
 
 ### Qué se queda en español
 
-`/admin` y `/sistema` son internos y monolingües por decisión: responden 404 en
-cualquier otro idioma y no muestran el selector.
+`/admin` y `/sistema` son internos y monolingües por decisión. Pedidos en otro
+idioma redirigen al español —no responden 404: el panel existe, sólo que en una
+lengua— y no muestran el selector.
 
 Los tres documentos legales —privacidad, términos y bases— se publican en
 inglés con un aviso visible de que son traducción de cortesía y de que sólo el
@@ -213,8 +214,9 @@ código: ver `docs/correos-supabase/`.
 ### Comprobaciones
 
 ```bash
-npm run check       # paridad de catálogos, literales sueltos, catálogo semilla
-npm run humo        # 112 comprobaciones contra un servidor levantado
+npm run check         # paridad de catálogos, literales sueltos, catálogo semilla
+npm run humo          # 112 comprobaciones contra un servidor levantado
+npm run check:fugas   # busca español servido en las páginas inglesas
 ```
 
 Las tres primeras corren en cada PR (`.github/workflows/verificar.yml`). El

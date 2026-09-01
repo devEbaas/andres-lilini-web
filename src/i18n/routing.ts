@@ -46,8 +46,8 @@ export const routing = defineRouting({
     "/expediente/[token]": { es: "/expediente/[token]", en: "/dossier/[token]" },
     "/tutor/[token]": { es: "/tutor/[token]", en: "/guardian/[token]" },
 
-    // Internas: sólo español. Están en el mapa para que `Link` las acepte,
-    // pero su layout responde 404 si el idioma no es español.
+    // Internas: sólo español. Están en el mapa para que `Link` las acepte;
+    // el proxy redirige al español si se piden en otro idioma.
     "/sistema": "/sistema",
     "/admin": "/admin",
     "/admin/arco": "/admin/arco",
@@ -79,5 +79,5 @@ export type RutaEstatica = Exclude<Ruta, `${string}[${string}`>;
  */
 export type Destino = RutaEstatica | { pathname: RutaEstatica; hash: string };
 
-/** Rutas que sólo existen en español. Su layout hace `notFound()` en inglés. */
+/** Rutas que sólo existen en español. El proxy redirige al español las demás. */
 export const RUTAS_SOLO_ES = ["/admin", "/sistema"] as const;
