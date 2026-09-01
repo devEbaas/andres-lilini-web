@@ -1,7 +1,10 @@
 {
   "common": {
-    "localeName": "Español",
-    "switchLanguage": "Cambiar idioma"
+    "switchLanguage": "Cambiar idioma",
+    "idiomas": {
+      "es": "Español",
+      "en": "English"
+    }
   },
   "links": {
     "inicio": "Inicio",
@@ -26,8 +29,7 @@
     "menu": "Menú",
     "cerrarMenu": "Cerrar menú",
     "menuTitulo": "Menú",
-    "carrito": "{count, plural, =0 {Carrito} one {Carrito, # artículo} other {Carrito, # artículos}}",
-    "enPendiente": "La versión en inglés llega en la próxima entrega."
+    "carrito": "{count, plural, =0 {Carrito} one {Carrito, # artículo} other {Carrito, # artículos}}"
   },
   "footer": {
     "logoAlt": "Andrés Lillini · formador de futbolistas",

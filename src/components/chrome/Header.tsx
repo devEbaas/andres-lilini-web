@@ -8,10 +8,10 @@ import { useTranslations } from "next-intl";
 
 import { NAV, type Route } from "@/lib/content/site";
 import { useCart } from "@/lib/store/cart";
-import { useToast } from "@/lib/store/toast";
 import { CartIcon } from "@/components/ui/CartIcon";
 import { PanelLink } from "@/components/auth/PanelLink";
 import { MobileMenu } from "./MobileMenu";
+import { SelectorIdioma } from "./SelectorIdioma";
 
 export function Header() {
   const t = useTranslations("header");
@@ -20,7 +20,6 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { count, open } = useCart();
-  const { flash } = useToast();
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 40));
@@ -79,23 +78,7 @@ export function Header() {
           <div className="ml-auto flex items-center gap-2.5 nav:ml-0">
             <PanelLink />
 
-            <div className="flex overflow-hidden rounded-full border border-hairline">
-              <button
-                type="button"
-                aria-pressed="true"
-                className="cursor-pointer border-0 bg-panel-2 px-[11px] py-2 text-[10px] font-extrabold tracking-[0.14em]"
-              >
-                ES
-              </button>
-              <button
-                type="button"
-                aria-pressed="false"
-                onClick={() => flash(t("enPendiente"))}
-                className="cursor-pointer border-0 bg-transparent px-[11px] py-2 text-[10px] font-extrabold tracking-[0.14em] text-muted hover:text-ink"
-              >
-                EN
-              </button>
-            </div>
+            <SelectorIdioma />
 
             <button
               type="button"

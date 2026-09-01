@@ -1,7 +1,10 @@
 {
   "common": {
-    "localeName": "English",
-    "switchLanguage": "Change language"
+    "switchLanguage": "Change language",
+    "idiomas": {
+      "es": "Español",
+      "en": "English"
+    }
   },
   "links": {
     "inicio": "Home",
@@ -26,8 +29,7 @@
     "menu": "Menu",
     "cerrarMenu": "Close menu",
     "menuTitulo": "Menu",
-    "carrito": "{count, plural, =0 {Cart} one {Cart, # item} other {Cart, # items}}",
-    "enPendiente": "The English version is coming in the next release."
+    "carrito": "{count, plural, =0 {Cart} one {Cart, # item} other {Cart, # items}}"
   },
   "footer": {
     "logoAlt": "Andrés Lillini · football talent developer",
