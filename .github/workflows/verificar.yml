@@ -1,0 +1,49 @@
+name: Verificar
+
+# Lo que impide que el sitio bilingüe se degrade en silencio. Nadie borra una
+# traducción a propósito: se olvida al añadir una cadena, y sólo se descubre
+# cuando alguien navega en el otro idioma.
+on:
+  pull_request:
+  push:
+    branches: [main, develop]
+  workflow_dispatch:
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Primero lo barato: estos tres fallan en segundos y dan el motivo
+      # exacto, así que se ejecutan antes que el build.
+      - name: Paridad de los catálogos de mensajes
+        run: npm run check:messages
+
+      - name: Texto sin traducir fuera del catálogo
+        run: npm run check:literales
+
+      - name: La semilla del catálogo espeja la migración
+        run: npm run check:catalogo
+
+      - name: Tipos
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npm run lint
+
+      # El build es también un chequeo de i18n: next-intl registra un error por
+      # cada clave que falte al prerenderizar, en los dos idiomas.
+      - name: Build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
