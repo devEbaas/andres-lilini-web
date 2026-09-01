@@ -3,8 +3,8 @@
 import { useState, useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
-import type { ErrorRef } from "@/lib/actions/types";
-import { useErrores } from "@/lib/errores";
+import type { AvisoKey, ErrorRef } from "@/lib/actions/types";
+import { useAvisos, useErrores } from "@/lib/errores";
 
 import { crearSolicitudArco } from "@/lib/actions/privacidad";
 import { Spinner } from "@/components/ui/Spinner";
@@ -15,6 +15,7 @@ const DERECHOS = ["acceso", "rectificacion", "cancelacion", "oposicion"] as cons
 
 export function DerechosForm() {
   const err = useErrores();
+  const aviso = useAvisos();
   const t = useTranslations("derechos");
   const locale = useLocale();
   const [tipo, setTipo] = useState("acceso");
@@ -22,7 +23,7 @@ export function DerechosForm() {
   const [email, setEmail] = useState("");
   const [detalle, setDetalle] = useState("");
   const [error, setError] = useState<ErrorRef | null>(null);
-  const [hecho, setHecho] = useState("");
+  const [hecho, setHecho] = useState<AvisoKey | null>(null);
   const [pending, startTransition] = useTransition();
 
   const onSubmit = (e: React.FormEvent) => {
@@ -42,7 +43,7 @@ export function DerechosForm() {
           ✓
         </div>
         <h3 className="m-0 mb-2.5 font-display text-[26px] uppercase">{t("recibida")}</h3>
-        <p className="m-0 leading-[1.7] text-muted">{hecho}</p>
+        <p className="m-0 leading-[1.7] text-muted">{aviso(hecho)}</p>
       </div>
     );
   }

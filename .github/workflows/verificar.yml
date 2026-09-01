@@ -23,13 +23,16 @@ jobs:
 
       - run: npm ci
 
-      # Primero lo barato: estos tres fallan en segundos y dan el motivo
+      # Primero lo barato: estos cuatro fallan en segundos y dan el motivo
       # exacto, así que se ejecutan antes que el build.
       - name: Paridad de los catálogos de mensajes
         run: npm run check:messages
 
       - name: Texto sin traducir fuera del catálogo
         run: npm run check:literales
+
+      - name: Frases y URLs españolas en las Server Actions
+        run: npm run check:acciones
 
       - name: La semilla del catálogo espeja la migración
         run: npm run check:catalogo

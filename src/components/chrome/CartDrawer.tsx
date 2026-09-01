@@ -9,6 +9,7 @@ import type { ErrorRef } from "@/lib/actions/types";
 import { useErrores } from "@/lib/errores";
 
 import { startCheckout } from "@/lib/actions/checkout";
+import { PRODUCTS_SEED } from "@/lib/content/tienda";
 import { money } from "@/lib/format";
 import type { Locale } from "@/i18n/routing";
 import { useCart } from "@/lib/store/cart";
@@ -21,9 +22,17 @@ export function CartDrawer() {
   const t = useTranslations("cart");
   const locale = useLocale() as Locale;
   const sesion = useSesion();
-  /** Las líneas guardadas antes de esto no traen `nombres`: cae al guardado. */
-  const nombre = (l: { name: string; nombres?: Partial<Record<string, string>> }) =>
-    l.nombres?.[locale] ?? l.name;
+  /**
+   * El nombre en el idioma activo.
+   *
+   * Primero el catálogo, por `id`: es la misma fuente que usa `startCheckout`
+   * para armar las partidas, así que la bolsa y el cobro dicen lo mismo. Luego
+   * lo que guardó la línea, y sólo al final el nombre suelto, que es lo único
+   * que traen las bolsas guardadas antes de que esto fuese bilingüe: si no se
+   * mira el catálogo, esa línea se queda en español para siempre.
+   */
+  const nombre = (l: { id: string; name: string; nombres?: Partial<Record<string, string>> }) =>
+    PRODUCTS_SEED.find((s) => s.id === l.id)?.[locale].name ?? l.nombres?.[locale] ?? l.name;
   const { lines, isOpen, close, setQty, remove, subtotal, shipping, total } = useCart();
   const { flash } = useToast();
   const [pending, startTransition] = useTransition();

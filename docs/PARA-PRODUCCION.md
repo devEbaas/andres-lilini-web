@@ -86,7 +86,9 @@ cuando toque.
 
 - [ ] **`SITE_URL`** debe apuntar al dominio real. Se usa en los `success_url`
       de Stripe y en los enlaces de los correos. Si queda en `localhost`, los
-      enlaces que reciba la gente no funcionan.
+      enlaces que reciba la gente no funcionan. El idioma de esas URLs ya no
+      se escribe a mano: lo pone `rutaCon()`, y `npm run check:acciones` falla
+      si alguien vuelve a pegar una ruta española.
 - [ ] **`metadataBase`** está escrito a mano en
       `src/app/[lang]/layout.tsx` como `https://andreslillini.com`. Tiene que
       coincidir con el dominio real o los `canonical` y `hreflang` apuntarán a
@@ -94,6 +96,10 @@ cuando toque.
 - [ ] **Stripe en modo vivo**: `STRIPE_SECRET_KEY` de producción y
       `STRIPE_WEBHOOK_SECRET` del endpoint real, que es distinto del que
       imprime `stripe listen`.
+- [ ] **El nombre de la cuenta de Stripe** sale en la cabecera de la pasarela
+      y no lo pone el sitio: hoy dice «Entorno de prueba de lillini-website»,
+      así que un comprador en inglés ve esa línea en español. Se cambia en el
+      panel de Stripe, no en el código.
 - [ ] **Dominio y DNS**, y el remitente verificado en Resend si para entonces
       hay correo.
 
@@ -124,13 +130,13 @@ cuando toque.
 ## 4. Cómo comprobar que sigue bien
 
 ```bash
-npm run check                    # catálogos de idioma, literales, semilla
+npm run check                    # catálogos, literales, acciones, semilla
 npm run build && npm run start   # en otra terminal:
 npm run humo                     # 112 comprobaciones del sitio bilingüe
 npm run check:fugas              # español servido en páginas inglesas
 ```
 
-Los tres chequeos de `npm run check` corren solos en cada PR
+Los cuatro chequeos de `npm run check` corren solos en cada PR
 (`.github/workflows/verificar.yml`). El repaso de humo se lanza a mano contra
 un servidor levantado, o contra un preview pasándole la URL:
 
@@ -141,6 +147,9 @@ npm run humo -- https://mi-preview.vercel.app
 Lo que el humo **no** cubre, porque necesita sesión o dinero real:
 
 - Comprar desde `/en/store` y confirmar que Stripe abre en inglés y cobra MXN.
+  *Comprobado el 1 de septiembre de 2026 contra Stripe en modo prueba: la
+  sesión sale con `locale: en`, `success_url` a `/en/store/thank-you` y
+  `cancel_url` a `/en/store`; la española sigue en `/tienda/gracias`.*
 - Entrar en `/en/login` y aterrizar en `/en/account`.
 - Que una postulación en inglés dispare el correo bilingüe al tutor.
 

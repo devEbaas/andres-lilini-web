@@ -1,5 +1,6 @@
 "use server";
 
+import { rutaCon } from "@/i18n/rutas";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { APPLY_STEPS } from "@/lib/content/programa";
 import { MAX_CLUBES, PARENTESCOS, TUTOR_DIAS } from "@/lib/content/jugador";
@@ -166,14 +167,16 @@ export async function submitApplication(
     } else {
       // Va bilingüe si la postulación no fue en español: quien autoriza es
       // el tutor, y no tiene por qué leer el idioma que eligió el jugador.
+      const idioma = normalizaLocale(locale);
       const plantilla = await plantillaTutor(
         {
           jugador: t("nombre"),
           folio: `AL-2026-${folio}`,
-          url: `${siteUrl()}/tutor/${token}`,
+          // El enlace lleva a la versión del formulario que el correo anuncia.
+          url: `${siteUrl()}${rutaCon("/tutor/[token]", idioma, { token })}`,
           dias: TUTOR_DIAS,
         },
-        normalizaLocale(locale),
+        idioma,
       );
       await enviarCorreo({ para: t("tutorEmail"), ...plantilla });
     }

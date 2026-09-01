@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { conIdioma } from "@/i18n/rutas";
+import { conIdioma, rutaCon } from "@/i18n/rutas";
 
 import { getClaims } from "@/lib/auth/dal";
 import { createServerSupabase } from "@/lib/supabase/server";
@@ -13,8 +13,21 @@ import {
   isEmail,
   normalizaLocale,
   type ActionResult,
+  type AvisoKey,
   type ErrorKey,
 } from "./types";
+
+/**
+ * A dónde vuelve quien pulsa el enlace del correo.
+ *
+ * Supabase manda a `/auth/callback`, que está fuera del proxy de idioma, y de
+ * ahí a `next`. Ese `next` iba escrito en español, así que quien se registraba
+ * en inglés confirmaba su cuenta y aterrizaba en el sitio en español.
+ */
+function volverA(interna: string, locale: string): string {
+  const destino = rutaCon(interna, normalizaLocale(locale));
+  return `${siteUrl()}/auth/callback?next=${encodeURIComponent(destino)}`;
+}
 
 const NO_SESION = "sesionCaducada";
 const SIN_CONFIGURAR = "registroNoDisponible";
@@ -27,8 +40,7 @@ const SIN_CONFIGURAR = "registroNoDisponible";
  * devolviendo un usuario ofuscado cuando el correo ya existe, así que aquí
  * basta con no delatar nada en el mensaje.
  */
-const REVISA_CORREO =
-  "Si el correo es válido, te enviamos un enlace para confirmar la cuenta.";
+const REVISA_CORREO: AvisoKey = "revisaCorreo";
 
 /** Espejo de `password_requirements` de Supabase, para dar un mensaje útil. */
 function validaPassword(p: string): ErrorKey | null {
@@ -46,7 +58,7 @@ export async function signUp(input: {
   password: string;
   consent: boolean;
   locale?: string;
-}): Promise<ActionResult<{ mensaje: string }>> {
+}): Promise<ActionResult<{ mensaje: AvisoKey }>> {
   if (!input.consent) {
     return { ok: false, code: "consentimientoCuenta" };
   }
@@ -72,7 +84,7 @@ export async function signUp(input: {
         // trigger corre antes de que exista fila que actualizar.
         locale: normalizaLocale(input.locale),
       },
-      emailRedirectTo: `${siteUrl()}/auth/callback?next=/cuenta`,
+      emailRedirectTo: volverA("/cuenta", input.locale ?? ""),
     },
   });
 
@@ -102,10 +114,13 @@ export async function signUp(input: {
   return { ok: true, data: { mensaje: REVISA_CORREO } };
 }
 
-export async function solicitarReset(email: string): Promise<ActionResult<{ mensaje: string }>> {
+export async function solicitarReset(
+  email: string,
+  locale?: string,
+): Promise<ActionResult<{ mensaje: AvisoKey }>> {
   const neutro = {
     ok: true as const,
-    data: { mensaje: "Si el correo tiene cuenta, te enviamos un enlace para cambiarla." },
+    data: { mensaje: "enlaceContrasena" as AvisoKey },
   };
 
   if (!isEmail(email)) return neutro;
@@ -114,7 +129,7 @@ export async function solicitarReset(email: string): Promise<ActionResult<{ mens
   if (!supabase) return neutro;
 
   const { error } = await supabase.auth.resetPasswordForEmail(email.trim().toLowerCase(), {
-    redirectTo: `${siteUrl()}/auth/callback?next=/cuenta/password`,
+    redirectTo: volverA("/cuenta/password", locale ?? ""),
   });
 
   // El resultado no cambia el mensaje: si cambiara, sería un oráculo.
