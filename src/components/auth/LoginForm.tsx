@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useLocale, useTranslations } from "next-intl";
 
 import { signIn } from "@/lib/actions/auth";
 import { verificarMfa } from "@/lib/actions/mfa";
@@ -10,6 +11,10 @@ const inputCodigo =
   "field !bg-bg text-center font-mono !text-[22px] tracking-[0.5em]";
 
 export function LoginForm({ next }: { next?: string }) {
+  // Las acciones no pueden leer el idioma del segmento: se lo damos nosotros
+  // para que el destino por defecto caiga en la versión correcta del sitio.
+  const t = useTranslations("auth");
+  const locale = useLocale();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [codigo, setCodigo] = useState("");
@@ -24,7 +29,7 @@ export function LoginForm({ next }: { next?: string }) {
       // En caso de éxito la acción redirige desde el servidor y esto no
       // vuelve: sólo se llega aquí si falta el segundo factor o si algo
       // falló.
-      const res = await signIn({ email, password, next });
+      const res = await signIn({ email, password, next, locale });
       if (!res.ok) {
         setError(res.error);
         return;
@@ -39,7 +44,7 @@ export function LoginForm({ next }: { next?: string }) {
     setError("");
     startTransition(async () => {
       // Sólo vuelve si el código no valía: al verificar, la acción redirige.
-      const res = await verificarMfa({ code: codigo, next });
+      const res = await verificarMfa({ code: codigo, next, locale });
       setCodigo("");
       setError(res.error);
     });
@@ -58,7 +63,7 @@ export function LoginForm({ next }: { next?: string }) {
     return (
       <form onSubmit={onCodigo} noValidate className="grid gap-[18px]">
         <label className="flex flex-col gap-[9px]">
-          <span className="label-caps">Código de verificación</span>
+          <span className="label-caps">{t("codigo")}</span>
           <input
             inputMode="numeric"
             autoComplete="one-time-code"
@@ -66,13 +71,13 @@ export function LoginForm({ next }: { next?: string }) {
             autoFocus
             value={codigo}
             onChange={(e) => setCodigo(e.target.value.replace(/\D/g, "").slice(0, 6))}
-            placeholder="000000"
+            placeholder={t("codigoPh")}
             className={inputCodigo}
           />
         </label>
 
         <p className="m-0 text-xs leading-[1.7] text-muted">
-          Abre tu aplicación de autenticación y escribe el código de seis dígitos.
+          {t("codigoAyuda")}
         </p>
 
         {aviso}
@@ -83,7 +88,7 @@ export function LoginForm({ next }: { next?: string }) {
           className="flex min-h-[52px] cursor-pointer items-center justify-center gap-2.5 rounded-full border-0 bg-gradient-accent text-xs font-extrabold uppercase tracking-[0.18em] text-on-accent disabled:opacity-60"
         >
           {pending && <Spinner />}
-          {pending ? "Verificando" : "Verificar"}
+          {pending ? t("verificando") : t("verificar")}
         </button>
       </form>
     );
@@ -92,27 +97,27 @@ export function LoginForm({ next }: { next?: string }) {
   return (
     <form onSubmit={onCredenciales} noValidate className="grid gap-[18px]">
       <label className="flex flex-col gap-[9px]">
-        <span className="label-caps">Correo</span>
+        <span className="label-caps">{t("correo")}</span>
         <input
           type="email"
           name="email"
           autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="tucorreo@dominio.com"
+          placeholder={t("correoPh")}
           className="field !bg-bg"
         />
       </label>
 
       <label className="flex flex-col gap-[9px]">
-        <span className="label-caps">Contraseña</span>
+        <span className="label-caps">{t("contrasena")}</span>
         <input
           type="password"
           name="password"
           autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="••••••••••••"
+          placeholder={t("contrasenaPh")}
           className="field !bg-bg"
         />
       </label>
@@ -125,7 +130,7 @@ export function LoginForm({ next }: { next?: string }) {
         className="flex min-h-[52px] cursor-pointer items-center justify-center gap-2.5 rounded-full border-0 bg-gradient-accent text-xs font-extrabold uppercase tracking-[0.18em] text-on-accent disabled:opacity-60"
       >
         {pending && <Spinner />}
-        {pending ? "Entrando" : "Entrar"}
+        {pending ? t("entrando") : t("entrar")}
       </button>
     </form>
   );

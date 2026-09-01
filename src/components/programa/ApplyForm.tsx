@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 
 import { submitApplication, type ApplyPayload, type ClubEntry } from "@/lib/actions/apply";
 import { APPLY_STEPS, type ApplyField } from "@/lib/content/programa";
@@ -13,6 +14,8 @@ import { btnQuiet } from "@/components/ui/styles";
 const TOTAL = APPLY_STEPS.length;
 
 export function ApplyForm() {
+  const t = useTranslations("programa.form");
+  const ts = useTranslations("programa.steps");
   const [step, setStep] = useState(0);
   const [values, setValues] = useState<ApplyPayload>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -83,18 +86,17 @@ export function ApplyForm() {
           ✓
         </div>
         <h2 className="m-0 mb-3.5 font-display text-[clamp(30px,4vw,52px)] uppercase leading-[0.95]">
-          Postulación recibida
+          {t("recibidaTitulo")}
         </h2>
         <p className="mx-auto m-0 mb-6 max-w-[46ch] leading-[1.7] text-muted">
-          Un evaluador revisa el video en los próximos 15 días hábiles. Si avanza, recibirás una
-          invitación a sesión presencial con fecha y sede.
+          {t("recibidaTexto")}
         </p>
         <div className="inline-block rounded-[14px] border border-dashed border-hairline-strong p-4 font-mono text-[13px] tracking-[0.14em]">
-          FOLIO · AL-2026-{folio}
+          {t("folio", { folio })}
         </div>
         <div className="mt-[30px]">
           <button type="button" onClick={reset} className={btnQuiet}>
-            Enviar otra postulación
+            {t("otraPostulacion")}
           </button>
         </div>
       </motion.div>
@@ -106,10 +108,13 @@ export function ApplyForm() {
       <div className="flex flex-wrap items-center justify-between gap-[18px] border-b border-hairline p-[clamp(22px,3vw,32px)]">
         <div>
           <div className="font-mono text-[10px] uppercase tracking-[0.26em] text-muted">
-            Sección {String(step + 1).padStart(2, "0")} de {String(TOTAL).padStart(2, "0")}
+            {t("seccion", {
+              n: String(step + 1).padStart(2, "0"),
+              total: String(TOTAL).padStart(2, "0"),
+            })}
           </div>
           <h2 className="m-0 mt-2 font-display text-[clamp(22px,3vw,34px)] uppercase leading-none">
-            {current.title}
+            {ts(`${current.key}.title`)}
           </h2>
         </div>
         <div className="font-display text-[34px] text-muted">{pct}%</div>
@@ -126,7 +131,7 @@ export function ApplyForm() {
       <div className="flex gap-1.5 overflow-x-auto border-b border-hairline px-[clamp(22px,3vw,32px)] py-[18px]">
         {APPLY_STEPS.map((s, i) => (
           <button
-            key={s.short}
+            key={s.key}
             type="button"
             onClick={() => goTo(i)}
             aria-current={i === step ? "step" : undefined}
@@ -136,7 +141,7 @@ export function ApplyForm() {
                 : "border-hairline text-muted hover:text-ink"
             } ${i < step ? "bg-panel-2" : "bg-transparent"}`}
           >
-            {String(i + 1).padStart(2, "0")} · {s.short}
+            {String(i + 1).padStart(2, "0")} · {ts(`${s.key}.short`)}
           </button>
         ))}
       </div>
@@ -152,8 +157,7 @@ export function ApplyForm() {
       >
         {esMenor && current.fields.some((f) => f.soloMenores) && (
           <p className="col-span-full m-0 rounded-[14px] border border-accent/40 bg-panel-2 px-4 py-3.5 text-sm leading-[1.7] text-muted">
-            Eres menor de edad, así que necesitamos los datos de tu padre, madre o tutor legal
-            y su autorización expresa. Sin eso no podemos evaluar la postulación.
+            {t("avisoMenor")}
           </p>
         )}
         {visibles.map((f) =>
@@ -194,7 +198,7 @@ export function ApplyForm() {
             step === 0 ? "text-muted" : "text-ink"
           } disabled:cursor-default`}
         >
-          ← Anterior
+          {t("anterior")}
         </button>
         <button
           type="button"
@@ -203,7 +207,7 @@ export function ApplyForm() {
           className="flex min-h-11 cursor-pointer items-center gap-2.5 rounded-full border-0 bg-gradient-accent px-[30px] py-4 text-[11px] font-extrabold uppercase tracking-[0.18em] text-on-accent disabled:opacity-60"
         >
           {pending && <Spinner />}
-          {pending ? "Enviando" : step === TOTAL - 1 ? "Enviar postulación" : "Siguiente →"}
+          {pending ? t("enviando") : step === TOTAL - 1 ? t("enviar") : t("siguiente")}
         </button>
       </div>
     </div>
@@ -228,6 +232,9 @@ function Clubes({
   value: ClubEntry[];
   onChange: (v: ClubEntry[]) => void;
 }) {
+  const t = useTranslations("programa.form");
+  const tf = useTranslations("programa.f");
+  const tv = useTranslations("vocab");
   const filas = value.length ? value : [VACIO];
 
   const editar = (i: number, k: keyof ClubEntry, v: string) => {
@@ -237,10 +244,10 @@ function Clubes({
 
   return (
     <div className="col-span-full grid gap-3">
-      <span className="label-caps">{field.label}</span>
-      {field.hint && (
-        <span className="-mt-1 font-mono text-[10px] leading-[1.6] text-muted">{field.hint}</span>
-      )}
+      <span className="label-caps">{tf(`${field.key}.label`)}</span>
+      <span className="-mt-1 font-mono text-[10px] leading-[1.6] text-muted">
+        {tf(`${field.key}.hint`)}
+      </span>
 
       {filas.map((fila, i) => (
         <div
@@ -248,17 +255,19 @@ function Clubes({
           className="grid items-end gap-3 rounded-2xl border border-hairline bg-panel p-3.5 [grid-template-columns:repeat(auto-fit,minmax(130px,1fr))]"
         >
           <label className="flex flex-col gap-1.5">
-            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">Club</span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
+              {t("club")}
+            </span>
             <input
               value={fila.club}
               onChange={(e) => editar(i, "club", e.target.value)}
-              placeholder="Nombre del club"
+              placeholder={t("clubPh")}
               className="field !bg-bg"
             />
           </label>
           <label className="flex flex-col gap-1.5">
             <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
-              Categoría
+              {t("categoria")}
             </span>
             <select
               value={fila.categoria}
@@ -268,39 +277,39 @@ function Clubes({
               <option value="">—</option>
               {CATEGORIAS.map((c) => (
                 <option key={c} value={c}>
-                  {c}
+                  {tv(c)}
                 </option>
               ))}
             </select>
           </label>
           <label className="flex flex-col gap-1.5">
             <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
-              Desde
+              {t("desde")}
             </span>
             <input
               value={fila.desde}
               onChange={(e) => editar(i, "desde", e.target.value.replace(/\D/g, "").slice(0, 4))}
               inputMode="numeric"
-              placeholder="2021"
+              placeholder={t("desdePh")}
               className="field !bg-bg"
             />
           </label>
           <label className="flex flex-col gap-1.5">
             <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
-              Hasta
+              {t("hasta")}
             </span>
             <input
               value={fila.hasta}
               onChange={(e) => editar(i, "hasta", e.target.value.replace(/\D/g, "").slice(0, 4))}
               inputMode="numeric"
-              placeholder="2023"
+              placeholder={t("hastaPh")}
               className="field !bg-bg"
             />
           </label>
           {filas.length > 1 && (
             <button
               type="button"
-              aria-label={`Quitar el club ${i + 1}`}
+              aria-label={t("quitarClub", { n: i + 1 })}
               onClick={() => onChange(filas.filter((_, j) => j !== i))}
               className="size-11 shrink-0 cursor-pointer rounded-full border border-hairline bg-transparent text-muted hover:border-accent hover:text-ink"
             >
@@ -316,7 +325,7 @@ function Clubes({
           onClick={() => onChange([...filas, { ...VACIO }])}
           className={btnQuiet}
         >
-          Añadir otro club
+          {t("anadirClub")}
         </button>
       )}
     </div>
@@ -334,17 +343,27 @@ function Field({
   error?: string;
   onChange: (v: string | boolean) => void;
 }) {
+  const t = useTranslations("programa.form");
+  const tf = useTranslations("programa.f");
+  const tv = useTranslations("vocab");
+
   const id = `f-${field.key}`;
   const text = typeof value === "string" ? value : "";
   const invalid = Boolean(error);
+
+  // No todos los campos tienen marcador o ayuda: `has` evita pedir una clave
+  // que no existe, que en next-intl devolvería el propio nombre de la clave.
+  const label = tf(`${field.key}.label`);
+  const ph = tf.has(`${field.key}.ph`) ? tf(`${field.key}.ph`) : undefined;
+  const hint = tf.has(`${field.key}.hint`) ? tf(`${field.key}.hint`) : undefined;
 
   return (
     <div
       className={`flex flex-col gap-[9px] ${field.wide ? "col-span-full" : ""}`}
     >
-      {field.label && (
+      {label && (
         <label htmlFor={id} className="label-caps">
-          {field.label}
+          {label}
           {field.required && <span className="ml-1 text-accent">*</span>}
         </label>
       )}
@@ -357,17 +376,17 @@ function Field({
           aria-invalid={invalid}
           className="field appearance-none"
         >
-          <option value="">Elige una opción</option>
+          <option value="">{t("elige")}</option>
           {field.options?.map((o) => (
             <option key={o} value={o}>
-              {o}
+              {tv(o)}
             </option>
           ))}
         </select>
       )}
 
       {field.type === "radio" && (
-        <div role="radiogroup" aria-label={field.label} className="flex flex-wrap gap-2">
+        <div role="radiogroup" aria-label={label} className="flex flex-wrap gap-2">
           {field.options?.map((o) => {
             const on = text === o;
             return (
@@ -381,7 +400,7 @@ function Field({
                   on ? "border-accent bg-panel-2 text-ink" : "border-hairline bg-panel text-muted"
                 }`}
               >
-                {o}
+                {tv(o)}
               </button>
             );
           })}
@@ -394,7 +413,7 @@ function Field({
           rows={4}
           value={text}
           onChange={(e) => onChange(e.target.value)}
-          placeholder={field.ph}
+          placeholder={ph}
           aria-invalid={invalid}
           className="field resize-y leading-[1.6]"
         />
@@ -416,7 +435,7 @@ function Field({
           >
             {value ? "✓" : ""}
           </span>
-          <span className="text-sm leading-[1.6] text-muted">{field.ph}</span>
+          <span className="text-sm leading-[1.6] text-muted">{ph}</span>
         </button>
       )}
 
@@ -426,15 +445,13 @@ function Field({
           type={field.type}
           value={text}
           onChange={(e) => onChange(e.target.value)}
-          placeholder={field.ph}
+          placeholder={ph}
           aria-invalid={invalid}
           className="field"
         />
       )}
 
-      {field.hint && !error && (
-        <span className="font-mono text-[10px] text-muted">{field.hint}</span>
-      )}
+      {hint && !error && <span className="font-mono text-[10px] text-muted">{hint}</span>}
       {error && (
         <span className="text-xs font-semibold text-danger-text" role="alert">
           {error}

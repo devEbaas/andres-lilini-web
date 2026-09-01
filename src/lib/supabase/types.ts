@@ -6,14 +6,22 @@ export type Json = string | number | boolean | null | { [key: string]: Json } | 
 
 export type ProductRow = {
   id: string;
-  cat: string;
-  name: string;
-  sub: string;
+  /** Clave estable de categoría; el rótulo vive en los mensajes. */
+  cat_key: string;
+  /** Obsoleta: el rótulo en español que `cat_key` sustituye. Nadie la lee. */
+  cat: string | null;
   price: number;
-  shot: string;
-  description: string;
   sold_out: boolean;
   sort: number;
+  // Texto en español —las columnas originales— y su par en inglés.
+  name: string;
+  sub: string;
+  shot: string;
+  description: string;
+  name_en: string;
+  sub_en: string;
+  shot_en: string;
+  description_en: string;
 };
 
 /** Datos del tutor. Obligatorios si el postulante es menor de edad. */

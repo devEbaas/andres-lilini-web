@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 
 import { solicitarReset } from "@/lib/actions/cuenta";
 import { Spinner } from "@/components/ui/Spinner";
 
 export function RecuperarForm() {
+  const t = useTranslations("auth");
   const [email, setEmail] = useState("");
   const [hecho, setHecho] = useState("");
   const [pending, startTransition] = useTransition();
@@ -26,13 +28,13 @@ export function RecuperarForm() {
   return (
     <form onSubmit={onSubmit} noValidate className="grid gap-[18px]">
       <label className="flex flex-col gap-[9px]">
-        <span className="label-caps">Correo</span>
+        <span className="label-caps">{t("correo")}</span>
         <input
           type="email"
           autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="tucorreo@dominio.com"
+          placeholder={t("correoPh")}
           className="field !bg-bg"
         />
       </label>
@@ -43,7 +45,7 @@ export function RecuperarForm() {
         className="flex min-h-[52px] cursor-pointer items-center justify-center gap-2.5 rounded-full border-0 bg-gradient-accent text-xs font-extrabold uppercase tracking-[0.18em] text-on-accent disabled:opacity-60"
       >
         {pending && <Spinner />}
-        {pending ? "Enviando" : "Enviar enlace"}
+        {pending ? t("enviando") : t("enviarEnlace")}
       </button>
     </form>
   );

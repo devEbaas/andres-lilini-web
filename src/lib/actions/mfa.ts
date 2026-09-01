@@ -2,8 +2,12 @@
 
 import { redirect } from "next/navigation";
 
+import { hasLocale } from "next-intl";
+
 import { createServerSupabase } from "@/lib/supabase/server";
 import { safeNext } from "@/lib/auth/redirect";
+import { routing } from "@/i18n/routing";
+import { conIdioma } from "@/i18n/rutas";
 
 const CODIGO_MAL = "Código incorrecto o caducado. Prueba con el siguiente.";
 const FALLO = "No pudimos verificar el código. Inténtalo de nuevo.";
@@ -17,6 +21,8 @@ const FALLO = "No pudimos verificar el código. Inténtalo de nuevo.";
 export async function verificarMfa(input: {
   code: string;
   next?: string;
+  /** Igual que en `signIn`: la acción no puede resolver el idioma sola. */
+  locale?: string;
 }): Promise<{ ok: false; error: string }> {
   const code = input.code.replace(/\s/g, "");
   if (!/^\d{6}$/.test(code)) return { ok: false, error: CODIGO_MAL };
@@ -59,5 +65,6 @@ export async function verificarMfa(input: {
   // Igual que en `signIn`: la cookie con el token ya elevado a aal2 y la
   // navegación viajan en la misma respuesta. Era justo esta separación la
   // que hacía que el código se pidiera dos veces.
-  redirect(safeNext(input.next, esAdmin ? "/admin" : "/"));
+  const locale = hasLocale(routing.locales, input.locale) ? input.locale : routing.defaultLocale;
+  redirect(safeNext(input.next, esAdmin ? "/admin" : conIdioma("/", locale)));
 }

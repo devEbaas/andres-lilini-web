@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 
 import { actualizarPerfil } from "@/lib/actions/cuenta";
 import { Spinner } from "@/components/ui/Spinner";
@@ -10,6 +11,7 @@ export function PerfilForm({
 }: {
   inicial: { nombre: string; apellido: string; telefono: string };
 }) {
+  const t = useTranslations("account");
   const [nombre, setNombre] = useState(inicial.nombre);
   const [apellido, setApellido] = useState(inicial.apellido);
   const [telefono, setTelefono] = useState(inicial.telefono);
@@ -32,7 +34,7 @@ export function PerfilForm({
     <form onSubmit={onSubmit} noValidate className="grid max-w-[460px] gap-[18px]">
       <div className="grid gap-[18px] [grid-template-columns:repeat(auto-fit,minmax(140px,1fr))]">
         <label className="flex flex-col gap-[9px]">
-          <span className="label-caps">Nombre</span>
+          <span className="label-caps">{t("nombre")}</span>
           <input
             value={nombre}
             autoComplete="given-name"
@@ -41,7 +43,7 @@ export function PerfilForm({
           />
         </label>
         <label className="flex flex-col gap-[9px]">
-          <span className="label-caps">Apellido</span>
+          <span className="label-caps">{t("apellido")}</span>
           <input
             value={apellido}
             autoComplete="family-name"
@@ -52,12 +54,12 @@ export function PerfilForm({
       </div>
 
       <label className="flex flex-col gap-[9px]">
-        <span className="label-caps">Teléfono</span>
+        <span className="label-caps">{t("telefono")}</span>
         <input
           value={telefono}
           autoComplete="tel"
           onChange={(e) => setTelefono(e.target.value)}
-          placeholder="Opcional"
+          placeholder={t("telefonoPh")}
           className="field !bg-bg"
         />
       </label>
@@ -70,7 +72,7 @@ export function PerfilForm({
           {error}
         </div>
       )}
-      {guardado && <p className="m-0 text-sm text-accent">Guardado.</p>}
+      {guardado && <p className="m-0 text-sm text-accent">{t("guardado")}</p>}
 
       <button
         type="submit"
@@ -78,7 +80,7 @@ export function PerfilForm({
         className="flex min-h-[48px] cursor-pointer items-center justify-center gap-2.5 rounded-full border-0 bg-gradient-accent text-xs font-extrabold uppercase tracking-[0.18em] text-on-accent disabled:opacity-60"
       >
         {pending && <Spinner />}
-        {pending ? "Guardando" : "Guardar"}
+        {pending ? t("guardando") : t("guardar")}
       </button>
     </form>
   );

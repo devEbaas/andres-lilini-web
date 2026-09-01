@@ -2,9 +2,12 @@
 
 import { useState, useTransition } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { useTranslations } from "next-intl";
+
 import { subscribe } from "@/lib/actions/newsletter";
 
 export function NewsletterForm() {
+  const t = useTranslations("newsletter");
   const [email, setEmail] = useState("");
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
@@ -30,7 +33,7 @@ export function NewsletterForm() {
           className="flex min-h-12 items-center gap-3 rounded-full border border-accent bg-[color-mix(in_oklab,var(--accent)_10%,transparent)] px-5 py-[13px] text-sm"
         >
           <span className="font-extrabold text-accent">✓</span>
-          Listo, te escribimos el primer lunes del mes.
+          {t("listo")}
         </motion.div>
       ) : (
         <motion.form
@@ -42,14 +45,14 @@ export function NewsletterForm() {
         >
           <div className="flex flex-wrap gap-2.5">
             <label className="sr-only" htmlFor="newsletter-email">
-              Correo electrónico
+              {t("correo")}
             </label>
             <input
               id="newsletter-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="tucorreo@dominio.com"
+              placeholder={t("placeholder")}
               aria-invalid={Boolean(error)}
               className="field flex-1 basis-[200px] rounded-full !bg-bg px-4"
             />
@@ -58,7 +61,7 @@ export function NewsletterForm() {
               disabled={pending}
               className="min-h-12 cursor-pointer rounded-full border-0 bg-gradient-accent px-[26px] py-[13px] text-[11px] font-extrabold uppercase tracking-[0.16em] text-on-accent disabled:opacity-60"
             >
-              {pending ? "Enviando" : "Suscribirme"}
+              {pending ? t("enviando") : t("suscribirme")}
             </button>
           </div>
           {error && (
