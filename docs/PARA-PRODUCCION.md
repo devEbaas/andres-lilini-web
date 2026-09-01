@@ -46,14 +46,12 @@ hash** y el enlace viaja únicamente por correo. Sin correo, ese enlace no
 existe en ninguna parte: no hay forma de recuperarlo ni de reemitirlo, y la
 postulación se queda «Sin verificar» para siempre.
 
-A diferencia del expediente, **no hay botón en el panel para reemitir el enlace
-del tutor.** Tres salidas:
-
-1. Configurar Resend antes de enseñar el flujo de menores.
-2. Añadir al panel un botón que reemita el enlace, igual que
-   `EnlaceExpediente` hace con el expediente. Es trabajo pequeño y bien
-   acotado.
-3. Enseñar la demo sólo con postulantes mayores de edad.
+**Resuelto:** `/admin/postulaciones` tiene ahora un botón «Reenviar
+autorización» junto a cada tutor sin verificar. Reemite el enlace, lo muestra
+una vez y lo copia al portapapeles; si hay correo configurado también lo manda.
+El enlace anterior deja de valer, que es lo que se quiere si se perdió por
+donde no debía. No aparece en las postulaciones ya autorizadas: ofrecerlo
+invitaría a invalidar una autorización válida por error.
 
 ### Correos de Supabase Auth
 
@@ -101,11 +99,14 @@ cuando toque.
 
 ### Buscadores
 
-- [ ] **No hay `robots.txt`.** Mientras sea una demo desplegada en una URL
-      pública, conviene un `src/app/robots.ts` que lo bloquee todo — el
-      `sitemap.xml` sí existe y ya lista las 44 URLs, así que un buscador que
-      lo encuentre indexará la demo con su contenido de relleno.
-- [ ] Al lanzar, invertirlo: permitir el rastreo y declarar el sitemap.
+- [x] **`robots.txt`**: ya existe y **bloquea todo el sitio** mientras sea una
+      demo. Sin él, el `sitemap.xml` —que lista las 44 URLs— habría bastado
+      para que un buscador indexara el contenido de relleno.
+- [ ] **Al lanzar, poner `SITIO_INDEXABLE=1`** en las variables de entorno.
+      Eso invierte el `robots.txt`: permite el rastreo, declara el sitemap y
+      bloquea sólo las áreas con sesión y los enlaces con token, en los dos
+      idiomas. No se deduce de `NODE_ENV` a propósito: la demo también se
+      construye en modo producción y eso la dejaría abierta.
 - [ ] Dar de alta el sitio en Search Console y comprobar que reconoce las dos
       versiones de idioma.
 
