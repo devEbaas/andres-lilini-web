@@ -21,7 +21,10 @@
     "derechos": "Ejercer tus derechos",
     "escribenos": "Escríbenos",
     "prensa": "Prensa",
-    "patrocinios": "Patrocinios"
+    "patrocinios": "Patrocinios",
+    "entrar": "Entrar",
+    "crearCuenta": "Crear cuenta",
+    "misPedidos": "Mis pedidos"
   },
   "header": {
     "inicio": "Andrés Lillini · inicio",
@@ -38,7 +41,8 @@
       "explorar": "Explorar",
       "programa": "Programa",
       "legal": "Legal",
-      "contacto": "Contacto"
+      "contacto": "Contacto",
+      "cuenta": "Cuenta"
     },
     "boletinTitulo": "Boletín de cantera",
     "boletinTexto": "Convocatorias, informes y fechas de visorías. Un correo al mes.",
@@ -69,7 +73,8 @@
     "preparando": "Preparando…",
     "irAPagar": "Ir a pagar",
     "pagoSeguro": "Pago seguro en pasarela externa",
-    "pedidoRegistrado": "Pedido registrado. Te contactamos para completar el pago."
+    "pedidoRegistrado": "Pedido registrado. Te contactamos para completar el pago.",
+    "tieneCuenta": "¿Ya tienes cuenta? <entrar>Entra</entrar> y no vuelvas a escribir tu dirección."
   },
   "contact": {
     "topics": {
@@ -963,7 +968,9 @@
     "enviando": "Enviando",
     "enviarEnlace": "Enviar enlace",
     "saliendo": "Saliendo",
-    "salir": "Salir"
+    "salir": "Salir",
+    "panel": "Panel",
+    "miCuenta": "Cuenta"
   },
   "account": {
     "eyebrow": "Cuenta",

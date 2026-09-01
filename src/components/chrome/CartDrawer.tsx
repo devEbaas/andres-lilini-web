@@ -12,6 +12,7 @@ import { startCheckout } from "@/lib/actions/checkout";
 import { money } from "@/lib/format";
 import type { Locale } from "@/i18n/routing";
 import { useCart } from "@/lib/store/cart";
+import { useSesion } from "@/lib/store/sesion";
 import { useToast } from "@/lib/store/toast";
 import { btnQuiet } from "@/components/ui/styles";
 
@@ -19,6 +20,7 @@ export function CartDrawer() {
   const err = useErrores();
   const t = useTranslations("cart");
   const locale = useLocale() as Locale;
+  const sesion = useSesion();
   /** Las líneas guardadas antes de esto no traen `nombres`: cae al guardado. */
   const nombre = (l: { name: string; nombres?: Partial<Record<string, string>> }) =>
     l.nombres?.[locale] ?? l.name;
@@ -173,6 +175,24 @@ export function CartDrawer() {
                       {err(error)}
                     </p>
                   )}
+                  {/* Sólo a quien no ha entrado: el resto ya tiene su
+                      dirección guardada y el aviso sobraría. */}
+                  {sesion && !sesion.entrado && (
+                    <p className="m-0 mt-1 text-center text-[11px] leading-[1.6] text-muted">
+                      {t.rich("tieneCuenta", {
+                        entrar: (chunks) => (
+                          <Link
+                            href="/login"
+                            onClick={close}
+                            className="text-accent underline underline-offset-4"
+                          >
+                            {chunks}
+                          </Link>
+                        ),
+                      })}
+                    </p>
+                  )}
+
                   <button
                     type="button"
                     onClick={checkout}
