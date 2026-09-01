@@ -1,7 +1,7 @@
 import { createServerSupabase } from "@/lib/supabase/server";
 import { bytesToMb } from "@/lib/format";
 import { edadAlCierre } from "@/lib/content/fundacion";
-import { Celda, Tabla, Vacio, fecha } from "@/components/admin/Tabla";
+import { Celda, Idioma, Tabla, Vacio, fecha } from "@/components/admin/Tabla";
 import { DescargarArchivo } from "@/components/admin/DescargarArchivo";
 import { fijarIdioma } from "@/i18n/servidor";
 
@@ -15,7 +15,7 @@ export default async function ConvocatoriaPage() {
 
   const { data, error } = await supabase
     .from("convocatoria_entries")
-    .select("id, folio, created_at, nombre, email, link, file_name, file_size, nacimiento, estado, categoria, posicion, pie, es_menor, tutor_nombre, tutor_tel")
+    .select("id, folio, created_at, nombre, email, locale, link, file_name, file_size, nacimiento, estado, categoria, posicion, pie, es_menor, tutor_nombre, tutor_tel")
     .order("created_at", { ascending: false })
     .limit(200);
 
@@ -35,6 +35,7 @@ export default async function ConvocatoriaPage() {
             <Celda>
               <span className="block">{c.nombre}</span>
               <span className="block font-mono text-xs text-muted">{c.email}</span>
+              <Idioma locale={c.locale} />
               {c.estado && (
                 <span className="block font-mono text-xs text-muted">{c.estado}</span>
               )}

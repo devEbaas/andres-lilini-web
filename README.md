@@ -33,6 +33,7 @@ mismas rutas pasan a leer y escribir de verdad, sin cambios en el código.
 | `/contacto` | Formulario por tema + canales directos |
 | `/contenido/[doc]` | Prensa, FAQ, patrocinios, privacidad, términos, bases |
 | `/sistema` | Sistema de diseño: tokens, tipografía, componentes, tarjetas OG |
+| `/en/…` | Las mismas rutas en inglés, con slug traducido — ver «Idiomas» |
 | — | `not-found.tsx` para el 404 |
 
 ## Supabase
@@ -145,6 +146,77 @@ esas rutas no se vuelvan dinámicas al conectar Supabase.
   restringidos a PDF, JPG, PNG y MP4. `next.config.ts` sube el
   `bodySizeLimit` de Server Actions a 26 MB para que quepa el archivo.
 
+## Idiomas
+
+El sitio es bilingüe. **El español vive en la raíz y el inglés bajo `/en`**, con
+los slugs traducidos: `/tienda` ↔ `/en/store`, `/convocatoria` ↔ `/en/tryouts`.
+Ninguna URL en español cambió al añadir el inglés.
+
+El mapa de rutas está en `src/i18n/routing.ts` y es la única fuente de verdad:
+de ahí salen los enlaces, el `hreflang`, el sitemap y el selector. Los `href` se
+escriben siempre en su forma interna —la ruta en español, que es como se llaman
+las carpetas— y `Link` los traduce.
+
+```
+src/i18n/
+  routing.ts     el mapa de rutas y los idiomas
+  navigation.ts  Link, redirect, usePathname conscientes del idioma
+  request.ts     qué catálogo se carga en cada petición
+  rutas.ts       traducción de rutas sin React (proxy y servidor)
+  servidor.ts    fijarIdioma() y localeActual()
+  metadata.ts    título, canonical, hreflang y Open Graph
+messages/
+  es.json        catálogo maestro
+  en.json        misma forma, otro idioma
+```
+
+`el idioma lo decide la URL`, sin cookie ni `Accept-Language`
+(`localeDetection: false`). Así una misma URL sirve siempre el mismo contenido,
+que es lo que mantiene cacheable un sitio mayoritariamente estático. La
+contrapartida: quien elige inglés y vuelve al dominio pelado aterriza en
+español.
+
+### Reglas al escribir código
+
+- **Nada de texto en el JSX.** Va a `messages/es.json` y `messages/en.json`.
+  `npm run check:literales` lo comprueba; una línea con un nombre propio se
+  exime con `i18n-ok` en un comentario.
+- **`fijarIdioma()` al principio de cada page y layout.** Sin eso next-intl
+  resuelve el idioma leyendo una cabecera y la página se vuelve dinámica.
+- **Las Server Actions no pueden resolver el idioma.** Llega como dato del
+  formulario y se filtra con `normalizaLocale`. Decide en qué lengua se
+  escribe, nunca un permiso.
+- **Los errores de las acciones son claves, no frases.** `ErrorKey` sale del
+  propio `es.json`, así que una clave inexistente no compila.
+- **Lo que se guarda no se traduce.** Posiciones, categorías, parentescos y
+  temas de contacto van a la base con su valor canónico; sólo la etiqueta
+  cambia de idioma, desde el espacio `vocab`.
+
+### Qué se queda en español
+
+`/admin` y `/sistema` son internos y monolingües por decisión: responden 404 en
+cualquier otro idioma y no muestran el selector.
+
+Los tres documentos legales —privacidad, términos y bases— se publican en
+inglés con un aviso visible de que son traducción de cortesía y de que sólo el
+original en español vincula. **No sustituye a la revisión de quien redactó el
+aviso de privacidad**: están redactados con cuidado, pero recogen
+consentimientos de tutores de menores bajo la LFPDPPP.
+
+Los correos de Supabase Auth son el único punto que no se resuelve desde el
+código: ver `docs/correos-supabase/`.
+
+### Comprobaciones
+
+```bash
+npm run check       # paridad de catálogos, literales sueltos, catálogo semilla
+npm run humo        # 112 comprobaciones contra un servidor levantado
+```
+
+Las tres primeras corren en cada PR (`.github/workflows/verificar.yml`). El
+repaso de humo necesita `npm run build && npm run start` y se lanza a mano
+antes de desplegar.
+
 ## Diseño
 
 Los tokens del canvas (paleta oklch, sombras, gradiente de acento) viven en
@@ -155,9 +227,9 @@ mismos valores. Cambiar `--accent` y `--accent-light` en `:root` retiñe el siti
 entero.
 
 El tema claro está implementado y se activa poniendo `data-theme="light"` en
-`<html>` (`src/app/layout.tsx`); todavía no hay control de usuario para
-alternarlo. El selector ES/EN de la cabecera es parte del diseño original y hoy
-sólo avisa de que la versión en inglés está pendiente.
+`<html>` (`src/app/[lang]/layout.tsx`); todavía no hay control de usuario para
+alternarlo. El selector ES/EN de la cabecera ya cambia de idioma conservando la
+página: ver «Idiomas» más arriba.
 
 ### Movimiento
 
@@ -184,4 +256,6 @@ npm run dev     # desarrollo
 npm run build   # build de producción
 npm run start   # servir el build
 npm run lint    # eslint
+npm run check   # catálogos de idioma: paridad, literales sueltos, semilla
+npm run humo    # repaso del sitio bilingüe contra un servidor levantado
 ```

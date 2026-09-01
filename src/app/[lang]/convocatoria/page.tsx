@@ -8,12 +8,11 @@ import { ConvocatoriaForm } from "@/components/convocatoria/ConvocatoriaForm";
 import { Reveal } from "@/components/ui/Reveal";
 import { btnPrimary } from "@/components/ui/styles";
 import { fijarIdioma } from "@/i18n/servidor";
+import { metadatosDe } from "@/i18n/metadata";
 
-export const metadata: Metadata = {
-  title: "Beca de formación 2027",
-  description:
-    "Diez plazas completas: un año de seguimiento metodológico, equipamiento y acompañamiento académico. Cierra el 30 de noviembre de 2026.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadatosDe("/convocatoria", "convocatoria");
+}
 
 export default async function ConvocatoriaPage() {
   // Fija el idioma antes de cualquier lectura: sin esto la página

@@ -2,10 +2,11 @@ import type { Metadata, Viewport } from "next";
 import { Anton, Archivo, IBM_Plex_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import "../globals.css";
 
 import { routing } from "@/i18n/routing";
+import { metadatosDe } from "@/i18n/metadata";
 import { CartProvider } from "@/lib/store/cart";
 import { ToastProvider } from "@/lib/store/toast";
 import { Header } from "@/components/chrome/Header";
@@ -27,23 +28,27 @@ const plexMono = IBM_Plex_Mono({
   variable: "--font-plex-mono",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL("https://andreslillini.com"),
-  title: {
-    default: "Andrés Lillini — Formador de talento",
-    template: "%s · Andrés Lillini",
-  },
-  description:
-    "Veintisiete años detectando y desarrollando futbolistas: canteras en México, Argentina y Rusia, y hoy la estructura de selecciones menores de un país entero.",
-  openGraph: {
-    type: "website",
-    locale: "es_MX",
-    siteName: "Andrés Lillini",
-    title: "Andrés Lillini — Formador de talento",
-    description:
-      "Formación, detección y desarrollo de futbolistas. Programa de atletas, convocatoria abierta y tienda oficial.",
-  },
-};
+/**
+ * La portada y la plantilla de títulos, ya en el idioma del segmento.
+ *
+ * Va en el layout y no en la página porque `title.template` lo hereda todo el
+ * árbol: si viviera en `page.tsx` sólo aplicaría a la portada.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const base = await metadatosDe("/", "inicio");
+  const t = await getTranslations("meta");
+
+  return {
+    ...base,
+    metadataBase: new URL("https://andreslillini.com"),
+    title: { default: t("inicio.title"), template: t("plantilla") },
+    openGraph: {
+      ...base.openGraph,
+      title: t("inicio.ogTitle"),
+      description: t("inicio.ogDescription"),
+    },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: "#0b120e",

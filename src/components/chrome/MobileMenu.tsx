@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 
 import { NAV, SOCIAL } from "@/lib/content/site";
+import { SelectorIdioma } from "./SelectorIdioma";
 
 export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
   const t = useTranslations("header");
@@ -64,6 +65,12 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
               </motion.div>
             ))}
           </nav>
+
+          <div className="mb-5 flex">
+            {/* El menú a pantalla completa tapa la cabecera, así que sin esto
+                no hay forma de cambiar de idioma desde el móvil. */}
+            <SelectorIdioma />
+          </div>
 
           <div className="flex flex-wrap gap-2">
             {SOCIAL.map((s) => (

@@ -3,13 +3,17 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 
+import type { ErrorRef } from "@/lib/actions/types";
+import { useErrores } from "@/lib/errores";
+
 import { confirmarTutor } from "@/lib/actions/tutor";
 import { Spinner } from "@/components/ui/Spinner";
 
 export function ConfirmarTutor({ token }: { token: string }) {
+  const err = useErrores();
   const t = useTranslations("tutor");
   const [hecho, setHecho] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ErrorRef | null>(null);
   const [pending, startTransition] = useTransition();
 
   if (hecho) {
@@ -34,7 +38,7 @@ export function ConfirmarTutor({ token }: { token: string }) {
           startTransition(async () => {
             const res = await confirmarTutor(token);
             if (res.ok) setHecho(true);
-            else setError(res.error);
+            else setError(res.code);
           })
         }
         className="flex min-h-[52px] cursor-pointer items-center justify-center gap-2.5 rounded-full border-0 bg-gradient-accent text-xs font-extrabold uppercase tracking-[0.18em] text-on-accent disabled:opacity-60"
@@ -47,7 +51,7 @@ export function ConfirmarTutor({ token }: { token: string }) {
           role="alert"
           className="m-0 rounded-[14px] border border-danger/50 bg-danger/10 px-4 py-3.5 text-sm text-danger-text"
         >
-          {error}
+          {err(error)}
         </p>
       )}
     </div>

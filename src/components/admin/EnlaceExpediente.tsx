@@ -5,6 +5,8 @@ import { useState, useTransition } from "react";
 import { generarEnlaceExpediente } from "@/lib/actions/expediente";
 import { EXPEDIENTE_DIAS } from "@/lib/content/jugador";
 import { Spinner } from "@/components/ui/Spinner";
+import type { ErrorRef } from "@/lib/actions/types";
+import { useErrores } from "@/lib/errores";
 
 /**
  * Genera el enlace privado de un preseleccionado y lo muestra **una vez**.
@@ -21,14 +23,15 @@ export function EnlaceExpediente({
   id: string;
   enviado: string | null;
 }) {
+  const err = useErrores();
   const [url, setUrl] = useState("");
   const [porCorreo, setPorCorreo] = useState(false);
   const [copiado, setCopiado] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ErrorRef | null>(null);
   const [pending, startTransition] = useTransition();
 
   const generar = () => {
-    setError("");
+    setError(null);
     setCopiado(false);
     startTransition(async () => {
       const res = await generarEnlaceExpediente(id);
@@ -36,7 +39,7 @@ export function EnlaceExpediente({
         setUrl(res.data.url);
         setPorCorreo(res.data.enviado);
       }
-      else setError(res.error);
+      else setError(res.code);
     });
   };
 
@@ -45,7 +48,7 @@ export function EnlaceExpediente({
       await navigator.clipboard.writeText(url);
       setCopiado(true);
     } catch {
-      setError("No se pudo copiar. Selecciona el texto a mano.");
+      setError("noSePudoCopiar");
     }
   };
 
@@ -73,7 +76,7 @@ export function EnlaceExpediente({
         </button>
         {error && (
           <span role="alert" className="text-[11px] text-danger-text">
-            {error}
+            {err(error)}
           </span>
         )}
       </div>
@@ -98,7 +101,7 @@ export function EnlaceExpediente({
       </button>
       {error && (
         <span role="alert" className="text-[11px] text-danger-text">
-          {error}
+          {err(error)}
         </span>
       )}
     </div>

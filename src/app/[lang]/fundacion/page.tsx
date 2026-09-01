@@ -8,12 +8,11 @@ import { PhotoSlot } from "@/components/ui/PhotoSlot";
 import { Reveal } from "@/components/ui/Reveal";
 import { btnPrimary } from "@/components/ui/styles";
 import { fijarIdioma } from "@/i18n/servidor";
+import { metadatosDe } from "@/i18n/metadata";
 
-export const metadata: Metadata = {
-  title: "Fundación",
-  description:
-    "Clubes de barrio, escuelas y ligas municipales: detección que llega antes de que el costo la vuelva imposible.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadatosDe("/fundacion", "fundacion");
+}
 
 export default async function FundacionPage() {
   // Fija el idioma antes de cualquier lectura: sin esto la página

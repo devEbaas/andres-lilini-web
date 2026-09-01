@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import QRCode from "qrcode";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { createBrowserSupabase } from "@/lib/supabase/browser";
 import { Spinner } from "@/components/ui/Spinner";
@@ -43,6 +43,7 @@ async function dibujarQr(uri: string): Promise<string> {
 
 export function MfaEnroll({ activo }: { activo: boolean }) {
   const t = useTranslations("mfa");
+  const locale = useLocale();
   const [tieneFactor, setTieneFactor] = useState(activo);
   const [pendiente, setPendiente] = useState<Pendiente | null>(null);
   const [codigo, setCodigo] = useState("");
@@ -75,7 +76,7 @@ export function MfaEnroll({ activo }: { activo: boolean }) {
 
     const { data, error: e } = await supabase.auth.mfa.enroll({
       factorType: "totp",
-      friendlyName: `Panel · ${new Date().toLocaleDateString("es-MX")}`,
+      friendlyName: t("nombreFactor", { fecha: new Date().toLocaleDateString(locale) }),
       issuer: "Andrés Lillini",
     });
     setCargando(false);

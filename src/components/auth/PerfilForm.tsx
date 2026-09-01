@@ -3,6 +3,9 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 
+import type { ErrorRef } from "@/lib/actions/types";
+import { useErrores } from "@/lib/errores";
+
 import { actualizarPerfil } from "@/lib/actions/cuenta";
 import { Spinner } from "@/components/ui/Spinner";
 
@@ -11,22 +14,23 @@ export function PerfilForm({
 }: {
   inicial: { nombre: string; apellido: string; telefono: string };
 }) {
+  const err = useErrores();
   const t = useTranslations("account");
   const [nombre, setNombre] = useState(inicial.nombre);
   const [apellido, setApellido] = useState(inicial.apellido);
   const [telefono, setTelefono] = useState(inicial.telefono);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ErrorRef | null>(null);
   const [guardado, setGuardado] = useState(false);
   const [pending, startTransition] = useTransition();
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError(null);
     setGuardado(false);
     startTransition(async () => {
       const res = await actualizarPerfil({ nombre, apellido, telefono });
       if (res.ok) setGuardado(true);
-      else setError(res.error);
+      else setError(res.code);
     });
   };
 
@@ -69,7 +73,7 @@ export function PerfilForm({
           role="alert"
           className="rounded-[14px] border border-danger/50 bg-danger/10 px-4 py-3.5 text-sm text-danger-text"
         >
-          {error}
+          {err(error)}
         </div>
       )}
       {guardado && <p className="m-0 text-sm text-accent">{t("guardado")}</p>}

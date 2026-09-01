@@ -3,15 +3,17 @@
 import { Link } from "@/i18n/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { CATEGORIES, type Product } from "@/lib/content/tienda";
+import type { Locale } from "@/i18n/routing";
 import { money } from "@/lib/format";
 import { PhotoSlot } from "@/components/ui/PhotoSlot";
 import { chip, chipOff, chipOn } from "@/components/ui/styles";
 
 export function CatalogGrid({ products }: { products: Product[] }) {
   const t = useTranslations("store");
+  const locale = useLocale() as Locale;
   const tc = useTranslations("store.cats");
   const [cat, setCat] = useState<string>("todo");
   const shown = products.filter((p) => cat === "todo" || p.catKey === cat);
@@ -69,7 +71,7 @@ export function CatalogGrid({ products }: { products: Product[] }) {
                   </span>
                   <h3 className="m-0 my-2.5 mb-1 text-[17px] font-bold">{p.name}</h3>
                   <p className="m-0 mb-3.5 text-sm leading-[1.6] text-muted">{p.sub}</p>
-                  <span className="font-display text-2xl">{money(p.price)}</span>
+                  <span className="font-display text-2xl">{money(p.price, locale)}</span>
                 </div>
               </Link>
             </motion.article>

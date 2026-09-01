@@ -6,7 +6,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { GENERIC_ERROR, isEmail, type ActionResult } from "./types";
 
-const NO_AUTORIZADO = "Tu sesión no permite esta acción.";
+const NO_AUTORIZADO = "noAutorizado";
 
 export type Rastro = {
   postulaciones: { id: string; folio: string; nombre: string; created_at: string }[];
@@ -27,13 +27,13 @@ export type Rastro = {
  * ya dan acceso y así una sesión que no sea admin no obtiene nada.
  */
 export async function buscarPorCorreo(email: string): Promise<ActionResult<Rastro>> {
-  if (!isEmail(email)) return { ok: false, error: "Escribe un correo válido." };
+  if (!isEmail(email)) return { ok: false, code: "correoInvalido" };
 
   const admin = await adminOrNull();
-  if (!admin) return { ok: false, error: NO_AUTORIZADO };
+  if (!admin) return { ok: false, code: NO_AUTORIZADO };
 
   const supabase = await createServerSupabase();
-  if (!supabase) return { ok: false, error: GENERIC_ERROR };
+  if (!supabase) return { ok: false, code: GENERIC_ERROR };
 
   const e = email.trim().toLowerCase();
 
@@ -76,18 +76,18 @@ export async function purgarPorCorreo(input: {
   email: string;
   confirmacion: string;
 }): Promise<ActionResult<{ resumen: string }>> {
-  if (!isEmail(input.email)) return { ok: false, error: "Escribe un correo válido." };
+  if (!isEmail(input.email)) return { ok: false, code: "correoInvalido" };
 
   const e = input.email.trim().toLowerCase();
   if (input.confirmacion.trim().toLowerCase() !== e) {
-    return { ok: false, error: "Escribe el correo otra vez para confirmar." };
+    return { ok: false, code: "correoRepetir" };
   }
 
   const admin = await adminOrNull();
-  if (!admin) return { ok: false, error: NO_AUTORIZADO };
+  if (!admin) return { ok: false, code: NO_AUTORIZADO };
 
   const service = createAdminClient();
-  if (!service) return { ok: false, error: GENERIC_ERROR };
+  if (!service) return { ok: false, code: GENERIC_ERROR };
 
   // Los archivos primero: si se borran las filas antes, se pierde la ruta y
   // el archivo queda huérfano en el bucket para siempre. Es lo que más se

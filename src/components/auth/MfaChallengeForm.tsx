@@ -3,25 +3,29 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 
+import type { ErrorRef } from "@/lib/actions/types";
+import { useErrores } from "@/lib/errores";
+
 import { verificarMfa } from "@/lib/actions/mfa";
 import { Spinner } from "@/components/ui/Spinner";
 
 /** Reto suelto: para la sesión que se quedó a medias y vuelve más tarde. */
 export function MfaChallengeForm({ next }: { next?: string }) {
+  const err = useErrores();
   const t = useTranslations("auth");
   const [codigo, setCodigo] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ErrorRef | null>(null);
   const [pending, startTransition] = useTransition();
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError(null);
     startTransition(async () => {
       // Sólo vuelve si el código no valía: al verificar, la acción redirige
       // desde el servidor, con la cookie ya elevada a aal2.
       const res = await verificarMfa({ code: codigo, next });
       setCodigo("");
-      setError(res.error);
+      setError(res.code);
     });
   };
 
@@ -46,7 +50,7 @@ export function MfaChallengeForm({ next }: { next?: string }) {
           role="alert"
           className="rounded-[14px] border border-danger/50 bg-danger/10 px-4 py-3.5 text-sm text-danger-text"
         >
-          {error}
+          {err(error)}
         </div>
       )}
 

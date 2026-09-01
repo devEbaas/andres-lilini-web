@@ -9,8 +9,8 @@ import { createServerSupabase } from "@/lib/supabase/server";
 import type { ApplicationStatus } from "@/lib/supabase/types";
 import { type ActionResult } from "./types";
 
-const NO_AUTORIZADO = "Tu sesión no permite esta acción.";
-const FALLO = "No pudimos guardar el cambio. Inténtalo de nuevo.";
+const NO_AUTORIZADO = "noAutorizado";
+const FALLO = "noGuardado";
 
 const ESTADOS: ApplicationStatus[] = [
   "recibida",
@@ -32,13 +32,13 @@ export async function setEstadoPostulacion(
   id: string,
   status: ApplicationStatus,
 ): Promise<ActionResult> {
-  if (!ESTADOS.includes(status)) return { ok: false, error: FALLO };
+  if (!ESTADOS.includes(status)) return { ok: false, code: FALLO };
 
   const admin = await adminOrNull();
-  if (!admin) return { ok: false, error: NO_AUTORIZADO };
+  if (!admin) return { ok: false, code: NO_AUTORIZADO };
 
   const supabase = await createServerSupabase();
-  if (!supabase) return { ok: false, error: FALLO };
+  if (!supabase) return { ok: false, code: FALLO };
 
   const { data, error } = await supabase
     .from("applications")
@@ -49,10 +49,10 @@ export async function setEstadoPostulacion(
 
   if (error) {
     console.error("[setEstadoPostulacion]", error.message);
-    return { ok: false, error: FALLO };
+    return { ok: false, code: FALLO };
   }
   // Sin fila afectada: o no existe, o RLS la ocultó. No distinguimos.
-  if (!data) return { ok: false, error: NO_AUTORIZADO };
+  if (!data) return { ok: false, code: NO_AUTORIZADO };
 
   await logAdminAction(admin, {
     action: "postulacion.estado",
@@ -68,10 +68,10 @@ export async function setEstadoPostulacion(
 /** Marca un mensaje de contacto como atendido o pendiente. */
 export async function marcarMensaje(id: string, handled: boolean): Promise<ActionResult> {
   const admin = await adminOrNull();
-  if (!admin) return { ok: false, error: NO_AUTORIZADO };
+  if (!admin) return { ok: false, code: NO_AUTORIZADO };
 
   const supabase = await createServerSupabase();
-  if (!supabase) return { ok: false, error: FALLO };
+  if (!supabase) return { ok: false, code: FALLO };
 
   const { data, error } = await supabase
     .from("contact_messages")
@@ -82,9 +82,9 @@ export async function marcarMensaje(id: string, handled: boolean): Promise<Actio
 
   if (error) {
     console.error("[marcarMensaje]", error.message);
-    return { ok: false, error: FALLO };
+    return { ok: false, code: FALLO };
   }
-  if (!data) return { ok: false, error: NO_AUTORIZADO };
+  if (!data) return { ok: false, code: NO_AUTORIZADO };
 
   await logAdminAction(admin, {
     action: handled ? "mensaje.atendido" : "mensaje.reabierto",
@@ -115,10 +115,10 @@ export async function urlArchivoConvocatoria(
   entryId: string,
 ): Promise<ActionResult<{ url: string }>> {
   const admin = await adminOrNull();
-  if (!admin) return { ok: false, error: NO_AUTORIZADO };
+  if (!admin) return { ok: false, code: NO_AUTORIZADO };
 
   const supabase = await createServerSupabase();
-  if (!supabase) return { ok: false, error: FALLO };
+  if (!supabase) return { ok: false, code: FALLO };
 
   const { data: fila, error: errorFila } = await supabase
     .from("convocatoria_entries")
@@ -128,13 +128,13 @@ export async function urlArchivoConvocatoria(
 
   if (errorFila) {
     console.error("[urlArchivoConvocatoria]", errorFila.message);
-    return { ok: false, error: FALLO };
+    return { ok: false, code: FALLO };
   }
-  if (!fila) return { ok: false, error: NO_AUTORIZADO };
-  if (!fila.file_path) return { ok: false, error: "Esta participación no tiene archivo." };
+  if (!fila) return { ok: false, code: NO_AUTORIZADO };
+  if (!fila.file_path) return { ok: false, code: "sinArchivo" };
 
   const service = createAdminClient();
-  if (!service) return { ok: false, error: FALLO };
+  if (!service) return { ok: false, code: FALLO };
 
   const { data, error } = await service.storage
     .from("convocatoria")
@@ -144,7 +144,7 @@ export async function urlArchivoConvocatoria(
 
   if (error || !data?.signedUrl) {
     console.error("[urlArchivoConvocatoria] firma", error?.message);
-    return { ok: false, error: FALLO };
+    return { ok: false, code: FALLO };
   }
 
   await logAdminAction(admin, {

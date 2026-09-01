@@ -1,7 +1,10 @@
 {
   "common": {
-    "localeName": "Español",
-    "switchLanguage": "Cambiar idioma"
+    "switchLanguage": "Cambiar idioma",
+    "idiomas": {
+      "es": "Español",
+      "en": "English"
+    }
   },
   "links": {
     "inicio": "Inicio",
@@ -26,8 +29,7 @@
     "menu": "Menú",
     "cerrarMenu": "Cerrar menú",
     "menuTitulo": "Menú",
-    "carrito": "{count, plural, =0 {Carrito} one {Carrito, # artículo} other {Carrito, # artículos}}",
-    "enPendiente": "La versión en inglés llega en la próxima entrega."
+    "carrito": "{count, plural, =0 {Carrito} one {Carrito, # artículo} other {Carrito, # artículos}}"
   },
   "footer": {
     "logoAlt": "Andrés Lillini · formador de futbolistas",
@@ -924,9 +926,7 @@
       "contrato": "Declaro que no tengo contrato profesional vigente.",
       "tutorConsent": "Mi padre, madre o tutor legal conoce esta participación y autoriza expresamente el tratamiento de mis datos.",
       "enviando": "Enviando…",
-      "enviar": "Enviar participación",
-      "archivoGrande": "El archivo supera los 25 MB permitidos.",
-      "formatoMal": "Formato no admitido. Usa PDF, JPG, PNG o MP4."
+      "enviar": "Enviar participación"
     }
   },
   "auth": {
@@ -985,7 +985,6 @@
     "passwordLead": "Supabase pide haber entrado hace poco para cambiarla. Si te lo rechaza, vuelve a entrar y repite: es lo que impide que un portátil desbloqueado se convierta en una cuenta perdida.",
     "contrasenaNueva": "Contraseña nueva",
     "repitela": "Repítela",
-    "noCoinciden": "Las dos contraseñas no coinciden.",
     "contrasenaActualizada": "Contraseña actualizada.",
     "cambiarContrasena": "Cambiar contraseña",
     "pedidosCols": {
@@ -1149,5 +1148,187 @@
     "registrando": "Registrando",
     "autorizar": "Sí, autorizo la postulación",
     "registrada": "Autorización registrada. La postulación ya puede evaluarse."
+  },
+  "errors": {
+    "accesoNoDisponible": "El acceso no está disponible en este momento.",
+    "aceptacionNecesaria": "Necesitamos tu aceptación.",
+    "archivoGrande": "El archivo supera los 25 MB permitidos.",
+    "articulosNoDisponibles": "Los artículos de tu bolsa ya no están disponibles.",
+    "autorizacionTutor": "Necesitamos la autorización de tu tutor.",
+    "bolsaVacia": "Tu bolsa está vacía.",
+    "codigoMal": "Código incorrecto o caducado. Prueba con el siguiente.",
+    "codigoNoVerificado": "No pudimos verificar el código. Inténtalo de nuevo.",
+    "confirmaVeracidad": "Confirma que la información es verídica.",
+    "consentimientoContinuar": "Necesitamos tu consentimiento para continuar.",
+    "consentimientoCuenta": "Necesitamos tu consentimiento para crear la cuenta.",
+    "consentimientoRespuesta": "Necesitamos tu consentimiento para responderte.",
+    "consentimientoSalud": "Para guardar datos de salud necesitamos tu consentimiento expreso.",
+    "contactoEmergencia": "Necesitamos un contacto de emergencia.",
+    "contactoTutor": "Necesitamos un contacto del tutor.",
+    "correoExacto": "Escribe tu correo exactamente para confirmar.",
+    "correoFormato": "Revisa el formato del correo.",
+    "correoInvalido": "Escribe un correo válido.",
+    "correoNecesario": "Necesitamos un correo válido.",
+    "correoParaResponder": "Necesitamos un correo válido para responderte.",
+    "correoRepetir": "Escribe el correo otra vez para confirmar.",
+    "credenciales": "Correo o contraseña incorrectos.",
+    "declaracionNecesaria": "Necesitamos esta declaración para poder evaluarte.",
+    "edadFueraDeRango": "La convocatoria es para jugadores de {min} a {max} años al cierre. Con esa fecha tendrías {edad}.",
+    "eligeAlcance": "Elige el alcance.",
+    "eligeCategoria": "Elige tu categoría.",
+    "eligeDerecho": "Elige el derecho que quieres ejercer.",
+    "eligeEstado": "Elige tu estado de residencia.",
+    "eligeOpcion": "Elige una opción.",
+    "eligeParentesco": "Elige el parentesco.",
+    "eligePosicion": "Elige tu posición principal.",
+    "eligeProtocolo": "Elige cómo se midió.",
+    "eligeTest": "Elige el test.",
+    "enlaceInvalido": "Este enlace no es válido o ya caducó.",
+    "equipoActual": "Dinos en qué equipo juegas hoy.",
+    "expedienteEnviado": "Este expediente ya se envió.",
+    "expedienteEnviadoPideEnlace": "Este expediente ya se envió. Pide un enlace nuevo si necesitas corregirlo.",
+    "fechaInvalida": "Esa fecha no es válida.",
+    "fechaNecesaria": "Necesitamos tu fecha de nacimiento.",
+    "firmantePropio": "Escribe tu nombre para firmar.",
+    "firmanteTutor": "Escribe el nombre del tutor que autoriza.",
+    "formatoMal": "Formato no admitido. Usa PDF, JPG, PNG o MP4.",
+    "generico": "No pudimos registrar el envío. Inténtalo de nuevo en un momento.",
+    "indicaAlcance": "Indica hasta dónde autorizas el uso.",
+    "indicaParentesco": "Indica el parentesco.",
+    "indicaPie": "Indica tu pie dominante.",
+    "mensajeCorto": "Cuéntanos un poco más: al menos diez caracteres.",
+    "noAutorizado": "Tu sesión no permite esta acción.",
+    "noCerroSesion": "No pudimos cerrar la sesión. Inténtalo de nuevo.",
+    "noGuardado": "No pudimos guardar el cambio. Inténtalo de nuevo.",
+    "noSePudoCopiar": "No se pudo copiar. Selecciona el texto a mano.",
+    "nombreCompleto": "Escribe tu nombre completo.",
+    "nombreNecesario": "Dinos cómo te llamas.",
+    "nombreSolicitud": "Necesitamos tu nombre.",
+    "nombreVacio": "El nombre no puede quedar vacío.",
+    "obligatorio": "Este dato es obligatorio.",
+    "obligatorioMenores": "Obligatorio para menores de edad.",
+    "participacionDuplicada": "Ya registramos una participación con este correo. Sólo se admite una por jugador.",
+    "pasarela": "No pudimos abrir la pasarela de pago. Inténtalo de nuevo.",
+    "passwordCorta": "La contraseña necesita al menos 12 caracteres.",
+    "passwordDebil": "Esa contraseña no cumple los requisitos.",
+    "passwordIncorrecta": "La contraseña no es correcta.",
+    "passwordMayuscula": "Añade alguna mayúscula.",
+    "passwordMinuscula": "Añade alguna minúscula.",
+    "passwordNoCambiada": "No pudimos cambiar la contraseña. Vuelve a intentarlo.",
+    "passwordNoCoinciden": "Las dos contraseñas no coinciden.",
+    "passwordNumero": "Añade algún número.",
+    "propuestaCorta": "Cuéntanos un poco más: al menos veinte caracteres.",
+    "registroNoDisponible": "El registro no está disponible en este momento.",
+    "revisaCampos": "Revisa los campos marcados.",
+    "sesionCaducada": "Tu sesión ha caducado. Vuelve a entrar.",
+    "sinArchivo": "Esta participación no tiene archivo.",
+    "soloMexico": "La convocatoria es sólo para residentes en México.",
+    "subidaFallida": "No pudimos subir el archivo. Inténtalo de nuevo.",
+    "telefonoNecesario": "Necesitamos un teléfono."
+  },
+  "email": {
+    "marca": "Andrés Lillini",
+    "pie": "Recibes este mensaje porque alguien lo solicitó desde {dominio}. Si no fuiste tú, ignóralo.",
+    "botonFallback": "Si el botón no funciona, copia esta dirección:",
+    "tutor": {
+      "asunto": "Autoriza la postulación de {jugador}",
+      "titulo": "Necesitamos tu autorización",
+      "p1": "{jugador} se postuló al programa de atletas y te señaló como su padre, madre o tutor legal.",
+      "p2": "Como es menor de edad, no podemos evaluar la postulación <b>{folio}</b> sin que tú lo autorices expresamente. Confírmalo desde aquí:",
+      "boton": "Autorizar la postulación",
+      "enlace": "Autoriza aquí:",
+      "caduca": "El enlace caduca en {dias} días. Si no reconoces esta postulación, no hagas nada: sin tu confirmación no se evalúa."
+    },
+    "expediente": {
+      "asunto": "Pasaste el primer corte",
+      "titulo": "Pasaste el primer corte",
+      "p1": "Hola, {jugador}. Tu postulación <b>{folio}</b> avanzó a la siguiente fase.",
+      "p2": "Nos falta un último bloque de datos antes de citarte: medibles, un contacto de emergencia y las autorizaciones. No te lo pedimos al postularte porque sólo hace falta ahora.",
+      "boton": "Completar mi expediente",
+      "enlace": "Complétalo aquí:",
+      "caduca": "El enlace es personal y caduca en {dias} días. No lo compartas."
+    },
+    "arco": {
+      "asunto": "Recibimos tu solicitud",
+      "titulo": "Recibimos tu solicitud",
+      "p1": "Hola, {nombre}. Registramos tu solicitud de <b>{derecho}</b> sobre tus datos personales.",
+      "p2": "Antes de entregar o eliminar información tenemos que comprobar que eres quien dices ser. Te escribiremos a esta misma dirección para acreditarlo.",
+      "p3": "Este mensaje es sólo un acuse: no hace falta que respondas todavía."
+    },
+    "derechos": {
+      "acceso": "acceso",
+      "rectificacion": "rectificación",
+      "cancelacion": "cancelación",
+      "oposicion": "oposición"
+    }
+  },
+  "meta": {
+    "plantilla": "%s · Andrés Lillini",
+    "sitio": "Andrés Lillini",
+    "inicio": {
+      "title": "Andrés Lillini — Formador de talento",
+      "description": "Veintisiete años detectando y desarrollando futbolistas: canteras en México, Argentina y Rusia, y hoy la estructura de selecciones menores de un país entero.",
+      "ogTitle": "Andrés Lillini — Formador de talento",
+      "ogDescription": "Formación, detección y desarrollo de futbolistas. Programa de atletas, convocatoria abierta y tienda oficial."
+    },
+    "tienda": {
+      "title": "Tienda oficial",
+      "description": "Material de trabajo: metodología, indumentaria y equipamiento. Envío a todo México en 3 a 5 días hábiles."
+    },
+    "programa": {
+      "title": "Programa de atletas",
+      "description": "Un formulario, quince atributos y un informe real. Evaluamos jugadores de 12 a 21 años en cualquier posición y liga."
+    },
+    "convocatoria": {
+      "title": "Beca de formación 2027",
+      "description": "Diez plazas completas: un año de seguimiento metodológico, equipamiento y acompañamiento académico. Cierra el 30 de noviembre de 2026."
+    },
+    "fundacion": {
+      "title": "Fundación",
+      "description": "Clubes de barrio, escuelas y ligas municipales: detección que llega antes de que el costo la vuelva imposible."
+    },
+    "contacto": {
+      "title": "Contacto",
+      "description": "Elige el tema correcto y llega directo a quien lo resuelve."
+    },
+    "derechos": {
+      "title": "Ejercer tus derechos",
+      "description": "Solicita acceso, rectificación, cancelación u oposición sobre tus datos personales."
+    },
+    "registro": {
+      "title": "Crear cuenta",
+      "description": "Crea tu cuenta para seguir tus pedidos."
+    },
+    "login": {
+      "title": "Acceso",
+      "description": "Acceso al área privada."
+    },
+    "mfa": {
+      "title": "Verificación"
+    },
+    "recuperar": {
+      "title": "Recuperar contraseña"
+    },
+    "gracias": {
+      "title": "Pedido confirmado",
+      "description": "Confirmación de tu pedido en la tienda oficial de Andrés Lillini."
+    },
+    "expediente": {
+      "title": "Expediente"
+    },
+    "tutor": {
+      "title": "Autorización del tutor"
+    },
+    "cuenta": {
+      "title": "Mi cuenta"
+    },
+    "admin": {
+      "title": "Panel"
+    },
+    "sistema": {
+      "title": "Sistema de diseño",
+      "description": "Tokens, tipografía, componentes y tarjetas Open Graph del sitio."
+    },
+    "productoNoEncontrado": "Producto no encontrado"
   }
 }

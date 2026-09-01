@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
 import { routing } from "@/i18n/routing";
+import { metadatosDe } from "@/i18n/metadata";
 import { localeActual } from "@/i18n/servidor";
 
 import { DOCS, DOCS_LEGALES, getDoc } from "@/lib/content/docs";
@@ -23,7 +24,16 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { doc } = await params;
   const t = await getTranslations("docs");
   if (!getDoc(doc)) return { title: t("noEncontrado") };
-  return { title: t(`${doc}.title`), description: t(`${doc}.lead`) };
+
+  const base = await metadatosDe({ pathname: "/contenido/[doc]", params: { doc } }, "inicio");
+  const title = t(`${doc}.title`);
+  const description = t(`${doc}.lead`);
+  return {
+    ...base,
+    title,
+    description,
+    openGraph: { ...base.openGraph, title, description },
+  };
 }
 
 export default async function DocPage({ params }: Params) {
