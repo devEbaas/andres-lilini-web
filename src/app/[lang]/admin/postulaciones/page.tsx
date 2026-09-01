@@ -1,5 +1,5 @@
 import { createServerSupabase } from "@/lib/supabase/server";
-import { Celda, Tabla, Vacio, fecha } from "@/components/admin/Tabla";
+import { Celda, Idioma, Tabla, Vacio, fecha } from "@/components/admin/Tabla";
 import { EstadoPostulacion } from "@/components/admin/EstadoPostulacion";
 import { EnlaceExpediente } from "@/components/admin/EnlaceExpediente";
 import { fijarIdioma } from "@/i18n/servidor";
@@ -14,7 +14,7 @@ export default async function PostulacionesPage() {
 
   const { data, error } = await supabase
     .from("applications")
-    .select("id, folio, created_at, nombre, email, status, video_url, es_menor, tutor_nombre, tutor_tel, posicion, pie, nivel, club, escolaridad, expediente_enviado_at, tutor_email, tutor_verificado_at")
+    .select("id, folio, created_at, nombre, email, locale, status, video_url, es_menor, tutor_nombre, tutor_tel, posicion, pie, nivel, club, escolaridad, expediente_enviado_at, tutor_email, tutor_verificado_at")
     .order("created_at", { ascending: false })
     .limit(200);
 
@@ -33,6 +33,7 @@ export default async function PostulacionesPage() {
           <Celda>
             <span className="block">{a.nombre}</span>
             <span className="block font-mono text-xs text-muted">{a.email}</span>
+            <Idioma locale={a.locale} />
             {a.es_menor && (
               <span className="block text-[10px] font-extrabold uppercase tracking-[0.16em] text-accent">
                 Menor de edad

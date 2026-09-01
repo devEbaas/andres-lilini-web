@@ -1,7 +1,7 @@
 "use server";
 
 import { createAdminClient } from "@/lib/supabase/admin";
-import { GENERIC_ERROR, isEmail, type ActionResult } from "./types";
+import { GENERIC_ERROR, isEmail, normalizaLocale, type ActionResult } from "./types";
 
 export async function submitContact(input: {
   nombre: string;
@@ -9,6 +9,7 @@ export async function submitContact(input: {
   topic: string;
   message: string;
   consent: boolean;
+  locale?: string;
 }): Promise<ActionResult> {
   if (!input.consent) {
     return { ok: false, error: "Necesitamos tu consentimiento para responderte." };
@@ -27,6 +28,7 @@ export async function submitContact(input: {
   if (!supabase) return { ok: true };
 
   const { error } = await supabase.from("contact_messages").insert({
+    locale: normalizaLocale(input.locale),
     nombre: input.nombre.trim(),
     email: input.email.trim(),
     topic: input.topic,

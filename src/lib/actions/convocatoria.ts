@@ -15,7 +15,7 @@ import {
   edadAlCierre,
 } from "@/lib/content/fundacion";
 import { esMenorHoy } from "@/lib/edad";
-import { GENERIC_ERROR, isEmail, randomFolio, type ActionResult } from "./types";
+import { GENERIC_ERROR, isEmail, normalizaLocale, randomFolio, type ActionResult } from "./types";
 
 const REQUERIDOS = CONVOCATORIA_CHECKS.filter((c) => c.requerido).map((c) => c.k);
 
@@ -147,6 +147,7 @@ export async function submitConvocatoria(
 
   const { error } = await supabase.from("convocatoria_entries").insert({
     folio: `CV-2026-${folio}`,
+    locale: normalizaLocale(formData.get("locale")),
     nombre,
     email,
     link: link || null,

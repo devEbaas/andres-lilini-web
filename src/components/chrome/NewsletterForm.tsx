@@ -2,12 +2,13 @@
 
 import { useState, useTransition } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { subscribe } from "@/lib/actions/newsletter";
 
 export function NewsletterForm() {
   const t = useTranslations("newsletter");
+  const locale = useLocale();
   const [email, setEmail] = useState("");
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
@@ -17,7 +18,7 @@ export function NewsletterForm() {
     e.preventDefault();
     setError("");
     startTransition(async () => {
-      const res = await subscribe(email);
+      const res = await subscribe(email, locale);
       if (res.ok) setDone(true);
       else setError(res.error);
     });

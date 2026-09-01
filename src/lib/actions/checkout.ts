@@ -8,7 +8,7 @@ import { hasLocale } from "next-intl";
 import { routing } from "@/i18n/routing";
 import { getProducts } from "@/lib/data/products";
 import { getStripe, siteUrl, toCents } from "@/lib/stripe/client";
-import { GENERIC_ERROR, type ActionResult } from "./types";
+import { GENERIC_ERROR, normalizaLocale, type ActionResult } from "./types";
 
 export type CartLineInput = { id: string; qty: number };
 
@@ -59,6 +59,9 @@ export async function startCheckout(
   const { data, error } = await supabase
     .from("orders")
     .insert({
+      // El mismo idioma con el que se resolvió el catálogo: el pedido queda
+      // registrado en la lengua que vio quien compró.
+      locale: normalizaLocale(locale),
       subtotal,
       shipping: SHIPPING_MXN,
       total,

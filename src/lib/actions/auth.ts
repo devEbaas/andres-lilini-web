@@ -2,13 +2,10 @@
 
 import { redirect } from "next/navigation";
 
-import { hasLocale } from "next-intl";
-
 import { createServerSupabase } from "@/lib/supabase/server";
 import { safeNext } from "@/lib/auth/redirect";
-import { routing, type Locale } from "@/i18n/routing";
 import { conIdioma } from "@/i18n/rutas";
-import { isEmail, type ActionResult } from "./types";
+import { isEmail, normalizaLocale, type ActionResult } from "./types";
 
 /**
  * Mensaje único para cualquier fallo de acceso.
@@ -20,17 +17,6 @@ import { isEmail, type ActionResult } from "./types";
  */
 const CREDENCIALES = "Correo o contraseña incorrectos.";
 const SIN_CONFIGURAR = "El acceso no está disponible en este momento.";
-
-/**
- * El idioma llega como dato del formulario porque una Server Action no puede
- * resolverlo por su cuenta: los getters de `next/root-params` no corren aquí.
- *
- * Es un valor controlado por el cliente, así que sólo decide a qué URL se
- * navega. Nunca un permiso.
- */
-function localeDe(valor: unknown): Locale {
-  return hasLocale(routing.locales, valor) ? valor : routing.defaultLocale;
-}
 
 export async function signIn(input: {
   email: string;
@@ -69,7 +55,7 @@ export async function signIn(input: {
   const esAdmin = verificado?.claims?.user_role === "admin";
   // El panel sólo existe en español, así que va sin traducir. La cuenta de
   // cliente sí sigue el idioma con el que se entró.
-  const porDefecto = esAdmin ? "/admin" : conIdioma("/cuenta", localeDe(input.locale));
+  const porDefecto = esAdmin ? "/admin" : conIdioma("/cuenta", normalizaLocale(input.locale));
 
   // Redirige el servidor, no el navegador. Escribir la cookie de sesión y
   // navegar en la misma respuesta las hace atómicas: si el cliente hiciera

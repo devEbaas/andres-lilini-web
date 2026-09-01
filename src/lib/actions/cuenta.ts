@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { getClaims } from "@/lib/auth/dal";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { siteUrl } from "@/lib/urls";
-import { GENERIC_ERROR, isEmail, type ActionResult } from "./types";
+import { GENERIC_ERROR, isEmail, normalizaLocale, type ActionResult } from "./types";
 
 const NO_SESION = "Tu sesión ha caducado. Vuelve a entrar.";
 const SIN_CONFIGURAR = "El registro no está disponible en este momento.";
@@ -36,6 +36,7 @@ export async function signUp(input: {
   email: string;
   password: string;
   consent: boolean;
+  locale?: string;
 }): Promise<ActionResult<{ mensaje: string }>> {
   if (!input.consent) {
     return { ok: false, error: "Necesitamos tu consentimiento para crear la cuenta." };
@@ -58,6 +59,9 @@ export async function signUp(input: {
       data: {
         nombre: input.nombre.trim().slice(0, 80),
         apellido: input.apellido.trim().slice(0, 80),
+        // Lo lee `handle_new_user` al crear el perfil. Va por aquí porque el
+        // trigger corre antes de que exista fila que actualizar.
+        locale: normalizaLocale(input.locale),
       },
       emailRedirectTo: `${siteUrl()}/auth/callback?next=/cuenta`,
     },

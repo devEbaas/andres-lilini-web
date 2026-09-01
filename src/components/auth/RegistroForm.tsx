@@ -2,13 +2,14 @@
 
 import { Link } from "@/i18n/navigation";
 import { useState, useTransition } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { signUp } from "@/lib/actions/cuenta";
 import { Spinner } from "@/components/ui/Spinner";
 
 export function RegistroForm() {
   const t = useTranslations("auth");
+  const locale = useLocale();
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [email, setEmail] = useState("");
@@ -22,7 +23,7 @@ export function RegistroForm() {
     e.preventDefault();
     setError("");
     startTransition(async () => {
-      const res = await signUp({ nombre, apellido, email, password, consent });
+      const res = await signUp({ nombre, apellido, email, password, consent, locale });
       if (res.ok) setHecho(res.data.mensaje);
       else setError(res.error);
     });

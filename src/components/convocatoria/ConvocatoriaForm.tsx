@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import { useRef, useState, useTransition } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { submitConvocatoria } from "@/lib/actions/convocatoria";
 import {
@@ -103,6 +103,7 @@ export function ConvocatoriaForm() {
   const [file, setFile] = useState<File | null>(null);
   const [dragging, setDragging] = useState(false);
   const t = useTranslations("convocatoria.form");
+  const locale = useLocale();
   const tv = useTranslations("vocab");
   const tc = useTranslations("convocatoria.checks");
   const [pais, setPais] = useState("México");
@@ -135,6 +136,9 @@ export function ConvocatoriaForm() {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
+    // Va en el FormData, no en un campo oculto: no es un dato del formulario,
+    // es el idioma con el que se está usando.
+    fd.set("locale", locale);
     if (file) fd.set("file", file);
     else fd.delete("file");
     setError("");

@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import { useState, useTransition } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { submitApplication, type ApplyPayload, type ClubEntry } from "@/lib/actions/apply";
 import { APPLY_STEPS, type ApplyField } from "@/lib/content/programa";
@@ -15,6 +15,7 @@ const TOTAL = APPLY_STEPS.length;
 
 export function ApplyForm() {
   const t = useTranslations("programa.form");
+  const locale = useLocale();
   const ts = useTranslations("programa.steps");
   const [step, setStep] = useState(0);
   const [values, setValues] = useState<ApplyPayload>({});
@@ -50,7 +51,7 @@ export function ApplyForm() {
     }
     setFormError("");
     startTransition(async () => {
-      const res = await submitApplication(values);
+      const res = await submitApplication(values, locale);
       if (res.ok) {
         setFolio(res.data.folio);
         window.scrollTo({ top: 0, behavior: "smooth" });

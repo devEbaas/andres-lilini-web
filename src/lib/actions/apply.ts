@@ -8,7 +8,7 @@ import { plantillaTutor } from "@/lib/email/plantillas";
 import { enDias, hashToken, nuevoToken } from "@/lib/tokens";
 import { siteUrl } from "@/lib/urls";
 import { esMenorHoy } from "@/lib/edad";
-import { GENERIC_ERROR, isEmail, randomFolio, type ActionResult } from "./types";
+import { GENERIC_ERROR, isEmail, normalizaLocale, randomFolio, type ActionResult } from "./types";
 
 /** Una fila del historial de clubes tal como la manda el formulario. */
 export type ClubEntry = { club: string; categoria: string; desde: string; hasta: string };
@@ -21,6 +21,8 @@ const SI_MENOR = CAMPOS.filter((f) => f.requiredIfMenor);
 
 export async function submitApplication(
   payload: ApplyPayload,
+  /** Idioma del formulario: decide en qué lengua se responde después. */
+  locale?: string,
 ): Promise<ActionResult<{ folio: string }>> {
   const fieldErrors: Record<string, string> = {};
   const t = (k: string) => String(payload[k] ?? "").trim();
@@ -81,6 +83,7 @@ export async function submitApplication(
     .from("applications")
     .insert({
       folio: `AL-2026-${folio}`,
+      locale: normalizaLocale(locale),
       nombre: t("nombre"),
       email,
       video_url: t("video") || null,
