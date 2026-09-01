@@ -18,10 +18,10 @@ import { enviarCorreo } from "@/lib/email/client";
 import { plantillaExpediente } from "@/lib/email/plantillas";
 import { enDias, hashToken, nuevoToken } from "@/lib/tokens";
 import { siteUrl } from "@/lib/urls";
-import { GENERIC_ERROR, type ActionResult } from "./types";
+import { GENERIC_ERROR, type ActionResult, type ErrorRef } from "./types";
 
-const NO_AUTORIZADO = "Tu sesión no permite esta acción.";
-const ENLACE_MALO = "Este enlace no es válido o ya caducó.";
+const NO_AUTORIZADO = "noAutorizado";
+const ENLACE_MALO = "enlaceInvalido";
 
 /**
  * Crea el enlace privado de un preseleccionado.
@@ -35,10 +35,10 @@ export async function generarEnlaceExpediente(
   applicationId: string,
 ): Promise<ActionResult<{ url: string; expira: string; enviado: boolean }>> {
   const admin = await adminOrNull();
-  if (!admin) return { ok: false, error: NO_AUTORIZADO };
+  if (!admin) return { ok: false, code: NO_AUTORIZADO };
 
   const supabase = createAdminClient();
-  if (!supabase) return { ok: false, error: GENERIC_ERROR };
+  if (!supabase) return { ok: false, code: GENERIC_ERROR };
 
   const token = nuevoToken();
   const expira = enDias(EXPEDIENTE_DIAS);
@@ -53,14 +53,14 @@ export async function generarEnlaceExpediente(
       expediente_enviado_at: null,
     })
     .eq("id", applicationId)
-    .select("id, nombre, email, folio")
+    .select("id, nombre, email, folio, locale")
     .maybeSingle();
 
   if (error) {
     console.error("[generarEnlaceExpediente]", error.message);
-    return { ok: false, error: GENERIC_ERROR };
+    return { ok: false, code: GENERIC_ERROR };
   }
-  if (!data) return { ok: false, error: NO_AUTORIZADO };
+  if (!data) return { ok: false, code: NO_AUTORIZADO };
 
   await logAdminAction(admin, {
     action: "expediente.invitacion",
@@ -78,12 +78,17 @@ export async function generarEnlaceExpediente(
   // manda por donde pueda, que es como funcionaba hasta ahora.
   const enviado = await enviarCorreo({
     para: data.email,
-    ...plantillaExpediente({
-      jugador: data.nombre.split(" ")[0],
-      folio: data.folio,
-      url,
-      dias: EXPEDIENTE_DIAS,
-    }),
+    // El idioma es el que guardó la postulación, no el del admin que pulsa
+    // el botón: quien lee el correo es el jugador.
+    ...(await plantillaExpediente(
+      {
+        jugador: data.nombre.split(" ")[0],
+        folio: data.folio,
+        url,
+        dias: EXPEDIENTE_DIAS,
+      },
+      data.locale,
+    )),
   });
 
   revalidatePath("/admin/postulaciones");
@@ -131,31 +136,31 @@ export async function enviarExpediente(
   // lo mostró no decide nada, y nadie manda el id de la postulación desde
   // el navegador.
   const invitacion = await leerInvitacion(token);
-  if (!invitacion) return { ok: false, error: ENLACE_MALO };
+  if (!invitacion) return { ok: false, code: ENLACE_MALO };
   if (invitacion.yaEnviado) {
-    return { ok: false, error: "Este expediente ya se envió. Pide un enlace nuevo si necesitas corregirlo." };
+    return { ok: false, code: "expedienteEnviadoPideEnlace" };
   }
 
-  const fieldErrors: Record<string, string> = {};
+  const fieldErrors: Record<string, ErrorRef> = {};
   const t = (v: string) => v.trim();
 
-  if (!t(input.contactoNombre)) fieldErrors.contactoNombre = "Necesitamos un contacto de emergencia.";
+  if (!t(input.contactoNombre)) fieldErrors.contactoNombre = "contactoEmergencia";
   if (!PARENTESCOS.includes(input.contactoParentesco) && !t(input.contactoParentesco)) {
-    fieldErrors.contactoParentesco = "Indica el parentesco.";
+    fieldErrors.contactoParentesco = "indicaParentesco";
   }
-  if (!t(input.contactoTel)) fieldErrors.contactoTel = "Necesitamos un teléfono.";
+  if (!t(input.contactoTel)) fieldErrors.contactoTel = "telefonoNecesario";
 
   if (input.protocolo && !PROTOCOLOS.includes(input.protocolo)) {
-    fieldErrors.protocolo = "Elige cómo se midió.";
+    fieldErrors.protocolo = "eligeProtocolo";
   }
   if (input.agilidadTest && !TESTS_AGILIDAD.includes(input.agilidadTest)) {
-    fieldErrors.agilidadTest = "Elige el test.";
+    fieldErrors.agilidadTest = "eligeTest";
   }
   if (input.seguro && !SEGUROS.includes(input.seguro)) {
-    fieldErrors.seguro = "Elige una opción.";
+    fieldErrors.seguro = "eligeOpcion";
   }
   if (input.imagenAlcance && !ALCANCES_IMAGEN.includes(input.imagenAlcance)) {
-    fieldErrors.imagenAlcance = "Elige el alcance.";
+    fieldErrors.imagenAlcance = "eligeAlcance";
   }
 
   // Si hay algo escrito en salud, hace falta el consentimiento expreso: son
@@ -164,26 +169,24 @@ export async function enviarExpediente(
     t(input.alergias) || t(input.condiciones) || t(input.lesiones) || t(input.seguro),
   );
   if (haySalud && !input.okSalud) {
-    fieldErrors.okSalud = "Para guardar datos de salud necesitamos tu consentimiento expreso.";
+    fieldErrors.okSalud = "consentimientoSalud";
   }
 
   if (input.okImagen && !input.imagenAlcance) {
-    fieldErrors.imagenAlcance = "Indica hasta dónde autorizas el uso.";
+    fieldErrors.imagenAlcance = "indicaAlcance";
   }
 
   // En un menor, quien firma es el tutor: no se acepta la autofirma.
   if (!t(input.firmanteNombre)) {
-    fieldErrors.firmanteNombre = invitacion.esMenor
-      ? "Escribe el nombre del tutor que autoriza."
-      : "Escribe tu nombre para firmar.";
+    fieldErrors.firmanteNombre = invitacion.esMenor ? "firmanteTutor" : "firmantePropio";
   }
 
   if (Object.keys(fieldErrors).length) {
-    return { ok: false, error: "Revisa los campos marcados.", fieldErrors };
+    return { ok: false, code: "revisaCampos", fieldErrors };
   }
 
   const supabase = createAdminClient();
-  if (!supabase) return { ok: false, error: GENERIC_ERROR };
+  if (!supabase) return { ok: false, code: GENERIC_ERROR };
 
   const { error } = await supabase.from("expedientes").insert({
     application_id: invitacion.applicationId,
@@ -213,10 +216,10 @@ export async function enviarExpediente(
 
   if (error) {
     if (error.code === "23505") {
-      return { ok: false, error: "Este expediente ya se envió." };
+      return { ok: false, code: "expedienteEnviado" };
     }
     console.error("[enviarExpediente]", error.message);
-    return { ok: false, error: GENERIC_ERROR };
+    return { ok: false, code: GENERIC_ERROR };
   }
 
   await supabase

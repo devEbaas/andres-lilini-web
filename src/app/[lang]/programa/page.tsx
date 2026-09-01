@@ -7,12 +7,11 @@ import { ApplyForm } from "@/components/programa/ApplyForm";
 import { Reveal } from "@/components/ui/Reveal";
 import { btnPrimary } from "@/components/ui/styles";
 import { fijarIdioma } from "@/i18n/servidor";
+import { metadatosDe } from "@/i18n/metadata";
 
-export const metadata: Metadata = {
-  title: "Programa de atletas",
-  description:
-    "Un formulario, quince atributos y un informe real. Evaluamos jugadores de 12 a 21 años en cualquier posición y liga.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadatosDe("/programa", "programa");
+}
 
 export default async function ProgramaPage() {
   // Fija el idioma antes de cualquier lectura: sin esto la página

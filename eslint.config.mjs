@@ -13,6 +13,17 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    rules: {
+      // Quitar una clave de un objeto se escribe `const { [k]: _, ...resto }`.
+      // El descarte no se usa por definición, y avisar de ello convierte el
+      // idioma estándar de omisión en ruido.
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { ignoreRestSiblings: true, argsIgnorePattern: "^_" },
+      ],
+    },
+  },
 ]);
 
 export default eslintConfig;

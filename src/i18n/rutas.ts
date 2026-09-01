@@ -41,14 +41,23 @@ const CLAVES = Object.keys(PATHNAMES).sort((a, b) => {
 });
 
 /**
- * De la URL del navegador a la ruta interna y el idioma.
+ * De una URL a la ruta interna y el idioma.
  *
  * `/en/store/p3` → `{ locale: "en", interna: "/tienda/[id]" }`
  * `/cuenta/pedidos` → `{ locale: "es", interna: "/cuenta/pedidos" }`
  *
  * Devuelve el patrón, no la ruta con los parámetros sustituidos: quien llama
- * quiere saber *qué* ruta es para decidir permisos, no reconstruir la URL.
- * Una ruta desconocida vuelve tal cual, sin prefijo.
+ * quiere saber *qué* ruta es para decidir permisos o reconstruirla en el otro
+ * idioma, no repetir la que ya tiene.
+ *
+ * Acepta las dos formas que circulan por el sistema. El proxy la llama con lo
+ * que escribió el navegador —`/en/store/p3`— y corre antes de reescribir nada.
+ * El selector de idioma la llama con lo que devuelve `usePathname()`, que en
+ * el render del servidor ya viene reescrito —`/en/tienda/p3`—. Probar sólo una
+ * de las dos deja la otra cayendo al camino de «ruta desconocida», y ahí se
+ * pierden los parámetros.
+ *
+ * Una ruta que no case con ninguna vuelve tal cual, sin prefijo.
  */
 export function rutaInterna(pathname: string): { locale: Locale; interna: string } {
   const [, primero = "", ...resto] = pathname.split("/");
@@ -60,6 +69,10 @@ export function rutaInterna(pathname: string): { locale: Locale; interna: string
 
   for (const interna of CLAVES) {
     if (aRegex(externa(interna, locale)).test(limpio)) return { locale, interna };
+  }
+  // Segunda pasada contra la forma interna, para la ruta ya reescrita.
+  for (const interna of CLAVES) {
+    if (aRegex(interna).test(limpio)) return { locale, interna };
   }
   return { locale, interna: limpio };
 }

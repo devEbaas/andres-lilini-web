@@ -7,11 +7,11 @@ import { getTranslations } from "next-intl/server";
 import { requireUser } from "@/lib/auth/dal";
 import { SignOutButton } from "@/components/auth/SignOutButton";
 import { fijarIdioma } from "@/i18n/servidor";
+import { metadatosDe } from "@/i18n/metadata";
 
-export const metadata: Metadata = {
-  title: "Mi cuenta",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadatosDe("/cuenta", "cuenta", { indexable: false });
+}
 
 const SECCIONES: { href: RutaEstatica; key: string }[] = [
   { href: "/cuenta", key: "perfil" },

@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
 import { createServerSupabase } from "@/lib/supabase/server";
-import { Celda, Tabla, Vacio, fecha } from "@/components/admin/Tabla";
+import { Celda, Idioma, Tabla, Vacio, fecha } from "@/components/admin/Tabla";
 import { MarcarMensaje } from "@/components/admin/MarcarMensaje";
 import { fijarIdioma } from "@/i18n/servidor";
 
@@ -22,7 +22,7 @@ export default async function MensajesPage() {
 
   const { data, error } = await supabase
     .from("contact_messages")
-    .select("id, created_at, nombre, email, topic, message, handled")
+    .select("id, created_at, nombre, email, locale, topic, message, handled")
     .order("created_at", { ascending: false })
     .limit(200);
 
@@ -37,7 +37,10 @@ export default async function MensajesPage() {
       {data.map((m) => (
         <tr key={m.id}>
           <Celda mono>{fecha(m.created_at)}</Celda>
-          <Celda>{m.nombre}</Celda>
+          <Celda>
+            <span className="block">{m.nombre}</span>
+            <Idioma locale={m.locale} />
+          </Celda>
           <Celda mono>{m.email}</Celda>
           <Celda mono>{tema(m.topic)}</Celda>
           <Celda>

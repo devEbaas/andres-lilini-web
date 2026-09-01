@@ -20,12 +20,12 @@ import { GENERIC_ERROR, type ActionResult } from "./types";
 export async function confirmarTutor(token: string): Promise<ActionResult> {
   const verificacion = await leerVerificacionTutor(token);
   if (!verificacion) {
-    return { ok: false, error: "Este enlace no es válido o ya caducó." };
+    return { ok: false, code: "enlaceInvalido" };
   }
   if (verificacion.yaVerificado) return { ok: true };
 
   const supabase = createAdminClient();
-  if (!supabase) return { ok: false, error: GENERIC_ERROR };
+  if (!supabase) return { ok: false, code: GENERIC_ERROR };
 
   const { error } = await supabase
     .from("applications")
@@ -43,7 +43,7 @@ export async function confirmarTutor(token: string): Promise<ActionResult> {
 
   if (error) {
     console.error("[confirmarTutor]", error.message);
-    return { ok: false, error: GENERIC_ERROR };
+    return { ok: false, code: GENERIC_ERROR };
   }
 
   revalidatePath("/admin/postulaciones");

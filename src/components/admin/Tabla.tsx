@@ -35,6 +35,22 @@ export function Celda({ children, mono }: { children: ReactNode; mono?: boolean 
   );
 }
 
+/**
+ * Marca el idioma de una fila, y sólo cuando no es el habitual.
+ *
+ * Una columna entera diría «es» en casi todas y sería ruido. Lo que necesita
+ * saber quien responde es la excepción: a esta persona hay que escribirle en
+ * inglés.
+ */
+export function Idioma({ locale }: { locale: string | null }) {
+  if (!locale || locale === "es") return null;
+  return (
+    <span className="mt-0.5 inline-block rounded-full border border-accent px-2 py-px font-mono text-[9px] font-extrabold uppercase tracking-[0.14em] text-accent">
+      {locale}
+    </span>
+  );
+}
+
 export function Vacio({ texto }: { texto: string }) {
   return (
     <div className="rounded-[18px] border border-dashed border-hairline px-6 py-14 text-center text-sm text-muted">

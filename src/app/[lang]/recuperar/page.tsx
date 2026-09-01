@@ -4,11 +4,11 @@ import { getTranslations } from "next-intl/server";
 
 import { RecuperarForm } from "@/components/auth/RecuperarForm";
 import { fijarIdioma } from "@/i18n/servidor";
+import { metadatosDe } from "@/i18n/metadata";
 
-export const metadata: Metadata = {
-  title: "Recuperar contraseña",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadatosDe("/recuperar", "recuperar", { indexable: false });
+}
 
 export default async function RecuperarPage() {
   // Fija el idioma antes de cualquier lectura: sin esto la página

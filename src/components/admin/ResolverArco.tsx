@@ -4,6 +4,8 @@ import { useState, useTransition } from "react";
 
 import { resolverSolicitudArco } from "@/lib/actions/privacidad";
 import type { ArcoStatus } from "@/lib/supabase/types";
+import type { ErrorRef } from "@/lib/actions/types";
+import { useErrores } from "@/lib/errores";
 
 const ETIQUETAS: Record<ArcoStatus, string> = {
   recibida: "Recibida",
@@ -21,19 +23,20 @@ export function ResolverArco({
   status: ArcoStatus;
   nota: string;
 }) {
+  const err = useErrores();
   const [estado, setEstado] = useState<ArcoStatus>(status);
   const [texto, setTexto] = useState(nota);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ErrorRef | null>(null);
   const [guardado, setGuardado] = useState(false);
   const [pending, startTransition] = useTransition();
 
   const guardar = (nuevo: ArcoStatus, notaNueva: string) => {
-    setError("");
+    setError(null);
     setGuardado(false);
     startTransition(async () => {
       const res = await resolverSolicitudArco({ id, status: nuevo, nota: notaNueva });
       if (res.ok) setGuardado(true);
-      else setError(res.error);
+      else setError(res.code);
     });
   };
 
@@ -68,7 +71,7 @@ export function ResolverArco({
 
       {error && (
         <span role="alert" className="text-[11px] text-danger-text">
-          {error}
+          {err(error)}
         </span>
       )}
       {guardado && !error && <span className="text-[11px] text-accent">Guardado.</span>}

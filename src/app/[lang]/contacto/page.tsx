@@ -5,11 +5,11 @@ import { getTranslations } from "next-intl/server";
 import { CHANNELS } from "@/lib/content/site";
 import { ContactForm } from "@/components/contacto/ContactForm";
 import { fijarIdioma } from "@/i18n/servidor";
+import { metadatosDe } from "@/i18n/metadata";
 
-export const metadata: Metadata = {
-  title: "Contacto",
-  description: "Elige el tema correcto y llega directo a quien lo resuelve.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadatosDe("/contacto", "contacto");
+}
 
 export default async function ContactoPage() {
   // Fija el idioma antes de cualquier lectura: sin esto la página

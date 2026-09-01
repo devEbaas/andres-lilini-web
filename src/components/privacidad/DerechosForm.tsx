@@ -1,7 +1,10 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+
+import type { ErrorRef } from "@/lib/actions/types";
+import { useErrores } from "@/lib/errores";
 
 import { crearSolicitudArco } from "@/lib/actions/privacidad";
 import { Spinner } from "@/components/ui/Spinner";
@@ -11,22 +14,24 @@ import { Spinner } from "@/components/ui/Spinner";
 const DERECHOS = ["acceso", "rectificacion", "cancelacion", "oposicion"] as const;
 
 export function DerechosForm() {
+  const err = useErrores();
   const t = useTranslations("derechos");
+  const locale = useLocale();
   const [tipo, setTipo] = useState("acceso");
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [detalle, setDetalle] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ErrorRef | null>(null);
   const [hecho, setHecho] = useState("");
   const [pending, startTransition] = useTransition();
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError(null);
     startTransition(async () => {
-      const res = await crearSolicitudArco({ tipo, nombre, email, detalle });
+      const res = await crearSolicitudArco({ tipo, nombre, email, detalle, locale });
       if (res.ok) setHecho(res.data.mensaje);
-      else setError(res.error);
+      else setError(res.code);
     });
   };
 
@@ -106,7 +111,7 @@ export function DerechosForm() {
           role="alert"
           className="rounded-[14px] border border-danger/50 bg-danger/10 px-4 py-3.5 text-sm text-danger-text"
         >
-          {error}
+          {err(error)}
         </div>
       )}
 

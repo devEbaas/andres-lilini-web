@@ -3,12 +3,9 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getClaims } from "@/lib/auth/dal";
 import { SHIPPING_MXN } from "@/lib/content/site";
-import { hasLocale } from "next-intl";
-
-import { routing } from "@/i18n/routing";
 import { getProducts } from "@/lib/data/products";
 import { getStripe, siteUrl, toCents } from "@/lib/stripe/client";
-import { GENERIC_ERROR, type ActionResult } from "./types";
+import { GENERIC_ERROR, normalizaLocale, type ActionResult } from "./types";
 
 export type CartLineInput = { id: string; qty: number };
 
@@ -19,7 +16,7 @@ type CheckoutResult = {
   url: string | null;
 };
 
-const CHECKOUT_ERROR = "No pudimos abrir la pasarela de pago. Inténtalo de nuevo.";
+const CHECKOUT_ERROR = "pasarela";
 
 export async function startCheckout(
   lines: CartLineInput[],
@@ -30,11 +27,12 @@ export async function startCheckout(
    */
   locale?: string,
 ): Promise<ActionResult<CheckoutResult>> {
-  if (!lines.length) return { ok: false, error: "Tu bolsa está vacía." };
+  if (!lines.length) return { ok: false, code: "bolsaVacia" };
 
   // Los precios se recalculan contra el catálogo: lo que manda el navegador
   // sólo dice *qué* y *cuánto*, nunca a qué precio.
-  const catalog = await getProducts(hasLocale(routing.locales, locale) ? locale : routing.defaultLocale);
+  const idioma = normalizaLocale(locale);
+  const catalog = await getProducts(idioma);
   const items = lines.flatMap((l) => {
     const p = catalog.find((c) => c.id === l.id);
     if (!p || p.out) return [];
@@ -43,7 +41,7 @@ export async function startCheckout(
   });
 
   if (!items.length) {
-    return { ok: false, error: "Los artículos de tu bolsa ya no están disponibles." };
+    return { ok: false, code: "articulosNoDisponibles" };
   }
 
   const subtotal = items.reduce((a, i) => a + i.price * i.qty, 0);
@@ -59,6 +57,9 @@ export async function startCheckout(
   const { data, error } = await supabase
     .from("orders")
     .insert({
+      // El mismo idioma con el que se resolvió el catálogo: el pedido queda
+      // registrado en la lengua que vio quien compró.
+      locale: idioma,
       subtotal,
       shipping: SHIPPING_MXN,
       total,
@@ -71,7 +72,7 @@ export async function startCheckout(
 
   if (error) {
     console.error("[startCheckout]", error.message);
-    return { ok: false, error: GENERIC_ERROR };
+    return { ok: false, code: GENERIC_ERROR };
   }
 
   const orderId = data.id;
@@ -87,7 +88,8 @@ export async function startCheckout(
     const session = await stripe.checkout.sessions.create(
       {
         mode: "payment",
-        locale: "es",
+        // La pasarela habla el idioma de quien compra, no el del sitio.
+        locale: idioma,
         line_items: items.map((i) => ({
           quantity: i.qty,
           price_data: {
@@ -127,6 +129,6 @@ export async function startCheckout(
     return { ok: true, data: { orderId, total, url: session.url } };
   } catch (e) {
     console.error("[startCheckout] Stripe", (e as Error).message);
-    return { ok: false, error: CHECKOUT_ERROR };
+    return { ok: false, code: CHECKOUT_ERROR };
   }
 }

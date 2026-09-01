@@ -7,11 +7,11 @@ import { getTranslations } from "next-intl/server";
 import { RegistroForm } from "@/components/auth/RegistroForm";
 import { getClaims } from "@/lib/auth/dal";
 import { fijarIdioma, rutaLocal } from "@/i18n/servidor";
+import { metadatosDe } from "@/i18n/metadata";
 
-export const metadata: Metadata = {
-  title: "Crear cuenta",
-  description: "Crea tu cuenta para seguir tus pedidos.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadatosDe("/registro", "registro");
+}
 
 export default async function RegistroPage() {
   // Fija el idioma antes de cualquier lectura: sin esto la página

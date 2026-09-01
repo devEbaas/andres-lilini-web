@@ -4,6 +4,21 @@
  */
 export type Json = string | number | boolean | null | { [key: string]: Json } | Json[];
 
+/**
+ * Idioma con el que se envió una fila.
+ *
+ * Se guarda porque el correo sale mucho más tarde que el formulario, y para
+ * entonces no queda petición de la que deducirlo. El dominio lo fija un CHECK
+ * en cada tabla.
+ */
+export type FilaLocale = "es" | "en";
+
+/**
+ * En el Insert `locale` va opcional —lo rellena el DEFAULT— pero la columna es
+ * NOT NULL, así que al leer siempre viene. Esto lo estrecha para las filas.
+ */
+export type FilaLeida = { locale: FilaLocale };
+
 export type ProductRow = {
   id: string;
   /** Clave estable de categoría; el rótulo vive en los mensajes. */
@@ -87,6 +102,7 @@ export type ApplicationClubRow = ApplicationClubInsert & {
  */
 export type ApplicationInsert = {
   folio: string;
+  locale?: FilaLocale;
   nombre: string;
   email: string;
   video_url: string | null;
@@ -122,6 +138,7 @@ export type ApplicationInsert = {
 
 export type ConvocatoriaInsert = {
   folio: string;
+  locale?: FilaLocale;
   nombre: string;
   email: string;
   link: string | null;
@@ -145,6 +162,7 @@ export type ConvocatoriaInsert = {
 } & TutorInsert;
 
 export type ContactInsert = {
+  locale?: FilaLocale;
   nombre: string;
   email: string;
   topic: string;
@@ -159,6 +177,7 @@ export type OrderStatus = "pendiente" | "iniciado" | "pagado" | "expirado";
  * las rellena después. Al ser parte del Insert, también las cubre el Update.
  */
 export type OrderInsert = {
+  locale?: FilaLocale;
   subtotal: number;
   shipping: number;
   total: number;
@@ -203,13 +222,15 @@ export type ArcoTipo = "acceso" | "rectificacion" | "cancelacion" | "oposicion";
 export type ArcoStatus = "recibida" | "en_proceso" | "atendida" | "rechazada";
 
 export type ArcoInsert = {
+  locale?: FilaLocale;
   tipo: ArcoTipo;
   nombre: string;
   email: string;
   detalle: string;
 };
 
-export type ArcoRow = ArcoInsert & {
+export type ArcoRow = ArcoInsert &
+  FilaLeida & {
   id: string;
   status: ArcoStatus;
   nota: string | null;
@@ -226,6 +247,8 @@ export type ProfileRow = {
   nombre: string;
   apellido: string;
   telefono: string | null;
+  /** Lo escribe el trigger de alta desde los metadatos del registro. */
+  locale: FilaLocale;
   created_at: string;
   updated_at: string;
 };
@@ -283,7 +306,7 @@ export type Database = {
     Tables: {
       products: Table<ProductRow & { created_at: string }, ProductRow>;
       applications: Table<
-        ApplicationInsert & { id: string; created_at: string; status: ApplicationStatus },
+        ApplicationInsert & { id: string; created_at: string; status: ApplicationStatus } & FilaLeida,
         ApplicationInsert,
         // El panel cambia el estado; la invitación al expediente escribe su
         // token y su fecha. El resto de la fila es del postulante.
@@ -298,17 +321,17 @@ export type Database = {
         }
       >;
       convocatoria_entries: Table<
-        ConvocatoriaInsert & { id: string; created_at: string },
+        ConvocatoriaInsert & { id: string; created_at: string } & FilaLeida,
         ConvocatoriaInsert
       >;
       contact_messages: Table<
-        ContactInsert & { id: string; created_at: string; handled: boolean },
+        ContactInsert & { id: string; created_at: string; handled: boolean } & FilaLeida,
         ContactInsert,
         { handled?: boolean }
       >;
       newsletter_subscribers: Table<
-        { id: string; email: string; created_at: string },
-        { email: string }
+        { id: string; email: string; created_at: string; locale: FilaLocale },
+        { email: string; locale?: FilaLocale }
       >;
       orders: Table<OrderRow, OrderInsert>;
       profiles: Table<ProfileRow, ProfileUpdate & { id: string }>;

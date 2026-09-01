@@ -4,7 +4,7 @@ import { createServerSupabase } from "@/lib/supabase/server";
 import { vincularPedidosHuerfanos } from "@/lib/auth/pedidos";
 import { money } from "@/lib/format";
 import { Celda, Tabla, Vacio, fecha } from "@/components/admin/Tabla";
-import { fijarIdioma } from "@/i18n/servidor";
+import { fijarIdioma, localeActual } from "@/i18n/servidor";
 
 export default async function MisPedidosPage() {
   // Fija el idioma antes de cualquier lectura: sin esto la página
@@ -13,6 +13,7 @@ export default async function MisPedidosPage() {
 
   // Adopta los pedidos de invitado hechos con este correo. Es idempotente:
   // la segunda vez no encuentra ninguno y no hace nada.
+  const locale = await localeActual();
   const t = await getTranslations("account");
 
   await vincularPedidosHuerfanos();
@@ -62,7 +63,7 @@ export default async function MisPedidosPage() {
                 {t.has(`pedidosEstado.${o.status}`) ? t(`pedidosEstado.${o.status}`) : o.status}
               </span>
             </Celda>
-            <Celda>{money(o.total)}</Celda>
+            <Celda>{money(o.total, locale)}</Celda>
           </tr>
         );
       })}

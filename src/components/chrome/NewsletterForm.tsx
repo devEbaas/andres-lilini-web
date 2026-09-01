@@ -2,24 +2,29 @@
 
 import { useState, useTransition } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+
+import type { ErrorRef } from "@/lib/actions/types";
+import { useErrores } from "@/lib/errores";
 
 import { subscribe } from "@/lib/actions/newsletter";
 
 export function NewsletterForm() {
+  const err = useErrores();
   const t = useTranslations("newsletter");
+  const locale = useLocale();
   const [email, setEmail] = useState("");
   const [done, setDone] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ErrorRef | null>(null);
   const [pending, startTransition] = useTransition();
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError(null);
     startTransition(async () => {
-      const res = await subscribe(email);
+      const res = await subscribe(email, locale);
       if (res.ok) setDone(true);
-      else setError(res.error);
+      else setError(res.code);
     });
   };
 
@@ -66,7 +71,7 @@ export function NewsletterForm() {
           </div>
           {error && (
             <p className="m-0 mt-2 text-[13px] text-danger-text" role="alert">
-              {error}
+              {err(error)}
             </p>
           )}
         </motion.form>

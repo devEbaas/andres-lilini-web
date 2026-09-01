@@ -1,5 +1,5 @@
 import { createServerSupabase } from "@/lib/supabase/server";
-import { Celda, Tabla, Vacio, fecha } from "@/components/admin/Tabla";
+import { Celda, Idioma, Tabla, Vacio, fecha } from "@/components/admin/Tabla";
 import { ResolverArco } from "@/components/admin/ResolverArco";
 import { BuscarPorCorreo } from "@/components/admin/BuscarPorCorreo";
 import { fijarIdioma } from "@/i18n/servidor";
@@ -21,7 +21,7 @@ export default async function ArcoPage() {
   const { data, error } = supabase
     ? await supabase
         .from("arco_requests")
-        .select("id, tipo, nombre, email, detalle, status, nota, created_at")
+        .select("id, tipo, nombre, email, locale, detalle, status, nota, created_at")
         .order("created_at", { ascending: false })
         .limit(200)
     : { data: null, error: null };
@@ -52,6 +52,7 @@ export default async function ArcoPage() {
                 <Celda>
                   <span className="block">{s.nombre}</span>
                   <span className="block font-mono text-xs text-muted">{s.email}</span>
+                  <Idioma locale={s.locale} />
                 </Celda>
                 <Celda>
                   <span className="block max-w-[40ch] leading-[1.6] text-muted">

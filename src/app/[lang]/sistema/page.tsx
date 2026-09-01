@@ -6,15 +6,11 @@ import { Spinner } from "@/components/ui/Spinner";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { fijarIdioma } from "@/i18n/servidor";
+import { metadatosDe } from "@/i18n/metadata";
 
-export const metadata: Metadata = {
-  title: "Sistema de diseño",
-  description: "Tokens, tipografía, componentes y tarjetas Open Graph del sitio.",
-  // Referencia interna: sigue accesible por URL para quien construye el
-  // sitio, pero fuera del menú y fuera de los buscadores. Un resultado
-  // titulado «Sistema de diseño» bajo la marca no le sirve a nadie.
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadatosDe("/sistema", "sistema", { indexable: false });
+}
 
 const H2 = "m-0 mb-5 font-display text-[26px] uppercase";
 const CARD = "rounded-[20px] border border-hairline bg-panel p-6";

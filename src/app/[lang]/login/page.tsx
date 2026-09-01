@@ -5,14 +5,13 @@ import { getTranslations } from "next-intl/server";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { safeNext } from "@/lib/auth/redirect";
 import { fijarIdioma } from "@/i18n/servidor";
+import { metadatosDe } from "@/i18n/metadata";
 
 type Props = { searchParams: Promise<{ next?: string }> };
 
-export const metadata: Metadata = {
-  title: "Acceso",
-  description: "Acceso al panel de administración.",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadatosDe("/login", "login", { indexable: false });
+}
 
 export default async function LoginPage({ searchParams }: Props) {
   // Fija el idioma antes de cualquier lectura: sin esto la página

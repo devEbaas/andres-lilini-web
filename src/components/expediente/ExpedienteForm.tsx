@@ -3,6 +3,9 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 
+import type { ErrorRef } from "@/lib/actions/types";
+import { useErrores } from "@/lib/errores";
+
 import { enviarExpediente, type ExpedientePayload } from "@/lib/actions/expediente";
 import {
   ALCANCES_IMAGEN,
@@ -13,7 +16,7 @@ import {
 } from "@/lib/content/jugador";
 import { Spinner } from "@/components/ui/Spinner";
 
-type Errores = Record<string, string>;
+type Errores = Record<string, ErrorRef>;
 
 const VACIO: ExpedientePayload = {
   sprint10: "", sprint30: "", saltoCmj: "", agilidadTest: "", agilidadSeg: "",
@@ -33,6 +36,7 @@ function Campo({
   ancho?: boolean;
   children: React.ReactNode;
 }) {
+  const err = useErrores();
   const error = errores[name];
   return (
     <label className={`flex flex-col gap-[9px] ${ancho ? "col-span-full" : ""}`}>
@@ -43,7 +47,7 @@ function Campo({
       )}
       {error && (
         <span role="alert" className="text-[11px] leading-[1.5] text-danger-text">
-          {error}
+          {err(error)}
         </span>
       )}
     </label>
@@ -56,8 +60,9 @@ function Casilla({
   label: string;
   marcada: boolean;
   onToggle: () => void;
-  error?: string;
+  error?: ErrorRef;
 }) {
+  const err = useErrores();
   return (
     <div className="grid gap-1.5">
       <button
@@ -79,7 +84,7 @@ function Casilla({
       </button>
       {error && (
         <span role="alert" className="text-[11px] text-danger-text">
-          {error}
+          {err(error)}
         </span>
       )}
     </div>
@@ -95,6 +100,7 @@ export function ExpedienteForm({
   esMenor: boolean;
   tutorNombre: string | null;
 }) {
+  const err = useErrores();
   const t = useTranslations("expediente.form");
   const tv = useTranslations("vocab");
   const [v, setV] = useState<ExpedientePayload>({
@@ -103,18 +109,18 @@ export function ExpedienteForm({
     firmanteNombre: esMenor ? (tutorNombre ?? "") : "",
   });
   const [errores, setErrores] = useState<Errores>({});
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ErrorRef | null>(null);
   const [hecho, setHecho] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
   const set = <K extends keyof ExpedientePayload>(k: K, valor: ExpedientePayload[K]) => {
     setV((s) => ({ ...s, [k]: valor }));
-    setErrores((e) => ({ ...e, [k]: "" }));
+    setErrores(({ [k]: _quitado, ...resto }) => resto);
   };
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError(null);
     startTransition(async () => {
       const res = await enviarExpediente(token, v);
       if (res.ok) {
@@ -123,7 +129,7 @@ export function ExpedienteForm({
         return;
       }
       setErrores(res.fieldErrors ?? {});
-      setError(res.error);
+      setError(res.code);
     });
   };
 
@@ -378,7 +384,7 @@ export function ExpedienteForm({
           role="alert"
           className="m-0 rounded-[14px] border border-danger/50 bg-danger/10 px-4 py-3.5 text-sm text-danger-text"
         >
-          {error}
+          {err(error)}
         </p>
       )}
 

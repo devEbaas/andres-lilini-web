@@ -6,11 +6,11 @@ import { routing, type RutaEstatica } from "@/i18n/routing";
 import { requireAdmin } from "@/lib/auth/dal";
 import { SignOutButton } from "@/components/auth/SignOutButton";
 import { fijarIdioma } from "@/i18n/servidor";
+import { metadatosDe } from "@/i18n/metadata";
 
-export const metadata: Metadata = {
-  title: "Panel",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadatosDe("/admin", "admin", { indexable: false });
+}
 
 const SECCIONES: { href: RutaEstatica; label: string }[] = [
   { href: "/admin", label: "Resumen" },

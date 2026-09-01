@@ -5,6 +5,8 @@ import { useState, useTransition } from "react";
 import { buscarPorCorreo, purgarPorCorreo, type Rastro } from "@/lib/actions/arco-datos";
 import { Spinner } from "@/components/ui/Spinner";
 import { btnQuiet } from "@/components/ui/styles";
+import type { ErrorRef } from "@/lib/actions/types";
+import { useErrores } from "@/lib/errores";
 
 /**
  * La herramienta que hace ejecutables las solicitudes: cuatro de las cinco
@@ -12,33 +14,34 @@ import { btnQuiet } from "@/components/ui/styles";
  * así que el correo es la única forma de encontrarlas.
  */
 export function BuscarPorCorreo() {
+  const err = useErrores();
   const [email, setEmail] = useState("");
   const [rastro, setRastro] = useState<Rastro | null>(null);
   const [confirmacion, setConfirmacion] = useState("");
   const [purgando, setPurgando] = useState(false);
   const [resumen, setResumen] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ErrorRef | null>(null);
   const [pending, startTransition] = useTransition();
 
   const buscar = (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError(null);
     setResumen("");
     setRastro(null);
     setPurgando(false);
     startTransition(async () => {
       const res = await buscarPorCorreo(email);
       if (res.ok) setRastro(res.data);
-      else setError(res.error);
+      else setError(res.code);
     });
   };
 
   const purgar = () => {
-    setError("");
+    setError(null);
     startTransition(async () => {
       const res = await purgarPorCorreo({ email, confirmacion });
       if (!res.ok) {
-        setError(res.error);
+        setError(res.code);
         return;
       }
       setResumen(res.data.resumen);
@@ -92,7 +95,7 @@ export function BuscarPorCorreo() {
           role="alert"
           className="rounded-[14px] border border-danger/50 bg-danger/10 px-4 py-3.5 text-sm text-danger-text"
         >
-          {error}
+          {err(error)}
         </div>
       )}
 

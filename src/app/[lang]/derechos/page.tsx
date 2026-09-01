@@ -5,12 +5,11 @@ import { getTranslations } from "next-intl/server";
 
 import { DerechosForm } from "@/components/privacidad/DerechosForm";
 import { fijarIdioma } from "@/i18n/servidor";
+import { metadatosDe } from "@/i18n/metadata";
 
-export const metadata: Metadata = {
-  title: "Ejercer tus derechos",
-  description:
-    "Solicita acceso, rectificación, cancelación u oposición sobre tus datos personales.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadatosDe("/derechos", "derechos");
+}
 
 export default async function DerechosPage() {
   // Fija el idioma antes de cualquier lectura: sin esto la página
