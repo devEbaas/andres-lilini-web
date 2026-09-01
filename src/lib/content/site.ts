@@ -80,6 +80,14 @@ export const FOOTER_COLS: { key: string; links: Route[] }[] = [
     ],
   },
   {
+    key: "cuenta",
+    links: [
+      { key: "entrar", href: "/login" },
+      { key: "crearCuenta", href: "/registro" },
+      { key: "misPedidos", href: "/cuenta/pedidos" },
+    ],
+  },
+  {
     key: "contacto",
     links: [
       { key: "escribenos", href: "/contacto" },

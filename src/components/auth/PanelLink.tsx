@@ -1,67 +1,48 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { Link } from "@/i18n/navigation";
 import { routing, type RutaEstatica } from "@/i18n/routing";
-import { useEffect, useState } from "react";
+import { useSesion } from "@/lib/store/sesion";
 
-import { createBrowserSupabase } from "@/lib/supabase/browser";
-
-type Estado = { href: RutaEstatica; label: string } | null;
+const CLASES =
+  "grid min-h-11 shrink-0 place-items-center rounded-full border border-hairline bg-panel px-4 text-[10px] font-extrabold uppercase tracking-[0.14em] text-muted transition-colors duration-[250ms] hover:border-accent hover:text-ink";
 
 /**
- * Atajo a la zona privada de quien ya tiene sesión.
+ * Acceso a la zona privada desde la cabecera.
  *
- * Es un Client Component a propósito: si el header leyera la sesión en el
- * servidor, todo el sitio dejaría de prerenderizarse y `/tienda` perdería su
- * estático. Aquí sólo se hidrata este fragmento.
- *
- * No se muestra «Entrar» a quien no tiene sesión: el registro vive en
- * `/registro` y se llega desde el checkout, no desde el header.
+ * Muestra «Entrar» a quien no tiene sesión y su destino a quien sí. Hasta
+ * ahora no pintaba nada sin sesión, y como el footer tampoco enlazaba a
+ * `/login`, no había forma de llegar a la cuenta salvo escribiendo la URL.
  */
 export function PanelLink() {
-  const [estado, setEstado] = useState<Estado>(null);
+  const t = useTranslations("auth");
+  const sesion = useSesion();
 
-  useEffect(() => {
-    const supabase = createBrowserSupabase();
-    if (!supabase) return;
+  // Mientras no se sabe, nada: es preferible que aparezca un instante después
+  // a que cambie de «entrar» a «cuenta» delante de quien mira.
+  if (!sesion) return null;
 
-    let vigente = true;
+  if (!sesion.entrado) {
+    return (
+      <Link href="/login" className={CLASES}>
+        {t("entrar")}
+      </Link>
+    );
+  }
 
-    const revisar = async () => {
-      // getClaims verifica la firma; getSession devolvería la cookie sin más.
-      const { data } = await supabase.auth.getClaims();
-      if (!vigente) return;
-
-      const claims = data?.claims;
-      if (!claims) return setEstado(null);
-      setEstado(
-        claims.user_role === "admin"
-          ? { href: "/admin", label: "Panel" }
-          : { href: "/cuenta", label: "Cuenta" },
-      );
-    };
-
-    void revisar();
-    const { data: sub } = supabase.auth.onAuthStateChange(() => void revisar());
-
-    return () => {
-      vigente = false;
-      sub.subscription.unsubscribe();
-    };
-  }, []);
-
-  if (!estado) return null;
+  const destino: RutaEstatica = sesion.esAdmin ? "/admin" : "/cuenta";
 
   return (
     <Link
-      href={estado.href}
-      /* El panel sólo existe en español. Sin esto, desde una página en inglés
-         el enlace apuntaría a `/en/admin` y haría falta un redirect para
-         llegar. La cuenta de cliente sí sigue el idioma activo. */
-      {...(estado.href === "/admin" ? { locale: routing.defaultLocale } : {})}
-      className="grid min-h-11 shrink-0 place-items-center rounded-full border border-hairline bg-panel px-4 text-[10px] font-extrabold uppercase tracking-[0.14em] text-muted transition-colors duration-[250ms] hover:border-accent hover:text-ink"
+      href={destino}
+      /* El panel sólo existe en español. La cuenta de cliente sigue el idioma
+         activo, como el resto del sitio. */
+      {...(sesion.esAdmin ? { locale: routing.defaultLocale } : {})}
+      className={CLASES}
     >
-      {estado.label}
+      {sesion.esAdmin ? t("panel") : t("miCuenta")}
     </Link>
   );
 }

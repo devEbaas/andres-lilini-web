@@ -12,10 +12,14 @@ export async function Footer() {
   return (
     <footer className="border-t border-hairline bg-panel pb-[30px] pt-[clamp(50px,7vw,90px)]">
       <div className="shell">
-        <div className="grid gap-[clamp(30px,4vw,50px)] [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))] nav:[grid-template-columns:1.6fr_repeat(4,1fr)]">
+        <div className="grid gap-[clamp(30px,4vw,50px)] [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))] nav:[grid-template-columns:repeat(7,minmax(0,1fr))]">
           {/* A partir de 640px la rejilla tiene dos columnas o más; por debajo
               sólo hay una y `col-span-2` abría una columna implícita que
-              desbordaba la pantalla. */}
+              desbordaba la pantalla.
+
+              La marca ocupa dos huecos, así que con cinco columnas de enlaces
+              la rejilla necesita siete: con seis, la última caía a una segunda
+              fila. */}
           <div className="min-w-0 sm:col-span-2 nav:col-span-1">
             {/* Aquí va la marca completa: ya trae el nombre y el descriptor,
                 así que no se repiten al lado. */}

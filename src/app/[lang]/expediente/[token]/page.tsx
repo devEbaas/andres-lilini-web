@@ -5,14 +5,17 @@ import { getTranslations } from "next-intl/server";
 import { ExpedienteForm } from "@/components/expediente/ExpedienteForm";
 import { leerInvitacion } from "@/lib/expediente";
 import { fijarIdioma } from "@/i18n/servidor";
+import { metadatosDe } from "@/i18n/metadata";
 
 type Props = { params: Promise<{ token: string }> };
 
-export const metadata: Metadata = {
-  title: "Expediente",
-  // El enlace es privado: no debe acabar en un buscador.
-  robots: { index: false, follow: false },
-};
+// El enlace es privado: `indexable: false` lo deja fuera de los buscadores y
+// sin alternativas de idioma, que aquí no significan nada.
+export async function generateMetadata(): Promise<Metadata> {
+  return metadatosDe({ pathname: "/expediente/[token]", params: { token: "" } }, "expediente", {
+    indexable: false,
+  });
+}
 
 export default async function ExpedientePage({ params }: Props) {
   // Fija el idioma antes de cualquier lectura: sin esto la página
