@@ -6,14 +6,16 @@ import { getTranslations } from "next-intl/server";
 import { ConfirmarTutor } from "@/components/tutor/ConfirmarTutor";
 import { leerVerificacionTutor } from "@/lib/tutor";
 import { fijarIdioma } from "@/i18n/servidor";
+import { metadatosDe } from "@/i18n/metadata";
 
 type Props = { params: Promise<{ token: string }> };
 
-export const metadata: Metadata = {
-  title: "Autorización del tutor",
-  // Enlace privado sobre la postulación de un menor: fuera de los buscadores.
-  robots: { index: false, follow: false },
-};
+// Enlace privado sobre la postulación de un menor: fuera de los buscadores.
+export async function generateMetadata(): Promise<Metadata> {
+  return metadatosDe({ pathname: "/tutor/[token]", params: { token: "" } }, "tutor", {
+    indexable: false,
+  });
+}
 
 function Aviso({ titulo, cuerpo }: { titulo: string; cuerpo: string }) {
   return (

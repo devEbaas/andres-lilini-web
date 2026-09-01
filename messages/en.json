@@ -21,7 +21,10 @@
     "derechos": "Exercise your rights",
     "escribenos": "Write to us",
     "prensa": "Press",
-    "patrocinios": "Sponsorship"
+    "patrocinios": "Sponsorship",
+    "entrar": "Sign in",
+    "crearCuenta": "Create account",
+    "misPedidos": "My orders"
   },
   "header": {
     "inicio": "Andrés Lillini · home",
@@ -38,7 +41,8 @@
       "explorar": "Explore",
       "programa": "Program",
       "legal": "Legal",
-      "contacto": "Contact"
+      "contacto": "Contact",
+      "cuenta": "Account"
     },
     "boletinTitulo": "Academy newsletter",
     "boletinTexto": "Open calls, reports and trial dates. One email a month.",
@@ -69,7 +73,8 @@
     "preparando": "Preparing…",
     "irAPagar": "Checkout",
     "pagoSeguro": "Secure payment on an external gateway",
-    "pedidoRegistrado": "Order registered. We'll contact you to complete payment."
+    "pedidoRegistrado": "Order registered. We'll contact you to complete payment.",
+    "tieneCuenta": "Already have an account? <entrar>Sign in</entrar> and skip typing your address again."
   },
   "contact": {
     "topics": {
@@ -963,7 +968,9 @@
     "enviando": "Sending",
     "enviarEnlace": "Send link",
     "saliendo": "Signing out",
-    "salir": "Sign out"
+    "salir": "Sign out",
+    "panel": "Panel",
+    "miCuenta": "Account"
   },
   "account": {
     "eyebrow": "Account",

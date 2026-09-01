@@ -95,8 +95,16 @@ for (const base of MIRAR) {
       // mirar sólo `>…<` la dejaría pasar. Es la forma más común de que se
       // cuele un literal, porque nace de editar un párrafo ya traducido.
       ...[...s.matchAll(/[>}]\s*([^<>{}\n][^<>{}]*?)\s*[<{]/g)].map((m) => m[1]),
-      // Atributos que lee una persona.
+      // Atributos que lee una persona: `label="Enviar"`.
       ...[...s.matchAll(new RegExp(`(?:${ATRIBUTOS.join("|")})=("[^"]{2,}")`, "g"))].map((m) =>
+        m[1].slice(1, -1),
+      ),
+      // Y los mismos nombres como propiedad de objeto: `{ label: "Panel" }`.
+      //
+      // No es un caso raro: así se escriben los rótulos que dependen de una
+      // condición, y así se coló «Panel» en la cabecera durante toda la
+      // traducción sin que nadie lo viera.
+      ...[...s.matchAll(new RegExp(`(?:${ATRIBUTOS.join("|")}):\\s*("[^"]{2,}")`, "g"))].map((m) =>
         m[1].slice(1, -1),
       ),
     ];
