@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 
+import { getTranslations } from "next-intl/server";
+
 import { CAMPAIGNS } from "@/lib/content/fundacion";
 import { PhotoSlot } from "@/components/ui/PhotoSlot";
 import { Reveal } from "@/components/ui/Reveal";
@@ -17,20 +19,20 @@ export default async function FundacionPage() {
   // Fija el idioma antes de cualquier lectura: sin esto la página
   // se vuelve dinámica al resolver el locale por cabecera.
   await fijarIdioma();
+  const t = await getTranslations("fundacion");
 
   return (
     <>
       <section className="pb-[clamp(40px,5vw,70px)] pt-[clamp(70px,9vw,130px)]">
         <div className="shell">
           <p className="m-0 mb-5 font-mono text-[11px] uppercase tracking-[0.38em] text-accent">
-            Impacto comunitario
+            {t("eyebrow")}
           </p>
           <h1 className="m-0 max-w-[18ch] font-display text-[clamp(40px,8.5vw,124px)] uppercase leading-[0.87]">
-            El talento no elige código postal
+            {t("titulo")}
           </h1>
           <p className="m-0 mt-[26px] max-w-[56ch] text-[17px] leading-[1.7] text-pretty text-muted">
-            Trabajamos con clubes de barrio, escuelas y ligas municipales para que la detección
-            llegue antes de que el costo la vuelva imposible.
+            {t("lead")}
           </p>
         </div>
       </section>
@@ -39,18 +41,22 @@ export default async function FundacionPage() {
         <div className="shell grid gap-[clamp(16px,2vw,26px)] [grid-template-columns:repeat(auto-fill,minmax(280px,1fr))]">
           {CAMPAIGNS.map((c, i) => (
             <Reveal
-              key={c.title}
+              key={c.key}
               index={i}
               className="overflow-hidden rounded-[22px] border border-hairline bg-panel transition duration-[350ms] hover:-translate-y-[6px] hover:border-accent"
             >
-              <PhotoSlot label={c.photo} ratio="4/3" className="border-0">
+              <PhotoSlot label={t(`campanas.${c.key}.photo`)} ratio="4/3" className="border-0">
                 <span className="absolute left-3.5 top-3.5 rounded-full border border-accent bg-bg px-3 py-[7px] text-[10px] font-extrabold uppercase tracking-[0.14em] text-accent">
-                  {c.status}
+                  {t(`estados.${c.estado}`)}
                 </span>
               </PhotoSlot>
               <div className="p-6">
-                <h3 className="m-0 mb-2.5 text-[19px] font-bold">{c.title}</h3>
-                <p className="m-0 text-[15px] leading-[1.7] text-muted">{c.body}</p>
+                <h3 className="m-0 mb-2.5 text-[19px] font-bold">
+                  {t(`campanas.${c.key}.title`)}
+                </h3>
+                <p className="m-0 text-[15px] leading-[1.7] text-muted">
+                  {t(`campanas.${c.key}.body`)}
+                </p>
               </div>
             </Reveal>
           ))}
@@ -60,10 +66,10 @@ export default async function FundacionPage() {
       <section className="border-t border-hairline bg-panel py-[clamp(60px,8vw,110px)]">
         <div className="shell flex flex-wrap items-center justify-between gap-[30px]">
           <h2 className="m-0 max-w-[22ch] font-display text-[clamp(28px,4.5vw,62px)] uppercase leading-[0.95]">
-            ¿Tu escuela, liga u organización quiere colaborar?
+            {t("ctaTitulo")}
           </h2>
           <Link href="/contacto" className={`${btnPrimary} shrink-0`}>
-            Proponer colaboración
+            {t("cta")}
           </Link>
         </div>
       </section>

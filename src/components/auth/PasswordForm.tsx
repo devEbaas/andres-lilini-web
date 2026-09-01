@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 
 import { actualizarPassword } from "@/lib/actions/cuenta";
 import { Spinner } from "@/components/ui/Spinner";
 
 export function PasswordForm() {
+  const t = useTranslations("account");
   const [password, setPassword] = useState("");
   const [repetir, setRepetir] = useState("");
   const [error, setError] = useState("");
@@ -16,7 +18,7 @@ export function PasswordForm() {
     e.preventDefault();
     setError("");
     if (password !== repetir) {
-      setError("Las dos contraseñas no coinciden.");
+      setError(t("noCoinciden"));
       return;
     }
     startTransition(async () => {
@@ -34,7 +36,7 @@ export function PasswordForm() {
   return (
     <form onSubmit={onSubmit} noValidate className="grid max-w-[440px] gap-[18px]">
       <label className="flex flex-col gap-[9px]">
-        <span className="label-caps">Contraseña nueva</span>
+        <span className="label-caps">{t("contrasenaNueva")}</span>
         <input
           type="password"
           autoComplete="new-password"
@@ -43,12 +45,12 @@ export function PasswordForm() {
           className="field !bg-bg"
         />
         <span className="font-mono text-[10px] leading-[1.7] text-muted">
-          Mínimo 12 caracteres, con mayúsculas, minúsculas y números.
+          {t("reglaContrasena")}
         </span>
       </label>
 
       <label className="flex flex-col gap-[9px]">
-        <span className="label-caps">Repítela</span>
+        <span className="label-caps">{t("repitela")}</span>
         <input
           type="password"
           autoComplete="new-password"
@@ -66,7 +68,7 @@ export function PasswordForm() {
           {error}
         </div>
       )}
-      {hecho && <p className="m-0 text-sm text-accent">Contraseña actualizada.</p>}
+      {hecho && <p className="m-0 text-sm text-accent">{t("contrasenaActualizada")}</p>}
 
       <button
         type="submit"
@@ -74,7 +76,7 @@ export function PasswordForm() {
         className="flex min-h-[48px] cursor-pointer items-center justify-center gap-2.5 rounded-full border-0 bg-gradient-accent text-xs font-extrabold uppercase tracking-[0.18em] text-on-accent disabled:opacity-60"
       >
         {pending && <Spinner />}
-        {pending ? "Guardando" : "Cambiar contraseña"}
+        {pending ? t("guardando") : t("cambiarContrasena")}
       </button>
     </form>
   );

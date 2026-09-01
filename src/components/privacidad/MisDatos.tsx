@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 
 import { exportarMisDatos } from "@/lib/actions/privacidad";
 import { Spinner } from "@/components/ui/Spinner";
@@ -8,6 +9,7 @@ import { btnQuiet } from "@/components/ui/styles";
 
 /** Derecho de acceso, en autoservicio: perfil y pedidos en un JSON. */
 export function MisDatos() {
+  const t = useTranslations("account");
   const [error, setError] = useState("");
   const [pending, startTransition] = useTransition();
 
@@ -42,7 +44,7 @@ export function MisDatos() {
       )}
       <button type="button" onClick={descargar} disabled={pending} className={btnQuiet}>
         {pending && <Spinner />}
-        {pending ? "Preparando…" : "Descargar mis datos"}
+        {pending ? t("descargando") : t("descargar")}
       </button>
     </div>
   );

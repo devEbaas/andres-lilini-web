@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 
 import { confirmarTutor } from "@/lib/actions/tutor";
 import { Spinner } from "@/components/ui/Spinner";
 
 export function ConfirmarTutor({ token }: { token: string }) {
+  const t = useTranslations("tutor");
   const [hecho, setHecho] = useState(false);
   const [error, setError] = useState("");
   const [pending, startTransition] = useTransition();
@@ -17,7 +19,7 @@ export function ConfirmarTutor({ token }: { token: string }) {
           ✓
         </div>
         <p className="m-0 leading-[1.7] text-muted">
-          Autorización registrada. La postulación ya puede evaluarse.
+          {t("registrada")}
         </p>
       </div>
     );
@@ -38,7 +40,7 @@ export function ConfirmarTutor({ token }: { token: string }) {
         className="flex min-h-[52px] cursor-pointer items-center justify-center gap-2.5 rounded-full border-0 bg-gradient-accent text-xs font-extrabold uppercase tracking-[0.18em] text-on-accent disabled:opacity-60"
       >
         {pending && <Spinner />}
-        {pending ? "Registrando" : "Sí, autorizo la postulación"}
+        {pending ? t("registrando") : t("autorizar")}
       </button>
       {error && (
         <p

@@ -1,3 +1,5 @@
+import { getTranslations } from "next-intl/server";
+
 import { getClaims } from "@/lib/auth/dal";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { PerfilForm } from "@/components/auth/PerfilForm";
@@ -7,6 +9,8 @@ export default async function CuentaPage() {
   // Fija el idioma antes de cualquier lectura: sin esto la página
   // se vuelve dinámica al resolver el locale por cabecera.
   await fijarIdioma();
+
+  const t = await getTranslations("account");
 
   const claims = await getClaims();
   const supabase = await createServerSupabase();
@@ -23,10 +27,9 @@ export default async function CuentaPage() {
 
   return (
     <div>
-      <h2 className="m-0 mb-3.5 font-display text-2xl uppercase">Tus datos</h2>
+      <h2 className="m-0 mb-3.5 font-display text-2xl uppercase">{t("datosTitulo")}</h2>
       <p className="m-0 mb-7 max-w-[52ch] leading-[1.7] text-muted">
-        Sólo lo usamos para los envíos y para responderte. Tu correo se cambia desde
-        soporte, porque es la llave de la cuenta.
+        {t("datosLead")}
       </p>
 
       <PerfilForm

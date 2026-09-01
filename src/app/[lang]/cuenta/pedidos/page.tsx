@@ -1,15 +1,10 @@
+import { getTranslations } from "next-intl/server";
+
 import { createServerSupabase } from "@/lib/supabase/server";
 import { vincularPedidosHuerfanos } from "@/lib/auth/pedidos";
 import { money } from "@/lib/format";
 import { Celda, Tabla, Vacio, fecha } from "@/components/admin/Tabla";
 import { fijarIdioma } from "@/i18n/servidor";
-
-const ETIQUETA: Record<string, string> = {
-  pagado: "Pagado",
-  iniciado: "Sin completar",
-  expirado: "Caducado",
-  pendiente: "Pendiente",
-};
 
 export default async function MisPedidosPage() {
   // Fija el idioma antes de cualquier lectura: sin esto la página
@@ -18,10 +13,12 @@ export default async function MisPedidosPage() {
 
   // Adopta los pedidos de invitado hechos con este correo. Es idempotente:
   // la segunda vez no encuentra ninguno y no hace nada.
+  const t = await getTranslations("account");
+
   await vincularPedidosHuerfanos();
 
   const supabase = await createServerSupabase();
-  if (!supabase) return <Vacio texto="No pudimos cargar tus pedidos." />;
+  if (!supabase) return <Vacio texto={t("pedidosError")} />;
 
   // Sin filtro por usuario: la policy «cliente lee sus pedidos» ya decide qué
   // filas existen para esta sesión. Añadirlo aquí no daría más seguridad.
@@ -33,14 +30,22 @@ export default async function MisPedidosPage() {
 
   if (error) {
     console.error("[cuenta/pedidos]", error.message);
-    return <Vacio texto="No pudimos cargar tus pedidos." />;
+    return <Vacio texto={t("pedidosError")} />;
   }
   if (!data?.length) {
-    return <Vacio texto="Todavía no tienes pedidos. Los que hagas aparecerán aquí." />;
+    return <Vacio texto={t("pedidosVacio")} />;
   }
 
   return (
-    <Tabla cols={["Pedido", "Fecha", "Artículos", "Estado", "Total"]}>
+    <Tabla
+      cols={[
+        t("pedidosCols.pedido"),
+        t("pedidosCols.fecha"),
+        t("pedidosCols.articulos"),
+        t("pedidosCols.estado"),
+        t("pedidosCols.total"),
+      ]}
+    >
       {data.map((o) => {
         const items = Array.isArray(o.items) ? o.items.length : 0;
         return (
@@ -54,7 +59,7 @@ export default async function MisPedidosPage() {
                   o.status === "pagado" ? "text-accent" : "text-muted"
                 }`}
               >
-                {ETIQUETA[o.status] ?? o.status}
+                {t.has(`pedidosEstado.${o.status}`) ? t(`pedidosEstado.${o.status}`) : o.status}
               </span>
             </Celda>
             <Celda>{money(o.total)}</Celda>

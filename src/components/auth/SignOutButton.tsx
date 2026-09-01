@@ -2,10 +2,12 @@
 
 import { useRouter } from "@/i18n/navigation";
 import { useTransition } from "react";
+import { useTranslations } from "next-intl";
 
 import { signOut } from "@/lib/actions/auth";
 
 export function SignOutButton() {
+  const t = useTranslations("auth");
   const router = useRouter();
   const [pending, startTransition] = useTransition();
 
@@ -22,7 +24,7 @@ export function SignOutButton() {
       }
       className="min-h-9 shrink-0 cursor-pointer rounded-full border border-hairline-strong bg-transparent px-4 text-[10px] font-extrabold uppercase tracking-[0.16em] text-muted transition hover:border-accent hover:text-ink disabled:opacity-60"
     >
-      {pending ? "Saliendo" : "Salir"}
+      {pending ? t("saliendo") : t("salir")}
     </button>
   );
 }

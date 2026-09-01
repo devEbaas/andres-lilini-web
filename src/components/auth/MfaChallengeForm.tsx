@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 
 import { verificarMfa } from "@/lib/actions/mfa";
 import { Spinner } from "@/components/ui/Spinner";
 
 /** Reto suelto: para la sesión que se quedó a medias y vuelve más tarde. */
 export function MfaChallengeForm({ next }: { next?: string }) {
+  const t = useTranslations("auth");
   const [codigo, setCodigo] = useState("");
   const [error, setError] = useState("");
   const [pending, startTransition] = useTransition();
@@ -26,7 +28,7 @@ export function MfaChallengeForm({ next }: { next?: string }) {
   return (
     <form onSubmit={onSubmit} noValidate className="grid gap-[18px]">
       <label className="flex flex-col gap-[9px]">
-        <span className="label-caps">Código de verificación</span>
+        <span className="label-caps">{t("codigo")}</span>
         <input
           inputMode="numeric"
           autoComplete="one-time-code"
@@ -34,7 +36,7 @@ export function MfaChallengeForm({ next }: { next?: string }) {
           autoFocus
           value={codigo}
           onChange={(e) => setCodigo(e.target.value.replace(/\D/g, "").slice(0, 6))}
-          placeholder="000000"
+          placeholder={t("codigoPh")}
           className="field !bg-bg text-center font-mono !text-[22px] tracking-[0.5em]"
         />
       </label>
@@ -54,7 +56,7 @@ export function MfaChallengeForm({ next }: { next?: string }) {
         className="flex min-h-[52px] cursor-pointer items-center justify-center gap-2.5 rounded-full border-0 bg-gradient-accent text-xs font-extrabold uppercase tracking-[0.18em] text-on-accent disabled:opacity-60"
       >
         {pending && <Spinner />}
-        {pending ? "Verificando" : "Verificar"}
+        {pending ? t("verificando") : t("verificar")}
       </button>
     </form>
   );

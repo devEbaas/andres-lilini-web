@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 
+import { getTranslations } from "next-intl/server";
+
 import { ConfirmarTutor } from "@/components/tutor/ConfirmarTutor";
 import { leerVerificacionTutor } from "@/lib/tutor";
 import { fijarIdioma } from "@/i18n/servidor";
@@ -30,6 +32,8 @@ export default async function TutorPage({ params }: Props) {
   // Fija el idioma antes de cualquier lectura: sin esto la página
   // se vuelve dinámica al resolver el locale por cabecera.
   await fijarIdioma();
+  const t = await getTranslations("tutor");
+  const tv = await getTranslations("vocab");
 
   const { token } = await params;
   const v = await leerVerificacionTutor(token);
@@ -39,8 +43,8 @@ export default async function TutorPage({ params }: Props) {
   if (!v) {
     return (
       <Aviso
-        titulo="Este enlace no sirve"
-        cuerpo="O caducó, o nunca existió. Si te invitaron a autorizar una postulación y el enlace ya no funciona, escríbenos y te mandamos uno nuevo."
+        titulo={t("invalidoTitulo")}
+        cuerpo={t("invalidoTexto")}
       />
     );
   }
@@ -48,8 +52,8 @@ export default async function TutorPage({ params }: Props) {
   if (v.yaVerificado) {
     return (
       <Aviso
-        titulo="Ya está autorizada"
-        cuerpo={`La postulación ${v.folio} tiene tu autorización registrada. No hace falta que hagas nada más.`}
+        titulo={t("yaTitulo")}
+        cuerpo={t("yaTexto", { folio: v.folio })}
       />
     );
   }
@@ -58,43 +62,44 @@ export default async function TutorPage({ params }: Props) {
     <section className="grid min-h-[70vh] place-items-center py-[clamp(60px,8vw,110px)]">
       <div className="w-full max-w-[560px] px-[clamp(18px,4vw,44px)]">
         <p className="m-0 mb-5 font-mono text-[11px] uppercase tracking-[0.38em] text-accent">
-          Autorización · {v.folio}
+          {t("eyebrow", { folio: v.folio })}
         </p>
         <h1 className="m-0 mb-[18px] font-display text-[clamp(32px,5vw,64px)] uppercase leading-[0.9]">
-          ¿Autorizas esta postulación?
+          {t("titulo")}
         </h1>
 
         <div className="mb-7 grid gap-px overflow-hidden rounded-[18px] border border-hairline bg-hairline">
           <div className="bg-panel px-5 py-4">
             <p className="m-0 mb-1 text-[11px] font-extrabold uppercase tracking-[0.14em] text-muted">
-              Jugador
+              {t("jugador")}
             </p>
             <p className="m-0 text-sm text-ink">{v.jugador}</p>
           </div>
           <div className="bg-panel px-5 py-4">
             <p className="m-0 mb-1 text-[11px] font-extrabold uppercase tracking-[0.14em] text-muted">
-              Te señaló como
+              {t("teSenalo")}
             </p>
-            <p className="m-0 text-sm text-ink">{v.parentesco ?? "Tutor legal"}</p>
+            <p className="m-0 text-sm text-ink">{tv(v.parentesco ?? "Tutor legal")}</p>
           </div>
         </div>
 
         <p className="m-0 mb-7 max-w-[54ch] leading-[1.7] text-muted">
-          Es menor de edad, así que no podemos evaluar su postulación sin tu autorización
-          expresa. Al confirmar, aceptas el tratamiento de sus datos según el{" "}
-          <Link
-            href={{ pathname: "/contenido/[doc]", params: { doc: "privacidad" } }}
-            className="text-accent underline underline-offset-4"
-          >
-            aviso de privacidad
-          </Link>
-          .
+          {t.rich("aviso", {
+            aviso: (chunks) => (
+              <Link
+                href={{ pathname: "/contenido/[doc]", params: { doc: "privacidad" } }}
+                className="text-accent underline underline-offset-4"
+              >
+                {chunks}
+              </Link>
+            ),
+          })}
         </p>
 
         <ConfirmarTutor token={token} />
 
         <p className="m-0 mt-6 text-sm leading-[1.7] text-muted">
-          Si no reconoces esta postulación, no hagas nada: sin tu confirmación no se evalúa.
+          {t("noReconoces")}
         </p>
       </div>
     </section>

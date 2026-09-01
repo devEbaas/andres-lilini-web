@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { redirect } from "next/navigation";
 
+import { getTranslations } from "next-intl/server";
+
 import { RegistroForm } from "@/components/auth/RegistroForm";
 import { getClaims } from "@/lib/auth/dal";
 import { fijarIdioma, rutaLocal } from "@/i18n/servidor";
@@ -16,20 +18,21 @@ export default async function RegistroPage() {
   // se vuelve dinámica al resolver el locale por cabecera.
   await fijarIdioma();
 
+  const t = await getTranslations("auth");
+
   if (await getClaims()) redirect(await rutaLocal("/cuenta"));
 
   return (
     <section className="grid min-h-[70vh] place-items-center py-[clamp(60px,8vw,110px)]">
       <div className="w-full max-w-[500px] px-[clamp(18px,4vw,44px)]">
         <p className="m-0 mb-5 font-mono text-[11px] uppercase tracking-[0.38em] text-accent">
-          Cuenta
+          {t("registroEyebrow")}
         </p>
         <h1 className="m-0 mb-[18px] font-display text-[clamp(34px,6vw,64px)] uppercase leading-[0.9]">
-          Crear cuenta
+          {t("registroTitulo")}
         </h1>
         <p className="m-0 mb-9 leading-[1.7] text-muted">
-          Para seguir tus pedidos y no volver a escribir tu dirección. Comprar no la
-          necesita.
+          {t("registroLead")}
         </p>
 
         <div className="rounded-[26px] border border-hairline bg-panel p-[clamp(22px,3vw,34px)] shadow-soft">
@@ -37,9 +40,9 @@ export default async function RegistroPage() {
         </div>
 
         <p className="m-0 mt-6 text-center text-sm text-muted">
-          ¿Ya tienes cuenta?{" "}
+          {t("yaTienesCuenta")}{" "}
           <Link href="/login" className="text-accent underline underline-offset-4">
-            Entrar
+            {t("entrar")}
           </Link>
         </p>
       </div>

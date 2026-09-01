@@ -2,12 +2,14 @@
 
 import { useRouter } from "@/i18n/navigation";
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 
 import { cancelarMiCuenta } from "@/lib/actions/privacidad";
 import { Spinner } from "@/components/ui/Spinner";
 import { btnQuiet } from "@/components/ui/styles";
 
 export function CancelarCuenta({ email }: { email: string }) {
+  const t = useTranslations("account");
   const router = useRouter();
   const [abierto, setAbierto] = useState(false);
   const [password, setPassword] = useState("");
@@ -32,7 +34,7 @@ export function CancelarCuenta({ email }: { email: string }) {
   if (!abierto) {
     return (
       <button type="button" onClick={() => setAbierto(true)} className={btnQuiet}>
-        Cancelar mi cuenta
+        {t("cancelarBoton")}
       </button>
     );
   }
@@ -44,12 +46,14 @@ export function CancelarCuenta({ email }: { email: string }) {
       className="grid gap-[18px] rounded-[18px] border border-danger/40 bg-danger/5 p-5"
     >
       <p className="m-0 text-sm leading-[1.7] text-muted">
-        Esto no se puede deshacer. Escribe <strong className="text-ink">{email}</strong> y tu
-        contraseña para confirmar.
+        {t.rich("cancelarAviso", {
+          email,
+          correo: (chunks) => <strong className="text-ink">{chunks}</strong>,
+        })}
       </p>
 
       <label className="flex flex-col gap-[9px]">
-        <span className="label-caps">Tu correo</span>
+        <span className="label-caps">{t("tuCorreo")}</span>
         <input
           value={confirmacion}
           onChange={(e) => setConfirmacion(e.target.value)}
@@ -59,7 +63,7 @@ export function CancelarCuenta({ email }: { email: string }) {
       </label>
 
       <label className="flex flex-col gap-[9px]">
-        <span className="label-caps">Contraseña</span>
+        <span className="label-caps">{t("passwordTitulo")}</span>
         <input
           type="password"
           autoComplete="current-password"
@@ -85,7 +89,7 @@ export function CancelarCuenta({ email }: { email: string }) {
           className="flex min-h-[48px] flex-1 cursor-pointer items-center justify-center gap-2.5 rounded-full border border-danger/60 bg-transparent text-xs font-extrabold uppercase tracking-[0.18em] text-danger-text disabled:opacity-50"
         >
           {pending && <Spinner />}
-          {pending ? "Cancelando" : "Cancelar definitivamente"}
+          {pending ? t("cancelando") : t("cancelarDefinitivo")}
         </button>
         <button
           type="button"
@@ -97,7 +101,7 @@ export function CancelarCuenta({ email }: { email: string }) {
           }}
           className={btnQuiet}
         >
-          Mejor no
+          {t("mejorNo")}
         </button>
       </div>
     </form>

@@ -2,11 +2,13 @@
 
 import { Link } from "@/i18n/navigation";
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 
 import { signUp } from "@/lib/actions/cuenta";
 import { Spinner } from "@/components/ui/Spinner";
 
 export function RegistroForm() {
+  const t = useTranslations("auth");
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [email, setEmail] = useState("");
@@ -32,7 +34,7 @@ export function RegistroForm() {
         <div className="mx-auto mb-5 grid size-14 place-items-center rounded-full bg-gradient-accent text-2xl font-extrabold text-on-accent">
           ✓
         </div>
-        <h3 className="m-0 mb-2.5 font-display text-[26px] uppercase">Revisa tu correo</h3>
+        <h3 className="m-0 mb-2.5 font-display text-[26px] uppercase">{t("revisaCorreo")}</h3>
         <p className="m-0 leading-[1.7] text-muted">{hecho}</p>
       </div>
     );
@@ -42,7 +44,7 @@ export function RegistroForm() {
     <form onSubmit={onSubmit} noValidate className="grid gap-[18px]">
       <div className="grid gap-[18px] [grid-template-columns:repeat(auto-fit,minmax(140px,1fr))]">
         <label className="flex flex-col gap-[9px]">
-          <span className="label-caps">Nombre</span>
+          <span className="label-caps">{t("nombre")}</span>
           <input
             value={nombre}
             autoComplete="given-name"
@@ -51,7 +53,7 @@ export function RegistroForm() {
           />
         </label>
         <label className="flex flex-col gap-[9px]">
-          <span className="label-caps">Apellido</span>
+          <span className="label-caps">{t("apellido")}</span>
           <input
             value={apellido}
             autoComplete="family-name"
@@ -62,19 +64,19 @@ export function RegistroForm() {
       </div>
 
       <label className="flex flex-col gap-[9px]">
-        <span className="label-caps">Correo</span>
+        <span className="label-caps">{t("correo")}</span>
         <input
           type="email"
           autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="tucorreo@dominio.com"
+          placeholder={t("correoPh")}
           className="field !bg-bg"
         />
       </label>
 
       <label className="flex flex-col gap-[9px]">
-        <span className="label-caps">Contraseña</span>
+        <span className="label-caps">{t("contrasena")}</span>
         <input
           type="password"
           autoComplete="new-password"
@@ -83,7 +85,7 @@ export function RegistroForm() {
           className="field !bg-bg"
         />
         <span className="font-mono text-[10px] leading-[1.7] text-muted">
-          Mínimo 12 caracteres, con mayúsculas, minúsculas y números.
+          {t("reglaContrasena")}
         </span>
       </label>
 
@@ -104,14 +106,16 @@ export function RegistroForm() {
           {consent ? "✓" : ""}
         </span>
         <span className="text-sm leading-[1.6] text-muted">
-          Acepto el tratamiento de mis datos según el{" "}
-          <Link
-            href={{ pathname: "/contenido/[doc]", params: { doc: "privacidad" } }}
-            className="text-accent underline underline-offset-4"
-          >
-            aviso de privacidad
-          </Link>
-          .
+          {t.rich("consentimiento", {
+            aviso: (chunks) => (
+              <Link
+                href={{ pathname: "/contenido/[doc]", params: { doc: "privacidad" } }}
+                className="text-accent underline underline-offset-4"
+              >
+                {chunks}
+              </Link>
+            ),
+          })}
         </span>
       </button>
 
@@ -130,7 +134,7 @@ export function RegistroForm() {
         className="flex min-h-[52px] cursor-pointer items-center justify-center gap-2.5 rounded-full border-0 bg-gradient-accent text-xs font-extrabold uppercase tracking-[0.18em] text-on-accent disabled:opacity-60"
       >
         {pending && <Spinner />}
-        {pending ? "Creando" : "Crear cuenta"}
+        {pending ? t("creando") : t("crearCuenta")}
       </button>
     </form>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 
 import { enviarExpediente, type ExpedientePayload } from "@/lib/actions/expediente";
 import {
@@ -94,6 +95,8 @@ export function ExpedienteForm({
   esMenor: boolean;
   tutorNombre: string | null;
 }) {
+  const t = useTranslations("expediente.form");
+  const tv = useTranslations("vocab");
   const [v, setV] = useState<ExpedientePayload>({
     ...VACIO,
     // En un menor firma el tutor, y su nombre ya se recogió al postularse.
@@ -130,9 +133,9 @@ export function ExpedienteForm({
         <div className="mx-auto mb-5 grid size-14 place-items-center rounded-full bg-gradient-accent text-2xl font-extrabold text-on-accent">
           ✓
         </div>
-        <h2 className="m-0 mb-2.5 font-display text-[28px] uppercase">Expediente enviado</h2>
+        <h2 className="m-0 mb-2.5 font-display text-[28px] uppercase">{t("okTitulo")}</h2>
         <p className="m-0 leading-[1.7] text-muted">
-          Queda asociado a la postulación {hecho}. Te contactamos con la fecha y la sede.
+          {t("okTexto", { folio: hecho })}
         </p>
       </div>
     );
@@ -144,14 +147,12 @@ export function ExpedienteForm({
     <form onSubmit={onSubmit} noValidate className="grid gap-9">
       {/* ── Medibles ── */}
       <section>
-        <h2 className="m-0 mb-2 font-display text-xl uppercase">Medibles</h2>
+        <h2 className="m-0 mb-2 font-display text-xl uppercase">{t("medibles")}</h2>
         <p className="m-0 mb-5 max-w-[62ch] text-sm leading-[1.7] text-muted">
-          Todo es opcional. Si tienes los números, dinos también cómo se midieron: un
-          cronómetro manual y unas fotocélulas se diferencian en más de lo que separa a un
-          jugador rápido de uno normal, y sin ese dato no podemos comparar entre candidatos.
+          {t("mediblesLead")}
         </p>
         <div className={rejilla}>
-          <Campo label="Sprint 10 m (s)" name="sprint10" errores={errores} hint="Ej. 1.85">
+          <Campo label={t("sprint10")} name="sprint10" errores={errores} hint={t("sprint10Hint")}>
             <input
               value={v.sprint10}
               onChange={(e) => set("sprint10", e.target.value)}
@@ -159,7 +160,7 @@ export function ExpedienteForm({
               className="field !bg-bg"
             />
           </Campo>
-          <Campo label="Sprint 30 m (s)" name="sprint30" errores={errores} hint="Ej. 4.10">
+          <Campo label={t("sprint30")} name="sprint30" errores={errores} hint={t("sprint30Hint")}>
             <input
               value={v.sprint30}
               onChange={(e) => set("sprint30", e.target.value)}
@@ -167,7 +168,7 @@ export function ExpedienteForm({
               className="field !bg-bg"
             />
           </Campo>
-          <Campo label="Salto CMJ (cm)" name="saltoCmj" errores={errores} hint="Ej. 52">
+          <Campo label={t("cmj")} name="saltoCmj" errores={errores} hint={t("cmjHint")}>
             <input
               value={v.saltoCmj}
               onChange={(e) => set("saltoCmj", e.target.value.replace(/\D/g, ""))}
@@ -175,21 +176,21 @@ export function ExpedienteForm({
               className="field !bg-bg"
             />
           </Campo>
-          <Campo label="Test de agilidad" name="agilidadTest" errores={errores}>
+          <Campo label={t("testAgilidad")} name="agilidadTest" errores={errores}>
             <select
               value={v.agilidadTest}
               onChange={(e) => set("agilidadTest", e.target.value)}
               className="field !bg-bg appearance-none"
             >
               <option value="">—</option>
-              {TESTS_AGILIDAD.map((t) => (
-                <option key={t} value={t}>
-                  {t}
+              {TESTS_AGILIDAD.map((o) => (
+                <option key={o} value={o}>
+                  {tv(o)}
                 </option>
               ))}
             </select>
           </Campo>
-          <Campo label="Agilidad (s)" name="agilidadSeg" errores={errores}>
+          <Campo label={t("agilidad")} name="agilidadSeg" errores={errores}>
             <input
               value={v.agilidadSeg}
               onChange={(e) => set("agilidadSeg", e.target.value)}
@@ -197,14 +198,14 @@ export function ExpedienteForm({
               className="field !bg-bg"
             />
           </Campo>
-          <Campo label="Resistencia" name="yoyo" errores={errores} hint="Ej. Yo-Yo 19.5">
+          <Campo label={t("resistencia")} name="yoyo" errores={errores} hint={t("resistenciaHint")}>
             <input
               value={v.yoyo}
               onChange={(e) => set("yoyo", e.target.value)}
               className="field !bg-bg"
             />
           </Campo>
-          <Campo label="Cómo se midió" name="protocolo" errores={errores}>
+          <Campo label={t("protocolo")} name="protocolo" errores={errores}>
             <select
               value={v.protocolo}
               onChange={(e) => set("protocolo", e.target.value)}
@@ -213,12 +214,12 @@ export function ExpedienteForm({
               <option value="">—</option>
               {PROTOCOLOS.map((p) => (
                 <option key={p} value={p}>
-                  {p}
+                  {tv(p)}
                 </option>
               ))}
             </select>
           </Campo>
-          <Campo label="Fecha de la medición" name="medidoEn" errores={errores}>
+          <Campo label={t("fechaMedicion")} name="medidoEn" errores={errores}>
             <input
               type="date"
               value={v.medidoEn}
@@ -231,38 +232,38 @@ export function ExpedienteForm({
 
       {/* ── Contacto de emergencia ── */}
       <section>
-        <h2 className="m-0 mb-2 font-display text-xl uppercase">Contacto de emergencia</h2>
+        <h2 className="m-0 mb-2 font-display text-xl uppercase">{t("emergencia")}</h2>
         <p className="m-0 mb-5 max-w-[62ch] text-sm leading-[1.7] text-muted">
-          A quién llamamos si pasa algo durante una concentración o una visoría.
+          {t("emergenciaLead")}
         </p>
         <div className={rejilla}>
-          <Campo label="Nombre completo" name="contactoNombre" errores={errores}>
+          <Campo label={t("nombre")} name="contactoNombre" errores={errores}>
             <input
               value={v.contactoNombre}
               onChange={(e) => set("contactoNombre", e.target.value)}
               className="field !bg-bg"
             />
           </Campo>
-          <Campo label="Parentesco" name="contactoParentesco" errores={errores}>
+          <Campo label={t("parentesco")} name="contactoParentesco" errores={errores}>
             <select
               value={v.contactoParentesco}
               onChange={(e) => set("contactoParentesco", e.target.value)}
               className="field !bg-bg appearance-none"
             >
-              <option value="">Elige uno</option>
+              <option value="">{t("eligeUno")}</option>
               {PARENTESCOS.map((p) => (
                 <option key={p} value={p}>
-                  {p}
+                  {tv(p)}
                 </option>
               ))}
             </select>
           </Campo>
-          <Campo label="Teléfono" name="contactoTel" errores={errores}>
+          <Campo label={t("telefono")} name="contactoTel" errores={errores}>
             <input
               type="tel"
               value={v.contactoTel}
               onChange={(e) => set("contactoTel", e.target.value)}
-              placeholder="+52 55 0000 0000"
+              placeholder={t("telefonoPh")}
               className="field !bg-bg"
             />
           </Campo>
@@ -271,32 +272,30 @@ export function ExpedienteForm({
 
       {/* ── Salud ── */}
       <section>
-        <h2 className="m-0 mb-2 font-display text-xl uppercase">Salud</h2>
+        <h2 className="m-0 mb-2 font-display text-xl uppercase">{t("salud")}</h2>
         <p className="m-0 mb-5 max-w-[62ch] text-sm leading-[1.7] text-muted">
-          Sólo lo que necesitamos para cuidarte en una actividad presencial. Son datos
-          sensibles: si no marcas el consentimiento de abajo, no se guarda nada de esta
-          sección aunque lo escribas.
+          {t("saludLead")}
         </p>
         <div className="grid gap-5">
-          <Campo label="Alergias" name="alergias" errores={errores} ancho>
+          <Campo label={t("alergias")} name="alergias" errores={errores} ancho>
             <textarea
               rows={2}
               value={v.alergias}
               onChange={(e) => set("alergias", e.target.value.slice(0, 500))}
-              placeholder="Alimentos, medicamentos, picaduras…"
+              placeholder={t("alergiasPh")}
               className="field !bg-bg resize-y leading-[1.6]"
             />
           </Campo>
-          <Campo label="Condiciones médicas relevantes" name="condiciones" errores={errores} ancho>
+          <Campo label={t("condiciones")} name="condiciones" errores={errores} ancho>
             <textarea
               rows={2}
               value={v.condiciones}
               onChange={(e) => set("condiciones", e.target.value.slice(0, 500))}
-              placeholder="Asma, diabetes, tratamiento en curso…"
+              placeholder={t("condicionesPh")}
               className="field !bg-bg resize-y leading-[1.6]"
             />
           </Campo>
-          <Campo label="Lesiones de los últimos 12 meses" name="lesiones" errores={errores} ancho>
+          <Campo label={t("lesiones")} name="lesiones" errores={errores} ancho>
             <textarea
               rows={2}
               value={v.lesiones}
@@ -304,7 +303,7 @@ export function ExpedienteForm({
               className="field !bg-bg resize-y leading-[1.6]"
             />
           </Campo>
-          <Campo label="Servicio de salud" name="seguro" errores={errores}>
+          <Campo label={t("seguro")} name="seguro" errores={errores}>
             <select
               value={v.seguro}
               onChange={(e) => set("seguro", e.target.value)}
@@ -313,7 +312,7 @@ export function ExpedienteForm({
               <option value="">—</option>
               {SEGUROS.map((s) => (
                 <option key={s} value={s}>
-                  {s}
+                  {tv(s)}
                 </option>
               ))}
             </select>
@@ -323,35 +322,35 @@ export function ExpedienteForm({
 
       {/* ── Consentimientos ── */}
       <section className="grid gap-2.5">
-        <h2 className="m-0 mb-2 font-display text-xl uppercase">Autorizaciones</h2>
+        <h2 className="m-0 mb-2 font-display text-xl uppercase">{t("autorizaciones")}</h2>
 
         <Casilla
-          label="Autorizo el tratamiento de los datos de salud de esta sección, con la finalidad de atender una emergencia durante las actividades del programa."
+          label={t("okSalud")}
           marcada={v.okSalud}
           onToggle={() => set("okSalud", !v.okSalud)}
           error={errores.okSalud}
         />
         <Casilla
-          label="Autorizo el uso de imagen y video."
+          label={t("okImagen")}
           marcada={v.okImagen}
           onToggle={() => set("okImagen", !v.okImagen)}
         />
         {v.okImagen && (
           <Campo
-            label="Hasta dónde"
+            label={t("alcance")}
             name="imagenAlcance"
             errores={errores}
-            hint="Puedes autorizar la evaluación interna sin autorizar la difusión."
+            hint={t("alcanceHint")}
           >
             <select
               value={v.imagenAlcance}
               onChange={(e) => set("imagenAlcance", e.target.value)}
               className="field !bg-bg appearance-none"
             >
-              <option value="">Elige el alcance</option>
+              <option value="">{t("eligeAlcance")}</option>
               {ALCANCES_IMAGEN.map((a) => (
                 <option key={a} value={a}>
-                  {a}
+                  {tv(a)}
                 </option>
               ))}
             </select>
@@ -360,14 +359,10 @@ export function ExpedienteForm({
 
         <div className="mt-2">
           <Campo
-            label={esMenor ? "Nombre del padre, madre o tutor que autoriza" : "Tu nombre completo"}
+            label={esMenor ? t("firmanteMenor") : t("firmanteMayor")}
             name="firmanteNombre"
             errores={errores}
-            hint={
-              esMenor
-                ? "Eres menor de edad: quien autoriza es tu tutor, no tú."
-                : undefined
-            }
+            hint={esMenor ? t("firmanteHint") : undefined}
           >
             <input
               value={v.firmanteNombre}
@@ -393,7 +388,7 @@ export function ExpedienteForm({
         className="flex min-h-[52px] cursor-pointer items-center justify-center gap-2.5 rounded-full border-0 bg-gradient-accent text-xs font-extrabold uppercase tracking-[0.18em] text-on-accent disabled:opacity-60"
       >
         {pending && <Spinner />}
-        {pending ? "Enviando" : "Enviar expediente"}
+        {pending ? t("enviando") : t("enviar")}
       </button>
     </form>
   );

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import type { RutaEstatica } from "@/i18n/routing";
 
+import { getTranslations } from "next-intl/server";
+
 import { requireUser } from "@/lib/auth/dal";
 import { SignOutButton } from "@/components/auth/SignOutButton";
 import { fijarIdioma } from "@/i18n/servidor";
@@ -11,11 +13,11 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-const SECCIONES: { href: RutaEstatica; label: string }[] = [
-  { href: "/cuenta", label: "Perfil" },
-  { href: "/cuenta/pedidos", label: "Mis pedidos" },
-  { href: "/cuenta/password", label: "Contraseña" },
-  { href: "/cuenta/privacidad", label: "Privacidad" },
+const SECCIONES: { href: RutaEstatica; key: string }[] = [
+  { href: "/cuenta", key: "perfil" },
+  { href: "/cuenta/pedidos", key: "pedidos" },
+  { href: "/cuenta/password", key: "password" },
+  { href: "/cuenta/privacidad", key: "privacidad" },
 ];
 
 export default async function CuentaLayout({ children }: { children: React.ReactNode }) {
@@ -23,6 +25,7 @@ export default async function CuentaLayout({ children }: { children: React.React
   // se vuelve dinámica al resolver el locale por cabecera.
   await fijarIdioma();
 
+  const t = await getTranslations("account");
   const user = await requireUser("/cuenta");
 
   return (
@@ -31,10 +34,10 @@ export default async function CuentaLayout({ children }: { children: React.React
         <header className="mb-9 flex flex-wrap items-center justify-between gap-4 border-b border-hairline pb-6">
           <div>
             <p className="m-0 mb-2 font-mono text-[11px] uppercase tracking-[0.38em] text-accent">
-              Cuenta
+              {t("eyebrow")}
             </p>
             <h1 className="m-0 font-display text-[clamp(28px,4vw,48px)] uppercase leading-[0.95]">
-              Mi cuenta
+              {t("titulo")}
             </h1>
           </div>
           <div className="flex items-center gap-3.5">
@@ -46,11 +49,11 @@ export default async function CuentaLayout({ children }: { children: React.React
         <nav className="mb-9 flex flex-wrap gap-2.5">
           {SECCIONES.map((s) => (
             <Link
-              key={s.href}
+              key={s.key}
               href={s.href}
               className="rounded-full border border-hairline px-[18px] py-2.5 text-[11px] font-extrabold uppercase tracking-[0.14em] text-muted transition hover:border-accent hover:text-ink"
             >
-              {s.label}
+              {t(`secciones.${s.key}`)}
             </Link>
           ))}
         </nav>

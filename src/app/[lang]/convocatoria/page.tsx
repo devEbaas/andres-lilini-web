@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 
+import { getTranslations } from "next-intl/server";
+
 import { CONVOCATORIA_BRIEF } from "@/lib/content/fundacion";
 import { ConvocatoriaForm } from "@/components/convocatoria/ConvocatoriaForm";
 import { Reveal } from "@/components/ui/Reveal";
@@ -17,6 +19,7 @@ export default async function ConvocatoriaPage() {
   // Fija el idioma antes de cualquier lectura: sin esto la página
   // se vuelve dinámica al resolver el locale por cabecera.
   await fijarIdioma();
+  const t = await getTranslations("convocatoria");
 
   return (
     <>
@@ -31,25 +34,24 @@ export default async function ConvocatoriaPage() {
         />
         <div className="shell relative">
           <p className="m-0 mb-5 font-mono text-[11px] uppercase tracking-[0.38em] text-accent">
-            Convocatoria abierta · cierra 30 nov 2026
+            {t("eyebrow")}
           </p>
           <h1 className="m-0 max-w-[16ch] font-display text-[clamp(40px,9vw,132px)] uppercase leading-[0.86]">
-            Beca de formación 2027
+            {t("titulo")}
           </h1>
           <p className="m-0 my-[26px] mb-8 max-w-[56ch] text-[17px] leading-[1.7] text-pretty text-muted">
-            Diez plazas completas: un año de seguimiento metodológico, equipamiento y acompañamiento
-            académico para jugadores sin acceso a una estructura profesional.
+            {t("lead")}
           </p>
           <div className="flex flex-wrap gap-3">
             {/* Ancla dentro de la propia página: salto nativo, sin router. */}
             <a href="#participar" className={btnPrimary}>
-              Participar
+              {t("participar")}
             </a>
             <Link
               href={{ pathname: "/contenido/[doc]", params: { doc: "bases" } }}
               className="inline-flex min-h-[48px] items-center rounded-full border border-hairline px-[30px] text-[12px] font-extrabold uppercase tracking-[0.18em] text-muted transition hover:border-hairline-strong hover:text-ink"
             >
-              Leer las bases
+              {t("leerBases")}
             </Link>
           </div>
         </div>
@@ -60,20 +62,24 @@ export default async function ConvocatoriaPage() {
           <div className="grid gap-[clamp(16px,2vw,26px)] [grid-template-columns:repeat(auto-fit,minmax(260px,1fr))]">
             {CONVOCATORIA_BRIEF.map((b, i) => (
               <Reveal
-                key={b.n}
+                key={b.key}
                 index={i}
                 className="rounded-[22px] border border-hairline bg-panel p-[30px]"
               >
                 <span className="text-gradient block font-display text-[32px] leading-none">
                   {b.n}
                 </span>
-                <h3 className="m-0 my-3.5 mb-2.5 text-[18px] font-bold">{b.title}</h3>
-                <p className="m-0 text-[15px] leading-[1.7] text-muted">{b.body}</p>
+                <h3 className="m-0 my-3.5 mb-2.5 text-[18px] font-bold">
+                  {t(`brief.${b.key}.title`)}
+                </h3>
+                <p className="m-0 text-[15px] leading-[1.7] text-muted">
+                  {t(`brief.${b.key}.body`)}
+                </p>
               </Reveal>
             ))}
           </div>
           <p className="m-0 mt-[22px] font-mono text-[11px] text-muted">
-            Formatos aceptados: PDF, JPG, PNG o MP4 · máximo 25 MB por archivo.
+            {t("formatos")}
           </p>
         </div>
       </section>
