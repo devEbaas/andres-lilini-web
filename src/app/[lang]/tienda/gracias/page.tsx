@@ -8,14 +8,13 @@ import { fulfillCheckout } from "@/lib/stripe/fulfill";
 import { ClearCart } from "@/components/tienda/ClearCart";
 import { btnPrimary, btnQuiet } from "@/components/ui/styles";
 import { fijarIdioma, localeActual } from "@/i18n/servidor";
+import { metadatosDe } from "@/i18n/metadata";
 
 type Props = { searchParams: Promise<{ session_id?: string }> };
 
-export const metadata: Metadata = {
-  title: "Pedido confirmado",
-  description: "Confirmación de tu pedido en la tienda oficial de Andrés Lillini.",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadatosDe("/tienda/gracias", "gracias", { indexable: false });
+}
 
 export default async function GraciasPage({ searchParams }: Props) {
   // Fija el idioma antes de cualquier lectura: sin esto la página

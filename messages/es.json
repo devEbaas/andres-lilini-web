@@ -1259,5 +1259,74 @@
       "cancelacion": "cancelación",
       "oposicion": "oposición"
     }
+  },
+  "meta": {
+    "plantilla": "%s · Andrés Lillini",
+    "sitio": "Andrés Lillini",
+    "inicio": {
+      "title": "Andrés Lillini — Formador de talento",
+      "description": "Veintisiete años detectando y desarrollando futbolistas: canteras en México, Argentina y Rusia, y hoy la estructura de selecciones menores de un país entero.",
+      "ogTitle": "Andrés Lillini — Formador de talento",
+      "ogDescription": "Formación, detección y desarrollo de futbolistas. Programa de atletas, convocatoria abierta y tienda oficial."
+    },
+    "tienda": {
+      "title": "Tienda oficial",
+      "description": "Material de trabajo: metodología, indumentaria y equipamiento. Envío a todo México en 3 a 5 días hábiles."
+    },
+    "programa": {
+      "title": "Programa de atletas",
+      "description": "Un formulario, quince atributos y un informe real. Evaluamos jugadores de 12 a 21 años en cualquier posición y liga."
+    },
+    "convocatoria": {
+      "title": "Beca de formación 2027",
+      "description": "Diez plazas completas: un año de seguimiento metodológico, equipamiento y acompañamiento académico. Cierra el 30 de noviembre de 2026."
+    },
+    "fundacion": {
+      "title": "Fundación",
+      "description": "Clubes de barrio, escuelas y ligas municipales: detección que llega antes de que el costo la vuelva imposible."
+    },
+    "contacto": {
+      "title": "Contacto",
+      "description": "Elige el tema correcto y llega directo a quien lo resuelve."
+    },
+    "derechos": {
+      "title": "Ejercer tus derechos",
+      "description": "Solicita acceso, rectificación, cancelación u oposición sobre tus datos personales."
+    },
+    "registro": {
+      "title": "Crear cuenta",
+      "description": "Crea tu cuenta para seguir tus pedidos."
+    },
+    "login": {
+      "title": "Acceso",
+      "description": "Acceso al área privada."
+    },
+    "mfa": {
+      "title": "Verificación"
+    },
+    "recuperar": {
+      "title": "Recuperar contraseña"
+    },
+    "gracias": {
+      "title": "Pedido confirmado",
+      "description": "Confirmación de tu pedido en la tienda oficial de Andrés Lillini."
+    },
+    "expediente": {
+      "title": "Expediente"
+    },
+    "tutor": {
+      "title": "Autorización del tutor"
+    },
+    "cuenta": {
+      "title": "Mi cuenta"
+    },
+    "admin": {
+      "title": "Panel"
+    },
+    "sistema": {
+      "title": "Sistema de diseño",
+      "description": "Tokens, tipografía, componentes y tarjetas Open Graph del sitio."
+    },
+    "productoNoEncontrado": "Producto no encontrado"
   }
 }

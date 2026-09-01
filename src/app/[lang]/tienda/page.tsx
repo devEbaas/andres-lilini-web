@@ -5,15 +5,14 @@ import { getTranslations } from "next-intl/server";
 import { getProducts } from "@/lib/data/products";
 import { CatalogGrid } from "@/components/tienda/CatalogGrid";
 import { fijarIdioma, localeActual } from "@/i18n/servidor";
+import { metadatosDe } from "@/i18n/metadata";
 
 // Next exige un literal aquí: 5 minutos de caché para el catálogo.
 export const revalidate = 300;
 
-export const metadata: Metadata = {
-  title: "Tienda oficial",
-  description:
-    "Material de trabajo: metodología, indumentaria y equipamiento. Envío a todo México en 3 a 5 días hábiles.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadatosDe("/tienda", "tienda");
+}
 
 export default async function TiendaPage() {
   // Fija el idioma antes de cualquier lectura: sin esto la página

@@ -7,13 +7,13 @@ import { MfaChallengeForm } from "@/components/auth/MfaChallengeForm";
 import { getClaims, mfaPendiente } from "@/lib/auth/dal";
 import { safeNext } from "@/lib/auth/redirect";
 import { fijarIdioma, rutaLocal } from "@/i18n/servidor";
+import { metadatosDe } from "@/i18n/metadata";
 
 type Props = { searchParams: Promise<{ next?: string }> };
 
-export const metadata: Metadata = {
-  title: "Verificación",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadatosDe("/login/mfa", "mfa", { indexable: false });
+}
 
 export default async function MfaPage({ searchParams }: Props) {
   // Fija el idioma antes de cualquier lectura: sin esto la página

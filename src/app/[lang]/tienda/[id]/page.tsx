@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 
 import { getTranslations } from "next-intl/server";
 
+import { metadatosDe } from "@/i18n/metadata";
+
 import { PRODUCT_THUMBS } from "@/lib/content/tienda";
 import { getProduct, getProductIds } from "@/lib/data/products";
 import { money } from "@/lib/format";
@@ -26,8 +28,20 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { lang, id } = await params;
   const product = await getProduct(id, lang === "en" ? "en" : "es");
-  if (!product) return { title: "Producto no encontrado" };
-  return { title: product.name, description: product.desc };
+
+  const base = await metadatosDe({ pathname: "/tienda/[id]", params: { id } }, "tienda");
+  if (!product) {
+    const t = await getTranslations("meta");
+    return { title: t("productoNoEncontrado") };
+  }
+  // El nombre y la descripción son del producto; del ayudante se conservan las
+  // alternativas de idioma y el Open Graph.
+  return {
+    ...base,
+    title: product.name,
+    description: product.desc,
+    openGraph: { ...base.openGraph, title: product.name, description: product.desc },
+  };
 }
 
 export default async function ProductPage({ params }: Params) {

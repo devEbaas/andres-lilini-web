@@ -1259,5 +1259,74 @@
       "cancelacion": "deletion",
       "oposicion": "objection"
     }
+  },
+  "meta": {
+    "plantilla": "%s · Andrés Lillini",
+    "sitio": "Andrés Lillini",
+    "inicio": {
+      "title": "Andrés Lillini — Football talent developer",
+      "description": "Twenty-seven years scouting and developing footballers: academies in Mexico, Argentina and Russia, and today the youth national team structure of an entire country.",
+      "ogTitle": "Andrés Lillini — Football talent developer",
+      "ogDescription": "Scouting, development and support for football players. Athlete program, open call and official store."
+    },
+    "tienda": {
+      "title": "Official store",
+      "description": "Working gear: method, apparel and equipment. Shipping across Mexico in 3 to 5 business days."
+    },
+    "programa": {
+      "title": "Athlete program",
+      "description": "One form, fifteen attributes and a real report. We assess players aged 12 to 21 in any position and any league."
+    },
+    "convocatoria": {
+      "title": "2027 Development Scholarship",
+      "description": "Ten full places: a year of methodological follow-up, equipment and academic support. Closes 30 November 2026."
+    },
+    "fundacion": {
+      "title": "Foundation",
+      "description": "Neighbourhood clubs, schools and municipal leagues: scouting that arrives before cost makes it impossible."
+    },
+    "contacto": {
+      "title": "Contact",
+      "description": "Pick the right topic and reach the person who handles it."
+    },
+    "derechos": {
+      "title": "Exercise your rights",
+      "description": "Request access, rectification, deletion or objection regarding your personal data."
+    },
+    "registro": {
+      "title": "Create account",
+      "description": "Create your account to track your orders."
+    },
+    "login": {
+      "title": "Sign in",
+      "description": "Access to the private area."
+    },
+    "mfa": {
+      "title": "Verification"
+    },
+    "recuperar": {
+      "title": "Reset password"
+    },
+    "gracias": {
+      "title": "Order confirmed",
+      "description": "Confirmation of your order from the official Andrés Lillini store."
+    },
+    "expediente": {
+      "title": "Player file"
+    },
+    "tutor": {
+      "title": "Guardian authorisation"
+    },
+    "cuenta": {
+      "title": "My account"
+    },
+    "admin": {
+      "title": "Panel"
+    },
+    "sistema": {
+      "title": "Design system",
+      "description": "Tokens, typography, components and Open Graph cards for the site."
+    },
+    "productoNoEncontrado": "Product not found"
   }
 }
