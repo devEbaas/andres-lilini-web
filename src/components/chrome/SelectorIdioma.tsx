@@ -34,8 +34,8 @@ export function SelectorIdioma() {
   const params = useParams();
   const t = useTranslations("common");
 
-  // El panel y el sistema de diseño sólo existen en español: ofrecer el
-  // cambio ahí llevaría a un 404.
+  // El panel y el sistema de diseño sólo existen en español: el selector no
+  // tiene nada que ofrecer, y pulsarlo sólo daría una vuelta para volver aquí.
   const soloEs = RUTAS_SOLO_ES.some((p) => interna === p || interna.startsWith(`${p}/`));
   if (soloEs) return null;
 

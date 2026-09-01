@@ -1222,9 +1222,11 @@
     "revisaCampos": "Check the highlighted fields.",
     "sesionCaducada": "Your session has expired. Please sign in again.",
     "sinArchivo": "This entry has no attached file.",
+    "sinTutor": "This application has no guardian on record.",
     "soloMexico": "The open call is only for residents of Mexico.",
     "subidaFallida": "We couldn't upload the file. Please try again.",
-    "telefonoNecesario": "We need a phone number."
+    "telefonoNecesario": "We need a phone number.",
+    "tutorYaAutorizo": "The guardian has already authorised this application."
   },
   "email": {
     "marca": "Andrés Lillini",

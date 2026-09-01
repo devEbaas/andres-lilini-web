@@ -15,7 +15,10 @@ export function ProductActions({ product }: { product: Product }) {
 
   const onAdd = () => {
     if (product.out) return;
-    add({ id: product.id, name: product.name, price: product.price }, qty);
+    add(
+      { id: product.id, name: product.name, price: product.price, nombres: product.nombres },
+      qty,
+    );
     setAdded(true);
     flash(t("anadidoToast"));
     open();

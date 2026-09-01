@@ -29,8 +29,9 @@ export default async function AdminLayout({ children, params }: LayoutProps<"/[l
   // se vuelve dinámica al resolver el locale por cabecera.
   await fijarIdioma();
 
-  // El panel es interno y sólo existe en español. Sin esto, `/en/admin`
-  // renderizaría la interfaz en español bajo una URL que promete inglés.
+  // Red de seguridad. Lo normal es que el proxy ya haya redirigido a
+  // `/admin`; esto cubre el caso de que alguien cambie su matcher y evita
+  // servir la interfaz en español bajo una URL que promete inglés.
   const { lang } = await params;
   if (lang !== routing.defaultLocale) notFound();
 

@@ -19,6 +19,9 @@ export function CartDrawer() {
   const err = useErrores();
   const t = useTranslations("cart");
   const locale = useLocale() as Locale;
+  /** Las líneas guardadas antes de esto no traen `nombres`: cae al guardado. */
+  const nombre = (l: { name: string; nombres?: Partial<Record<string, string>> }) =>
+    l.nombres?.[locale] ?? l.name;
   const { lines, isOpen, close, setQty, remove, subtotal, shipping, total } = useCart();
   const { flash } = useToast();
   const [pending, startTransition] = useTransition();
@@ -113,7 +116,7 @@ export function CartDrawer() {
                     <div key={l.id} className="flex gap-3.5 border-b border-hairline py-[18px]">
                       <span className="photo-slot size-16 shrink-0 rounded-[14px] border border-hairline" />
                       <div className="min-w-0 flex-1">
-                        <div className="text-sm font-bold leading-[1.4]">{l.name}</div>
+                        <div className="text-sm font-bold leading-[1.4]">{nombre(l)}</div>
                         <div className="my-1 mb-2.5 font-mono text-[11px] text-muted">
                           {t("cadaUno", { precio: money(l.price, locale) })}
                         </div>
@@ -121,7 +124,7 @@ export function CartDrawer() {
                           <div className="flex items-center rounded-full border border-hairline">
                             <button
                               type="button"
-                              aria-label={t("quitarUnidad", { producto: l.name })}
+                              aria-label={t("quitarUnidad", { producto: nombre(l) })}
                               onClick={() => setQty(l.id, l.qty - 1)}
                               className="size-8 cursor-pointer border-0 bg-transparent"
                             >
@@ -132,7 +135,7 @@ export function CartDrawer() {
                             </span>
                             <button
                               type="button"
-                              aria-label={t("agregarUnidad", { producto: l.name })}
+                              aria-label={t("agregarUnidad", { producto: nombre(l) })}
                               onClick={() => setQty(l.id, l.qty + 1)}
                               className="size-8 cursor-pointer border-0 bg-transparent"
                             >

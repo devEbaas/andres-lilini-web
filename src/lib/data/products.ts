@@ -37,6 +37,7 @@ export async function getProducts(locale: Locale): Promise<Product[]> {
     catKey: r.cat_key as CatKey,
     price: r.price,
     out: r.sold_out,
+    nombres: { es: r.name, en: r.name_en || r.name },
     // Una fila sin traducir cae al español en vez de mostrarse en blanco: es
     // preferible un producto en el idioma equivocado a un producto sin nombre.
     name: locale === "en" ? r.name_en || r.name : r.name,

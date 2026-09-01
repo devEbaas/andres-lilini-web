@@ -1,7 +1,7 @@
 "use client";
 
 import { Link } from "@/i18n/navigation";
-import type { RutaEstatica } from "@/i18n/routing";
+import { routing, type RutaEstatica } from "@/i18n/routing";
 import { useEffect, useState } from "react";
 
 import { createBrowserSupabase } from "@/lib/supabase/browser";
@@ -55,6 +55,10 @@ export function PanelLink() {
   return (
     <Link
       href={estado.href}
+      /* El panel sólo existe en español. Sin esto, desde una página en inglés
+         el enlace apuntaría a `/en/admin` y haría falta un redirect para
+         llegar. La cuenta de cliente sí sigue el idioma activo. */
+      {...(estado.href === "/admin" ? { locale: routing.defaultLocale } : {})}
       className="grid min-h-11 shrink-0 place-items-center rounded-full border border-hairline bg-panel px-4 text-[10px] font-extrabold uppercase tracking-[0.14em] text-muted transition-colors duration-[250ms] hover:border-accent hover:text-ink"
     >
       {estado.label}
