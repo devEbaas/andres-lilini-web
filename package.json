@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "check:messages": "node scripts/check-messages.mjs",
     "db:link": "supabase link --project-ref cwtiokhjyclexedugjmb",
     "db:push": "supabase db push",
     "db:diff": "supabase db diff",

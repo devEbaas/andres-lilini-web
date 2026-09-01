@@ -55,6 +55,16 @@ export const DOCS: Doc[] = [
   },
 ];
 
+/**
+ * Documentos con efecto legal, redactados bajo la LFPDPPP mexicana.
+ *
+ * Su versión en inglés es una traducción de cortesía: se publica con un aviso
+ * visible de que sólo el original en español vincula. Traducir un
+ * consentimiento puede cambiar su alcance, y estos formularios recogen datos
+ * de menores y autorizaciones de tutores.
+ */
+export const DOCS_LEGALES = ["privacidad", "terminos", "bases"];
+
 export const DOC_SLUGS = DOCS.map((d) => d.slug);
 export const getDoc = (slug: string) => DOCS.find((d) => d.slug === slug);
 

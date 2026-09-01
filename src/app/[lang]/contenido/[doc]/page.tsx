@@ -4,7 +4,10 @@ import { notFound } from "next/navigation";
 
 import { getTranslations } from "next-intl/server";
 
-import { DOCS, getDoc } from "@/lib/content/docs";
+import { routing } from "@/i18n/routing";
+import { localeActual } from "@/i18n/servidor";
+
+import { DOCS, DOCS_LEGALES, getDoc } from "@/lib/content/docs";
 import { FaqList } from "@/components/contenido/FaqList";
 import { Reveal } from "@/components/ui/Reveal";
 import { chip, chipOff, chipOn } from "@/components/ui/styles";
@@ -29,6 +32,7 @@ export default async function DocPage({ params }: Params) {
   await fijarIdioma();
 
   const t = await getTranslations("docs");
+  const locale = await localeActual();
 
   const { doc } = await params;
   const current = getDoc(doc);
@@ -63,6 +67,22 @@ export default async function DocPage({ params }: Params) {
           <p className="m-0 mb-[clamp(30px,4vw,48px)] text-[18px] leading-[1.7] text-pretty text-muted">
             {t(`${current.slug}.lead`)}
           </p>
+
+          {/* Un documento legal traducido no vincula: lo dice él mismo y enlaza
+              al original, en vez de dejarlo en una nota de la fase siguiente. */}
+          {locale !== routing.defaultLocale && DOCS_LEGALES.includes(current.slug) && (
+            <p className="m-0 mb-8 rounded-[14px] border border-hairline-strong bg-panel px-5 py-4 text-sm leading-[1.7] text-muted">
+              {t("avisoLegal")}{" "}
+              <Link
+                href={{ pathname: "/contenido/[doc]", params: { doc: current.slug } }}
+                locale={routing.defaultLocale}
+                className="text-accent underline underline-offset-4"
+              >
+                {t("verOriginal")}
+              </Link>
+              .
+            </p>
+          )}
 
           {current.kind === "faq" ? (
             <FaqList />

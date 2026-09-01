@@ -457,7 +457,9 @@
           "p": "La convocatoria cierra el 30 de noviembre de 2026. La lista corta se publica el 15 de diciembre de 2026 y los resultados finales el 20 de enero de 2027."
         }
       }
-    }
+    },
+    "avisoLegal": "Traducción de cortesía. La versión en español es la única legalmente vinculante.",
+    "verOriginal": "Leer el original en español"
   },
   "vocab": {
     "Portero": "Portero",
