@@ -127,6 +127,7 @@ cuando toque.
 npm run check                    # catálogos de idioma, literales, semilla
 npm run build && npm run start   # en otra terminal:
 npm run humo                     # 112 comprobaciones del sitio bilingüe
+npm run check:fugas              # español servido en páginas inglesas
 ```
 
 Los tres chequeos de `npm run check` corren solos en cada PR

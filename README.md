@@ -214,8 +214,9 @@ código: ver `docs/correos-supabase/`.
 ### Comprobaciones
 
 ```bash
-npm run check       # paridad de catálogos, literales sueltos, catálogo semilla
-npm run humo        # 112 comprobaciones contra un servidor levantado
+npm run check         # paridad de catálogos, literales sueltos, catálogo semilla
+npm run humo          # 112 comprobaciones contra un servidor levantado
+npm run check:fugas   # busca español servido en las páginas inglesas
 ```
 
 Las tres primeras corren en cada PR (`.github/workflows/verificar.yml`). El
