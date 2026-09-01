@@ -1,9 +1,14 @@
 import Image from "next/image";
+import { getTranslations } from "next-intl/server";
+
 import { Link } from "@/i18n/navigation";
 import { FOOTER_COLS, SOCIAL } from "@/lib/content/site";
 import { NewsletterForm } from "./NewsletterForm";
 
-export function Footer() {
+export async function Footer() {
+  const t = await getTranslations("footer");
+  const tl = await getTranslations("links");
+
   return (
     <footer className="border-t border-hairline bg-panel pb-[30px] pt-[clamp(50px,7vw,90px)]">
       <div className="shell">
@@ -16,13 +21,13 @@ export function Footer() {
                 así que no se repiten al lado. */}
             <Image
               src="/images/logo.png"
-              alt="Andrés Lillini · formador de futbolistas"
+              alt={t("logoAlt")}
               width={640}
               height={719}
               className="h-[clamp(140px,14vw,152px)] w-auto"
             />
             <p className="m-0 my-[18px] mb-[22px] max-w-[34ch] leading-[1.7] text-muted">
-              Formación, detección y desarrollo de futbolistas. México · Argentina.
+              {t("lema")}
             </p>
             <div className="flex flex-wrap gap-2">
               {SOCIAL.map((s) => (
@@ -37,12 +42,12 @@ export function Footer() {
           </div>
 
           {FOOTER_COLS.map((col) => (
-            <div key={col.title}>
-              <div className="label-caps mb-4">{col.title}</div>
+            <div key={col.key}>
+              <div className="label-caps mb-4">{t(`cols.${col.key}`)}</div>
               <div className="flex flex-col gap-[11px]">
                 {col.links.map((l) => (
-                  <Link key={l.label} href={l.href} className="text-sm text-ink hover:text-accent">
-                    {l.label}
+                  <Link key={l.key} href={l.href} className="text-sm text-ink hover:text-accent">
+                    {tl(l.key)}
                   </Link>
                 ))}
               </div>
@@ -53,29 +58,29 @@ export function Footer() {
         <div className="mt-[clamp(40px,5vw,64px)] grid items-center gap-[26px] border-t border-hairline pt-8 [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))]">
           <div>
             <div className="mb-2.5 text-[11px] font-extrabold uppercase tracking-[0.18em]">
-              Boletín de cantera
+              {t("boletinTitulo")}
             </div>
             <p className="m-0 text-sm leading-[1.6] text-muted">
-              Convocatorias, informes y fechas de visorías. Un correo al mes.
+              {t("boletinTexto")}
             </p>
           </div>
           <NewsletterForm />
         </div>
 
         <div className="mt-[34px] flex flex-wrap justify-between gap-x-[22px] gap-y-2 font-mono text-[11px] text-muted">
-          <span>© 2026 Andrés Lillini. Todos los derechos reservados.</span>
+          <span>{t("copyright")}</span>
           <span className="flex gap-5">
             <Link
               href={{ pathname: "/contenido/[doc]", params: { doc: "privacidad" } }}
               className="text-muted hover:text-accent"
             >
-              Privacidad
+              {t("privacidad")}
             </Link>
             <Link
               href={{ pathname: "/contenido/[doc]", params: { doc: "terminos" } }}
               className="text-muted hover:text-accent"
             >
-              Términos
+              {t("terminos")}
             </Link>
           </span>
         </div>

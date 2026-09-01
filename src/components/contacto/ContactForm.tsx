@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 
 import { submitContact } from "@/lib/actions/contact";
 import { CONTACT_TOPICS } from "@/lib/content/site";
@@ -11,6 +12,8 @@ import { btnQuiet } from "@/components/ui/styles";
 const MAX = 800;
 
 export function ContactForm() {
+  const t = useTranslations("contact.form");
+  const tt = useTranslations("contact.topics");
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [topic, setTopic] = useState<string>(CONTACT_TOPICS[0]);
@@ -40,8 +43,8 @@ export function ContactForm() {
         <div className="mx-auto mb-5 grid size-14 place-items-center rounded-full bg-gradient-accent text-2xl font-extrabold text-on-accent">
           ✓
         </div>
-        <h3 className="m-0 mb-2.5 font-display text-[28px] uppercase">Mensaje enviado</h3>
-        <p className="m-0 mb-5 leading-[1.7] text-muted">Respondemos en 3 a 5 días hábiles.</p>
+        <h3 className="m-0 mb-2.5 font-display text-[28px] uppercase">{t("enviadoTitulo")}</h3>
+        <p className="m-0 mb-5 leading-[1.7] text-muted">{t("enviadoTexto")}</p>
         <button
           type="button"
           onClick={() => {
@@ -51,7 +54,7 @@ export function ContactForm() {
           }}
           className={btnQuiet}
         >
-          Enviar otro
+          {t("enviarOtro")}
         </button>
       </motion.div>
     );
@@ -60,48 +63,48 @@ export function ContactForm() {
   return (
     <form onSubmit={onSubmit} noValidate className="grid gap-[18px]">
       <label className="flex flex-col gap-[9px]">
-        <span className="label-caps">Nombre</span>
+        <span className="label-caps">{t("nombre")}</span>
         <input
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
-          placeholder="Tu nombre"
+          placeholder={t("nombrePlaceholder")}
           className="field !bg-bg"
         />
       </label>
 
       <label className="flex flex-col gap-[9px]">
-        <span className="label-caps">Correo</span>
+        <span className="label-caps">{t("correo")}</span>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="tucorreo@dominio.com"
+          placeholder={t("correoPlaceholder")}
           className="field !bg-bg"
         />
       </label>
 
       <label className="flex flex-col gap-[9px]">
-        <span className="label-caps">Tema</span>
+        <span className="label-caps">{t("tema")}</span>
         <select
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
           className="field !bg-bg appearance-none"
         >
-          {CONTACT_TOPICS.map((t) => (
-            <option key={t} value={t}>
-              {t}
+          {CONTACT_TOPICS.map((clave) => (
+            <option key={clave} value={clave}>
+              {tt(clave)}
             </option>
           ))}
         </select>
       </label>
 
       <label className="flex flex-col gap-[9px]">
-        <span className="label-caps">Mensaje</span>
+        <span className="label-caps">{t("mensaje")}</span>
         <textarea
           rows={5}
           value={message}
           onChange={(e) => setMessage(e.target.value.slice(0, MAX))}
-          placeholder="Cuéntanos con detalle"
+          placeholder={t("mensajePlaceholder")}
           className="field !bg-bg resize-y leading-[1.6]"
         />
         <span className="text-right font-mono text-[10px] text-muted">
@@ -126,7 +129,7 @@ export function ContactForm() {
           {consent ? "✓" : ""}
         </span>
         <span className="text-sm leading-[1.6] text-muted">
-          Acepto el tratamiento de mis datos según el aviso de privacidad.
+          {t("consentimiento")}
         </span>
       </button>
 
@@ -145,7 +148,7 @@ export function ContactForm() {
         className="flex min-h-[52px] cursor-pointer items-center justify-center gap-2.5 rounded-full border-0 bg-gradient-accent text-xs font-extrabold uppercase tracking-[0.18em] text-on-accent disabled:opacity-60"
       >
         {pending && <Spinner />}
-        {pending ? "Enviando" : "Enviar mensaje"}
+        {pending ? t("enviando") : t("enviar")}
       </button>
     </form>
   );

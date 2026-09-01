@@ -5,73 +5,86 @@ import type { Link } from "@/i18n/navigation";
 /**
  * Un enlace de navegación.
  *
- * `href` se escribe en su forma interna —la ruta en español— y `Link` la
- * traduce al idioma activo. El tipo es exactamente el que acepta `Link`, así
- * que un destino inexistente no compila y las rutas con parámetros exigen los
- * suyos. Es `import type`: se borra al compilar y no arrastra React aquí.
+ * Sólo la estructura: `href` en su forma interna —la ruta en español, que
+ * `Link` traduce al idioma activo— y `key`, que apunta al rótulo en
+ * `messages/*.json` bajo el espacio `links`. El texto visible no vive aquí.
+ *
+ * El tipo de `href` es exactamente el que acepta `Link`: un destino
+ * inexistente no compila y las rutas con parámetros exigen los suyos.
  */
-export type Route = { label: string; href: ComponentProps<typeof Link>["href"] };
+export type Route = { key: string; href: ComponentProps<typeof Link>["href"] };
 
 export const NAV: Route[] = [
-  { label: "Inicio", href: "/" },
-  { label: "Trayectoria", href: { pathname: "/", hash: "#trayectoria" } },
-  { label: "Tienda", href: "/tienda" },
-  { label: "Programa", href: "/programa" },
-  { label: "Convocatoria", href: "/convocatoria" },
-  { label: "Fundación", href: "/fundacion" },
+  { key: "inicio", href: "/" },
+  { key: "trayectoria", href: { pathname: "/", hash: "#trayectoria" } },
+  { key: "tienda", href: "/tienda" },
+  { key: "programa", href: "/programa" },
+  { key: "convocatoria", href: "/convocatoria" },
+  { key: "fundacion", href: "/fundacion" },
 ];
 
 export const SOCIAL = ["IG", "X", "YT", "IN"] as const;
 
+/** Los correos son datos, no copy: se quedan aquí y el rótulo va al JSON. */
 export const CHANNELS = [
-  { k: "Prensa", v: "prensa@andreslillini.com" },
-  { k: "Programa", v: "atletas@andreslillini.com" },
-  { k: "Pedidos", v: "tienda@andreslillini.com" },
-  { k: "Instagram", v: "@andreslillini" },
+  { key: "prensa", email: "prensa@andreslillini.com" },
+  { key: "programa", email: "atletas@andreslillini.com" },
+  { key: "pedidos", email: "tienda@andreslillini.com" },
+  { key: "instagram", email: "@andreslillini" },
 ];
 
+/**
+ * Temas del formulario de contacto.
+ *
+ * Son claves, no rótulos: el valor elegido viaja a `contact_messages.topic` y
+ * tiene que significar lo mismo se haya enviado en español o en inglés. La
+ * etiqueta que se ve vive en `contact.topics` del JSON, y el panel la traduce
+ * de vuelta al mostrarla.
+ */
 export const CONTACT_TOPICS = [
-  "General",
-  "Prensa y medios",
-  "Patrocinios",
-  "Tienda y pedidos",
-  "Convocatoria",
-  "Asesoría y entrenamiento",
+  "general",
+  "prensa",
+  "patrocinios",
+  "tienda",
+  "convocatoria",
+  "asesoria",
 ] as const;
 
-export const FOOTER_COLS: { title: string; links: Route[] }[] = [
+export type ContactTopic = (typeof CONTACT_TOPICS)[number];
+
+export const FOOTER_COLS: { key: string; links: Route[] }[] = [
   {
-    title: "Explorar",
+    key: "explorar",
     links: [
-      { label: "Inicio", href: "/" },
-      { label: "Trayectoria", href: { pathname: "/", hash: "#trayectoria" } },
-      { label: "Tienda", href: "/tienda" },
+      { key: "inicio", href: "/" },
+      { key: "trayectoria", href: { pathname: "/", hash: "#trayectoria" } },
+      { key: "tienda", href: "/tienda" },
     ],
   },
   {
-    title: "Programa",
+    key: "programa",
     links: [
-      { label: "Programa de atletas", href: "/programa" },
-      { label: "Convocatoria", href: "/convocatoria" },
-      { label: "Fundación", href: "/fundacion" },
-      { label: "Preguntas frecuentes", href: { pathname: "/contenido/[doc]", params: { doc: "faq" } } },
+      { key: "programaAtletas", href: "/programa" },
+      { key: "convocatoria", href: "/convocatoria" },
+      { key: "fundacion", href: "/fundacion" },
+      { key: "faq", href: { pathname: "/contenido/[doc]", params: { doc: "faq" } } },
     ],
   },
   {
-    title: "Legal",
+    key: "legal",
     links: [
-      { label: "Aviso de privacidad", href: { pathname: "/contenido/[doc]", params: { doc: "privacidad" } } },
-      { label: "Términos", href: { pathname: "/contenido/[doc]", params: { doc: "terminos" } } },
-      { label: "Bases de la convocatoria", href: { pathname: "/contenido/[doc]", params: { doc: "bases" } } },
-      { label: "Ejercer tus derechos", href: "/derechos" },
+      { key: "privacidad", href: { pathname: "/contenido/[doc]", params: { doc: "privacidad" } } },
+      { key: "terminos", href: { pathname: "/contenido/[doc]", params: { doc: "terminos" } } },
+      { key: "bases", href: { pathname: "/contenido/[doc]", params: { doc: "bases" } } },
+      { key: "derechos", href: "/derechos" },
     ],
   },
   {
-    title: "Contacto",
+    key: "contacto",
     links: [
-      { label: "Escríbenos", href: "/contacto" },
-      { label: "Prensa", href: { pathname: "/contenido/[doc]", params: { doc: "prensa" } } },
-      { label: "Patrocinios", href: { pathname: "/contenido/[doc]", params: { doc: "patrocinios" } } },
+      { key: "escribenos", href: "/contacto" },
+      { key: "prensa", href: { pathname: "/contenido/[doc]", params: { doc: "prensa" } } },
+      { key: "patrocinios", href: { pathname: "/contenido/[doc]", params: { doc: "patrocinios" } } },
     ],
   },
 ];

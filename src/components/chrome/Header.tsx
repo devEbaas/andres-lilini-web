@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Link, usePathname } from "@/i18n/navigation";
 import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { NAV, type Route } from "@/lib/content/site";
 import { useCart } from "@/lib/store/cart";
@@ -13,6 +14,8 @@ import { PanelLink } from "@/components/auth/PanelLink";
 import { MobileMenu } from "./MobileMenu";
 
 export function Header() {
+  const t = useTranslations("header");
+  const tl = useTranslations("links");
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -35,7 +38,7 @@ export function Header() {
         <div className="shell flex items-center gap-7">
           <Link
             href="/"
-            aria-label="Andrés Lillini · inicio"
+            aria-label={t("inicio")}
             className="flex shrink-0 items-center gap-3 text-ink hover:text-ink"
           >
             {/* El isotipo ya dice AL; el texto de al lado da el nombre, así que
@@ -53,7 +56,7 @@ export function Header() {
             <span className="flex flex-col leading-none max-[400px]:hidden">
               <span className="font-display text-[16px] uppercase tracking-[0.06em]">Lillini</span>
               <span className="mt-[3px] font-mono text-[9px] uppercase tracking-[0.22em] text-muted">
-                Formación
+                {t("descriptor")}
               </span>
             </span>
           </Link>
@@ -61,14 +64,14 @@ export function Header() {
           <nav className="ml-auto hidden gap-1 nav:flex">
             {NAV.map((item) => (
               <Link
-                key={item.label}
+                key={item.key}
                 href={item.href}
                 aria-current={isActive(item.href) ? "page" : undefined}
                 className={`rounded-full px-[13px] py-[11px] text-[11px] font-bold uppercase tracking-[0.18em] transition-colors duration-[250ms] hover:bg-panel-2 hover:text-ink ${
                   isActive(item.href) ? "bg-panel-2 text-ink" : "text-muted"
                 }`}
               >
-                {item.label}
+                {tl(item.key)}
               </Link>
             ))}
           </nav>
@@ -87,7 +90,7 @@ export function Header() {
               <button
                 type="button"
                 aria-pressed="false"
-                onClick={() => flash("La versión en inglés llega en la próxima entrega.")}
+                onClick={() => flash(t("enPendiente"))}
                 className="cursor-pointer border-0 bg-transparent px-[11px] py-2 text-[10px] font-extrabold tracking-[0.14em] text-muted hover:text-ink"
               >
                 EN
@@ -97,7 +100,7 @@ export function Header() {
             <button
               type="button"
               onClick={open}
-              aria-label={count ? `Carrito, ${count} artículos` : "Carrito"}
+              aria-label={t("carrito", { count })}
               className="relative grid size-11 min-w-11 cursor-pointer place-items-center rounded-full border border-hairline bg-panel transition-colors duration-[250ms] hover:border-accent"
             >
               <CartIcon />
@@ -117,7 +120,7 @@ export function Header() {
             <button
               type="button"
               onClick={() => setMenuOpen(true)}
-              aria-label="Menú"
+              aria-label={t("menu")}
               aria-expanded={menuOpen}
               className="flex size-11 cursor-pointer flex-col items-center justify-center gap-1 rounded-full border border-hairline bg-panel nav:hidden"
             >

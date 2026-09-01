@@ -23,4 +23,5 @@ export const PRODUCTS: Product[] = [
   { id: "p8", cat: "Accesorios", name: "Gorra de cuerpo técnico", sub: "Ajuste trasero metálico", price: 420, shot: "Producto · gorra de perfil", desc: "Gorra estructurada de seis paneles con bordado frontal y visera precurvada." },
 ];
 
-export const PRODUCT_THUMBS = ["Detalle 1", "Detalle 2", "En uso"];
+/** Claves de las miniaturas de la ficha. Los rótulos están en `store.thumbs`. */
+export const PRODUCT_THUMBS = ["detalle1", "detalle2", "enUso"] as const;

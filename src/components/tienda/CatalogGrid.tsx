@@ -3,6 +3,7 @@
 import { Link } from "@/i18n/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { CATEGORIES, type Product } from "@/lib/content/tienda";
 import { money } from "@/lib/format";
@@ -10,6 +11,7 @@ import { PhotoSlot } from "@/components/ui/PhotoSlot";
 import { chip, chipOff, chipOn } from "@/components/ui/styles";
 
 export function CatalogGrid({ products }: { products: Product[] }) {
+  const t = useTranslations("store");
   const [cat, setCat] = useState<string>("Todo");
   const shown = products.filter((p) => cat === "Todo" || p.cat === cat);
 
@@ -17,7 +19,7 @@ export function CatalogGrid({ products }: { products: Product[] }) {
     <>
       <div
         role="tablist"
-        aria-label="Categorías"
+        aria-label={t("categorias")}
         className="mb-7 flex gap-2 overflow-x-auto border-b border-hairline pb-[22px]"
       >
         {CATEGORIES.map((c) => (
@@ -56,7 +58,7 @@ export function CatalogGrid({ products }: { products: Product[] }) {
                 <PhotoSlot label={p.shot} ratio="1/1" className="border-0">
                   {p.out && (
                     <span className="absolute right-3.5 top-3.5 rounded-full border border-hairline-strong bg-bg px-3 py-[7px] text-[10px] font-extrabold uppercase tracking-[0.14em]">
-                      Agotado
+                      {t("agotado")}
                     </span>
                   )}
                 </PhotoSlot>
@@ -76,7 +78,7 @@ export function CatalogGrid({ products }: { products: Product[] }) {
 
       {shown.length === 0 && (
         <p className="py-16 text-center text-muted">
-          Todavía no hay piezas en esta categoría.
+          {t("sinPiezas")}
         </p>
       )}
     </>

@@ -2,5 +2,815 @@
   "common": {
     "localeName": "Español",
     "switchLanguage": "Cambiar idioma"
+  },
+  "links": {
+    "inicio": "Inicio",
+    "trayectoria": "Trayectoria",
+    "tienda": "Tienda",
+    "programa": "Programa",
+    "convocatoria": "Convocatoria",
+    "fundacion": "Fundación",
+    "programaAtletas": "Programa de atletas",
+    "faq": "Preguntas frecuentes",
+    "privacidad": "Aviso de privacidad",
+    "terminos": "Términos",
+    "bases": "Bases de la convocatoria",
+    "derechos": "Ejercer tus derechos",
+    "escribenos": "Escríbenos",
+    "prensa": "Prensa",
+    "patrocinios": "Patrocinios"
+  },
+  "header": {
+    "inicio": "Andrés Lillini · inicio",
+    "descriptor": "Formación",
+    "menu": "Menú",
+    "cerrarMenu": "Cerrar menú",
+    "menuTitulo": "Menú",
+    "carrito": "{count, plural, =0 {Carrito} one {Carrito, # artículo} other {Carrito, # artículos}}",
+    "enPendiente": "La versión en inglés llega en la próxima entrega."
+  },
+  "footer": {
+    "logoAlt": "Andrés Lillini · formador de futbolistas",
+    "lema": "Formación, detección y desarrollo de futbolistas. México · Argentina.",
+    "cols": {
+      "explorar": "Explorar",
+      "programa": "Programa",
+      "legal": "Legal",
+      "contacto": "Contacto"
+    },
+    "boletinTitulo": "Boletín de cantera",
+    "boletinTexto": "Convocatorias, informes y fechas de visorías. Un correo al mes.",
+    "copyright": "© 2026 Andrés Lillini. Todos los derechos reservados.",
+    "privacidad": "Privacidad",
+    "terminos": "Términos"
+  },
+  "newsletter": {
+    "correo": "Correo electrónico",
+    "placeholder": "tucorreo@dominio.com",
+    "enviando": "Enviando",
+    "suscribirme": "Suscribirme",
+    "listo": "Listo, te escribimos el primer lunes del mes."
+  },
+  "cart": {
+    "titulo": "Tu bolsa",
+    "cerrar": "Cerrar",
+    "vaciaEtiqueta": "VACÍA",
+    "vacia": "Todavía no agregas nada.",
+    "verTienda": "Ver la tienda",
+    "cadaUno": "{precio} c/u",
+    "quitarUnidad": "Quitar una unidad de {producto}",
+    "agregarUnidad": "Agregar una unidad de {producto}",
+    "quitar": "Quitar",
+    "subtotal": "Subtotal",
+    "envio": "Envío",
+    "total": "Total",
+    "preparando": "Preparando…",
+    "irAPagar": "Ir a pagar",
+    "pagoSeguro": "Pago seguro en pasarela externa",
+    "pedidoRegistrado": "Pedido registrado. Te contactamos para completar el pago."
+  },
+  "contact": {
+    "topics": {
+      "general": "General",
+      "prensa": "Prensa y medios",
+      "patrocinios": "Patrocinios",
+      "tienda": "Tienda y pedidos",
+      "convocatoria": "Convocatoria",
+      "asesoria": "Asesoría y entrenamiento"
+    },
+    "canales": {
+      "prensa": "Prensa",
+      "programa": "Programa",
+      "pedidos": "Pedidos",
+      "instagram": "Instagram"
+    },
+    "eyebrow": "Contacto",
+    "titulo": "Escríbenos",
+    "lead": "Elige el tema correcto y llega directo a quien lo resuelve.",
+    "otrasVias": "Otras vías",
+    "tiempos": "Prensa: 24 h hábiles · Programa: 15 días hábiles · Pedidos: 48 h",
+    "form": {
+      "nombre": "Nombre",
+      "nombrePlaceholder": "Tu nombre",
+      "correo": "Correo",
+      "correoPlaceholder": "tucorreo@dominio.com",
+      "tema": "Tema",
+      "mensaje": "Mensaje",
+      "mensajePlaceholder": "Cuéntanos con detalle",
+      "consentimiento": "Acepto el tratamiento de mis datos según el aviso de privacidad.",
+      "enviando": "Enviando",
+      "enviar": "Enviar mensaje",
+      "enviadoTitulo": "Mensaje enviado",
+      "enviadoTexto": "Respondemos en 3 a 5 días hábiles.",
+      "enviarOtro": "Enviar otro"
+    }
+  },
+  "notFound": {
+    "titulo": "Balón fuera",
+    "texto": "Esta página no existe o cambió de lugar. Prueba por aquí:"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Formador de talento · desde 1998",
+      "lead": "Veintisiete años detectando y desarrollando futbolistas: canteras en México, Argentina y Rusia, un primer equipo en Liga MX construido con quince debutantes y, hoy, la estructura de selecciones menores de un país entero.",
+      "postular": "Postular a un atleta",
+      "verTrayectoria": "Ver trayectoria",
+      "prensa": "Prensa",
+      "scroll": "Scroll"
+    },
+    "credenciales": {
+      "desde1998": "Formador desde 1998",
+      "canteras": "27 años en canteras",
+      "selecciones": "Selecciones menores MX"
+    },
+    "metrics": {
+      "eyebrow": "01 — Resultados",
+      "titulo": "La medida de un formador son los que llegan",
+      "nota": "Datos con corte a agosto de 2026. Cifras de gestión propia y registros públicos de Liga MX.",
+      "labels": {
+        "evaluados": "Jugadores evaluados en cantera",
+        "debutaron": "Debutaron en primera división",
+        "anios": "Años formando futbolistas",
+        "partidos": "Partidos dirigidos en Liga MX",
+        "paises": "Países con proyecto propio"
+      }
+    },
+    "timeline": {
+      "eyebrow": "02 — Trayectoria",
+      "titulo": "Tres países, una obsesión",
+      "archivo": "Archivo visual",
+      "hitos": {
+        "1998": {
+          "title": "Primeros pasos en Buenos Aires",
+          "body": "Empieza como entrenador de categorías formativas en el fútbol argentino, con foco en el trabajo individual del jugador joven.",
+          "photo": "Foto de archivo · cancha de barrio, Buenos Aires",
+          "caption": "Origen · fútbol formativo argentino"
+        },
+        "2001": {
+          "title": "Coordinador de fuerzas básicas en Morelia",
+          "body": "Llega a México invitado a estructurar la cantera de Monarcas Morelia. De ahí sale, entre otros, un lateral que sería multicampeón en la Liga MX.",
+          "photo": "Foto 16:10 · sesión de fuerzas básicas, Morelia",
+          "caption": "Primer proyecto en México"
+        },
+        "2007": {
+          "title": "Boca Juniors",
+          "body": "Regresa a Argentina para dirigir el trabajo formativo de uno de los clubes más grandes del continente, con una escala y una presión distintas.",
+          "photo": "Foto 16:10 · complejo de entrenamiento",
+          "caption": "Cuatro años en la cantera xeneize"
+        },
+        "2011": {
+          "title": "CSKA Moscú",
+          "body": "Salto a Europa del Este para reorganizar el área juvenil: aprende a rastrear jugadores en contextos culturales y climáticos completamente ajenos.",
+          "photo": "Foto 16:10 · sesión invernal, Moscú",
+          "caption": "Detección fuera de la zona de confort"
+        },
+        "2015": {
+          "title": "Banquillos en Sudamérica",
+          "body": "Etapas como técnico en Gimnasia y Esgrima y San Luis de Quillota: la traducción del formador al entrenador de resultados semanales.",
+          "photo": "Foto 16:10 · banquillo en día de partido",
+          "caption": "Primera línea, resultado inmediato"
+        },
+        "2018": {
+          "title": "Cantera de Pumas",
+          "body": "Toma la dirección de fuerzas básicas del club universitario y arma una estructura que alimenta al primer equipo con jugadores propios.",
+          "photo": "Foto 16:10 · cantera universitaria",
+          "caption": "Cantera como política deportiva"
+        },
+        "2020": {
+          "title": "Director técnico del primer equipo",
+          "body": "Asume de forma interina y se queda dos años y medio: 102 partidos, una final de liga y quince canteranos debutando en primera división.",
+          "photo": "Foto 16:10 · noche de final",
+          "caption": "Interinato que duró dos años y medio"
+        },
+        "2023": {
+          "title": "Selecciones nacionales menores",
+          "body": "Encabeza el proyecto de detección y desarrollo juvenil de la federación mexicana, incluida la búsqueda de jugadores con doble nacionalidad formados en el extranjero.",
+          "photo": "Foto 16:10 · concentración de selección menor",
+          "caption": "Actualidad · escala nacional"
+        }
+      }
+    },
+    "gallery": {
+      "principal": {
+        "label": "Foto principal · sesión de campo al amanecer",
+        "tag": "Entrenamiento"
+      },
+      "retrato": {
+        "label": "Retrato vertical · pizarra táctica",
+        "tag": "Metodología"
+      },
+      "detalle": {
+        "label": "Detalle · charla con jugador juvenil",
+        "tag": "Formación"
+      },
+      "vestidor": {
+        "label": "Foto cuadrada · vestidor",
+        "tag": "Vestidor"
+      },
+      "visorias": {
+        "label": "Foto cuadrada · visoría regional",
+        "tag": "Visorías"
+      },
+      "panoramica": {
+        "label": "Panorámica · estadio lleno, noche de partido",
+        "tag": "Día de partido"
+      }
+    },
+    "pillars": {
+      "eyebrow": "03 — Metodología",
+      "titulo": "Se evalúa al jugador, se forma a la persona",
+      "lead": "Quince atributos, tres fases y un principio: el talento sin contexto se pierde. El programa evalúa técnica, cabeza y entorno con el mismo rigor.",
+      "cta": "Conocer el programa",
+      "items": {
+        "detectar": {
+          "title": "Detectar",
+          "body": "Ver al jugador donde nadie mira: ligas municipales, torneos escolares, canteras sin estructura."
+        },
+        "desarrollar": {
+          "title": "Desarrollar",
+          "body": "Plan individual medible por trimestre, con carga física, técnica y acompañamiento académico."
+        },
+        "sostener": {
+          "title": "Sostener",
+          "body": "El debut no es la meta. Seguimiento de contrato, familia y salud mental durante los primeros tres años."
+        }
+      }
+    }
+  },
+  "store": {
+    "eyebrow": "Tienda oficial",
+    "titulo": "Material de trabajo",
+    "lead": "Envío a todo México en 3 a 5 días hábiles. Stock limitado por tirada; lo agotado no se reimprime.",
+    "categorias": "Categorías",
+    "agotado": "Agotado",
+    "sinPiezas": "Todavía no hay piezas en esta categoría.",
+    "volver": "← Volver al catálogo",
+    "thumbs": {
+      "detalle1": "Detalle 1",
+      "detalle2": "Detalle 2",
+      "enUso": "En uso"
+    },
+    "envioNota": "Envío estándar $120 MXN · Devoluciones dentro de 30 días · Facturación disponible",
+    "quitarUnidad": "Quitar una unidad",
+    "agregarUnidad": "Agregar una unidad",
+    "anadido": "Añadido ✓",
+    "anadir": "Añadir a la bolsa",
+    "anadidoToast": "Producto añadido a la bolsa"
+  },
+  "gracias": {
+    "sinPedidoTitulo": "Todavía no hay nada que confirmar",
+    "sinPedidoTexto": "Si acabas de pagar, la confirmación puede tardar unos segundos: vuelve a cargar esta página. Si no, tu pedido sigue esperando en la tienda.",
+    "volverTienda": "Volver a la tienda",
+    "eyebrow": "Pago confirmado",
+    "titulo": "Gracias por tu pedido",
+    "comprobanteA": "Enviamos el comprobante a {email}. ",
+    "pagoRegistrado": "Ya registramos tu pago. ",
+    "envioTexto": "Preparamos el envío y llega a tu domicilio en 3 a 5 días hábiles.",
+    "folio": "Folio",
+    "envio": "Envío",
+    "total": "Total",
+    "envioA": "Envío a",
+    "seguirComprando": "Seguir comprando",
+    "dudas": "¿Dudas con tu pedido?"
+  },
+  "docs": {
+    "navLabel": "Secciones de contenido",
+    "noEncontrado": "Contenido no encontrado",
+    "actualizado": "Última actualización: {fecha}",
+    "fechaActualizacion": "25 de agosto de 2026",
+    "prensa": {
+      "label": "Prensa",
+      "meta": "Sala de prensa",
+      "title": "Materiales para prensa",
+      "lead": "Biografía verificable, datos de trayectoria y cómo solicitar una entrevista.",
+      "s": {
+        "bio": {
+          "h": "Biografía corta",
+          "p": "Andrés Lillini (Argentina, 1975) es entrenador y formador de futbolistas. Ha dirigido áreas de cantera en México, Argentina y Rusia, fue director técnico de un primer equipo en la Liga MX durante dos años y medio y actualmente encabeza el trabajo de selecciones nacionales menores en México."
+        },
+        "datos": {
+          "h": "Datos verificables",
+          "p": "102 partidos dirigidos en primera división mexicana; una final de liga; quince debutantes de cantera en su gestión; etapas formativas en Morelia, Boca Juniors, CSKA Moscú y Pumas."
+        },
+        "materiales": {
+          "h": "Materiales disponibles",
+          "p": "Retratos en alta resolución con crédito obligatorio, dos fotografías de campo, logotipo del programa en versión clara y oscura, y una ficha de trayectoria en PDF."
+        },
+        "entrevistas": {
+          "h": "Solicitud de entrevistas",
+          "p": "Escribe desde el formulario de contacto eligiendo el tema Prensa y medios. Indica medio, formato, duración estimada y fecha límite; respondemos en 24 horas hábiles."
+        }
+      }
+    },
+    "faq": {
+      "label": "Preguntas frecuentes",
+      "meta": "Ayuda",
+      "title": "Preguntas frecuentes",
+      "lead": "Programa, tienda, envíos, convocatoria y privacidad.",
+      "preguntas": {
+        "edad": {
+          "q": "¿Qué edad necesito para postular al programa?",
+          "a": "Evaluamos jugadores de 12 a 21 años. Los menores de 18 requieren el consentimiento de su padre, madre o tutor legal como parte del formulario."
+        },
+        "costo": {
+          "q": "¿Cuánto cuesta postular?",
+          "a": "Nada. La postulación y la evaluación inicial son gratuitas. Si avanzas a sesión presencial, te informamos con antelación qué gastos cubre el programa."
+        },
+        "video": {
+          "q": "¿Qué debe mostrar el video de highlights?",
+          "a": "Cinco a ocho minutos de juego real, no solo goles: acciones sin balón, duelos, decisiones bajo presión. Un video de teléfono bien encuadrado es suficiente."
+        },
+        "pedido": {
+          "q": "¿Cuánto tarda mi pedido?",
+          "a": "Tres a cinco días hábiles en territorio nacional una vez confirmado el pago. Recibes guía de rastreo por correo."
+        },
+        "devolucion": {
+          "q": "¿Puedo devolver un producto?",
+          "a": "Sí, dentro de 30 días naturales, sin uso y en su empaque original. El costo de la guía de retorno corre por nuestra cuenta si el error fue nuestro."
+        },
+        "propuestas": {
+          "q": "¿Puedo enviar más de una propuesta a la convocatoria?",
+          "a": "No. Cada participante puede enviar una sola propuesta; si envías dos, consideramos válida la primera."
+        },
+        "datosMenor": {
+          "q": "¿Qué hacen con los datos de un menor de edad?",
+          "a": "Se usan exclusivamente para la evaluación deportiva, se conservan cifrados durante el ciclo de la convocatoria y se eliminan a solicitud del tutor en cualquier momento."
+        }
+      }
+    },
+    "patrocinios": {
+      "label": "Patrocinios",
+      "meta": "Alianzas",
+      "title": "Patrocinios y alianzas",
+      "lead": "Cómo colaborar con un proyecto que trabaja con jugadores de 12 a 21 años.",
+      "s": {
+        "ofrecemos": {
+          "h": "Qué ofrecemos",
+          "p": "Presencia en visorías, contenido documental del proceso formativo y acceso a una audiencia concentrada en familias, clubes y prensa deportiva de habla hispana."
+        },
+        "formatos": {
+          "h": "Formatos de colaboración",
+          "p": "Patrocinio de becas nominales, dotación de material deportivo, apoyo logístico en visorías regionales y coproducción de contenido educativo para entrenadores."
+        },
+        "noHacemos": {
+          "h": "Lo que no hacemos",
+          "p": "No comercializamos datos de menores, no colocamos marcas de apuestas ni bebidas alcohólicas en materiales dirigidos a jugadores, y no vendemos promesas de fichaje."
+        },
+        "siguiente": {
+          "h": "Siguiente paso",
+          "p": "Escribe desde contacto con el tema Patrocinios. Enviamos el dossier con alcances, cifras auditadas y calendario de actividades del ciclo."
+        }
+      }
+    },
+    "privacidad": {
+      "label": "Privacidad",
+      "meta": "Legal",
+      "title": "Aviso de privacidad",
+      "lead": "Qué datos recogemos, para qué los usamos y cómo ejercer tus derechos.",
+      "s": {
+        "responsable": {
+          "h": "Responsable",
+          "p": "El responsable del tratamiento de los datos personales recabados a través de este sitio es la oficina de Andrés Lillini, con domicilio en Ciudad de México."
+        },
+        "datos": {
+          "h": "Datos que recabamos",
+          "p": "Datos de identificación y contacto, datos deportivos aportados voluntariamente en el formulario del programa, y datos de facturación y envío en el caso de compras en la tienda."
+        },
+        "menores": {
+          "h": "Menores de edad",
+          "p": "Toda postulación de una persona menor de 18 años requiere el consentimiento expreso de su padre, madre o tutor legal, incluidos nombre completo, parentesco y medio de contacto verificable."
+        },
+        "consentimientoTutor": {
+          "h": "Cómo obtenemos el consentimiento del tutor",
+          "p": "El formulario determina la minoría de edad a partir de la fecha de nacimiento y, si el postulante es menor, no admite el envío sin el nombre completo del tutor, su parentesco, un teléfono de contacto y una autorización expresa marcada de forma separada del resto de consentimientos. Esos datos quedan registrados junto con la fecha del envío. Antes de cualquier actividad presencial contactamos al tutor por ese medio para confirmar la autorización."
+        },
+        "finalidades": {
+          "h": "Finalidades",
+          "p": "Evaluar postulaciones deportivas, gestionar pedidos, responder solicitudes de contacto y, si lo autorizas, enviarte el boletín. No vendemos ni cedemos datos a terceros con fines publicitarios."
+        },
+        "conservacion": {
+          "h": "Conservación",
+          "p": "Los datos de un pedido se conservan mientras dure la obligación fiscal de resguardar la contabilidad, aunque canceles tu cuenta. En ese caso se eliminan el correo y la dirección de envío, y sólo quedan importes, fechas y estado, que no identifican a nadie."
+        },
+        "encargados": {
+          "h": "Encargados",
+          "p": "Los pagos los procesa Stripe, la base de datos y el almacenamiento están alojados en Supabase, y el sitio se sirve desde Vercel. Cada uno trata los datos únicamente para prestarnos ese servicio."
+        },
+        "derechos": {
+          "h": "Derechos",
+          "p": "Puedes solicitar acceso, rectificación, cancelación u oposición al tratamiento de tus datos desde el formulario de derechos del sitio. Antes de entregar o eliminar información verificamos la identidad de quien la solicita. Atendemos la solicitud en un máximo de veinte días hábiles."
+        },
+        "conCuenta": {
+          "h": "Si tienes cuenta",
+          "p": "Desde el apartado de privacidad de tu cuenta puedes descargar todos tus datos y cancelar la cuenta al momento, sin esperar. Los formularios que hayas enviado sin haber iniciado sesión se gestionan por el formulario de derechos."
+        }
+      }
+    },
+    "terminos": {
+      "label": "Términos",
+      "meta": "Legal",
+      "title": "Términos y condiciones",
+      "lead": "Condiciones de uso del sitio, de la tienda y del programa de atletas.",
+      "s": {
+        "uso": {
+          "h": "Uso del sitio",
+          "p": "El contenido de este sitio es informativo. La postulación al programa no garantiza evaluación presencial, selección, contrato ni representación deportiva de ningún tipo."
+        },
+        "pagos": {
+          "h": "Compras y pagos",
+          "p": "Los precios se muestran en pesos mexicanos con impuestos incluidos. El pago se procesa en una pasarela externa; no almacenamos datos de tarjeta en nuestros servidores."
+        },
+        "envios": {
+          "h": "Envíos y devoluciones",
+          "p": "Envío estándar de tres a cinco días hábiles en territorio nacional. Aceptamos devoluciones dentro de treinta días naturales, con producto sin uso y en su empaque original."
+        },
+        "propiedad": {
+          "h": "Propiedad intelectual",
+          "p": "Los materiales metodológicos, textos y marcas del programa son propiedad de su titular y no pueden reproducirse con fines comerciales sin autorización escrita."
+        }
+      }
+    },
+    "bases": {
+      "label": "Bases de la convocatoria",
+      "meta": "Legal",
+      "title": "Bases de la convocatoria",
+      "lead": "Reglas completas de la Beca de formación 2027.",
+      "s": {
+        "quien": {
+          "h": "Quién puede participar",
+          "p": "Jugadores de 12 a 21 años residentes en México, sin contrato profesional vigente al cierre de la convocatoria. La participación es gratuita."
+        },
+        "como": {
+          "h": "Cómo participar",
+          "p": "Completa el formulario de participación y adjunta un archivo de hasta 25 MB en formato PDF, JPG, PNG o MP4. Cada participante puede enviar una sola propuesta."
+        },
+        "criterios": {
+          "h": "Criterios de selección",
+          "p": "Un jurado de tres evaluadores del programa califica potencial deportivo, contexto y compromiso académico. La decisión es inapelable y se comunica por correo electrónico."
+        },
+        "premio": {
+          "h": "Premio",
+          "p": "Diez plazas con seguimiento metodológico durante un año, equipamiento completo, dos concentraciones presenciales y acompañamiento académico. La beca es personal e intransferible."
+        },
+        "calendario": {
+          "h": "Calendario",
+          "p": "La convocatoria cierra el 30 de noviembre de 2026. La lista corta se publica el 15 de diciembre de 2026 y los resultados finales el 20 de enero de 2027."
+        }
+      }
+    }
+  },
+  "vocab": {
+    "Portero": "Portero",
+    "Lateral": "Lateral",
+    "Central": "Central",
+    "Mediocentro": "Mediocentro",
+    "Interior": "Interior",
+    "Extremo": "Extremo",
+    "Delantero": "Delantero",
+    "Ninguna": "Ninguna",
+    "Derecho": "Derecho",
+    "Izquierdo": "Izquierdo",
+    "Ambos": "Ambos",
+    "Sub-13": "Sub-13",
+    "Sub-15": "Sub-15",
+    "Sub-17": "Sub-17",
+    "Sub-20": "Sub-20",
+    "Libre": "Libre",
+    "Liga local": "Liga local",
+    "Liga estatal": "Liga estatal",
+    "Liga nacional juvenil": "Liga nacional juvenil",
+    "Cantera profesional": "Cantera profesional",
+    "Selección estatal": "Selección estatal",
+    "Selección nacional": "Selección nacional",
+    "Padre": "Padre",
+    "Madre": "Madre",
+    "Tutor legal": "Tutor legal",
+    "Primaria": "Primaria",
+    "Secundaria": "Secundaria",
+    "Preparatoria o bachillerato": "Preparatoria o bachillerato",
+    "Universidad": "Universidad",
+    "No estudia actualmente": "No estudia actualmente",
+    "Matutino": "Matutino",
+    "Vespertino": "Vespertino",
+    "Mixto": "Mixto",
+    "No aplica": "No aplica",
+    "México": "México",
+    "Otro": "Otro",
+    "Cronómetro manual": "Cronómetro manual",
+    "Fotocélulas": "Fotocélulas",
+    "App móvil": "App móvil",
+    "505": "505",
+    "Illinois": "Illinois",
+    "T-test": "T-test",
+    "IMSS": "IMSS",
+    "ISSSTE": "ISSSTE",
+    "Seguro privado": "Seguro privado",
+    "Ninguno": "Ninguno",
+    "Sólo evaluación interna": "Sólo evaluación interna",
+    "Materiales del programa": "Materiales del programa",
+    "Redes sociales": "Redes sociales",
+    "Sí": "Sí",
+    "No": "No",
+    "Con apoyo": "Con apoyo",
+    "A evaluar": "A evaluar"
+  },
+  "programa": {
+    "eyebrow": "Programa de atletas · convocatoria abierta",
+    "titulo": "Si juega, queremos verlo",
+    "lead": "Un formulario, quince atributos y un informe real. Evaluamos jugadores de 12 a 21 años en cualquier posición y liga; el video pesa más que el currículum.",
+    "irAlFormulario": "Ir al formulario",
+    "intro": {
+      "evaluamos": {
+        "title": "Qué evaluamos",
+        "body": "Quince atributos técnicos, físicos y mentales, más el contexto familiar y académico del jugador."
+      },
+      "tarda": {
+        "title": "Cuánto tarda",
+        "body": "Diez minutos llenar el formulario. Respuesta con dictamen en 15 días hábiles."
+      },
+      "menores": {
+        "title": "Menores de edad",
+        "body": "Toda postulación de menores de 18 años requiere consentimiento firmado del tutor legal."
+      }
+    },
+    "rubric": {
+      "velocidad": {
+        "n": "Velocidad",
+        "d": "Aceleración en los primeros cinco metros y velocidad punta con balón."
+      },
+      "fuerza": {
+        "n": "Fuerza",
+        "d": "Capacidad de imponerse en el duelo y sostener el cuerpo bajo contacto."
+      },
+      "pase": {
+        "n": "Precisión de pase",
+        "d": "Calidad del envío corto y largo bajo presión, con las dos piernas."
+      },
+      "golpeo": {
+        "n": "Golpeo",
+        "d": "Potencia y dirección en remate, centro y balón parado."
+      },
+      "atletismo": {
+        "n": "Atletismo",
+        "d": "Coordinación, salto, cambio de dirección y resistencia repetida."
+      },
+      "iq": {
+        "n": "IQ de juego",
+        "d": "Lectura del espacio, toma de decisión y anticipación sin balón."
+      },
+      "defensa": {
+        "n": "Defensa",
+        "d": "Presión, coberturas, marca individual y recuperación tras pérdida."
+      },
+      "mecanica": {
+        "n": "Mecánica",
+        "d": "Técnica base: control, conducción, perfil de recepción y postura."
+      },
+      "ofensivo": {
+        "n": "Poder ofensivo",
+        "d": "Capacidad de generar y definir situaciones de gol."
+      },
+      "consistencia": {
+        "n": "Consistencia",
+        "d": "Rendimiento sostenido a lo largo de una temporada completa."
+      },
+      "liderazgo": {
+        "n": "Liderazgo",
+        "d": "Influencia sobre el grupo dentro y fuera del campo."
+      },
+      "aprender": {
+        "n": "Capacidad de aprender",
+        "d": "Velocidad para incorporar una corrección y repetirla."
+      },
+      "pasion": {
+        "n": "Pasión",
+        "d": "Vínculo real con el juego más allá del contrato y la vitrina."
+      },
+      "mental": {
+        "n": "Fortaleza mental",
+        "d": "Respuesta al error, a la suplencia y a la crítica pública."
+      },
+      "etica": {
+        "n": "Ética de trabajo",
+        "d": "Lo que hace el jugador cuando nadie lo está evaluando."
+      }
+    },
+    "steps": {
+      "identidad": {
+        "short": "Identidad",
+        "title": "Identidad y contacto"
+      },
+      "perfil": {
+        "short": "Perfil",
+        "title": "Perfil deportivo"
+      },
+      "video": {
+        "short": "Video",
+        "title": "Rendimiento y video"
+      },
+      "medibles": {
+        "short": "Medibles",
+        "title": "Medibles y disponibilidad"
+      },
+      "estudios": {
+        "short": "Estudios",
+        "title": "Contexto académico"
+      },
+      "consentimientos": {
+        "short": "Consentimientos",
+        "title": "Consentimientos"
+      }
+    },
+    "f": {
+      "nombre": {
+        "label": "Nombre completo",
+        "ph": "Nombre y apellidos"
+      },
+      "nac": {
+        "label": "Fecha de nacimiento"
+      },
+      "pais": {
+        "label": "País de residencia"
+      },
+      "nacionalidad": {
+        "label": "Nacionalidad",
+        "ph": "Ej. mexicana"
+      },
+      "estado": {
+        "label": "Estado o provincia",
+        "ph": "Ej. Jalisco"
+      },
+      "ciudad": {
+        "label": "Ciudad",
+        "ph": "Ej. Guadalajara"
+      },
+      "email": {
+        "label": "Correo electrónico",
+        "ph": "tucorreo@dominio.com"
+      },
+      "tel": {
+        "label": "Teléfono con lada",
+        "ph": "+52 55 0000 0000"
+      },
+      "estatura": {
+        "label": "Estatura (cm)",
+        "ph": "175"
+      },
+      "peso": {
+        "label": "Peso (kg)",
+        "ph": "68"
+      },
+      "pos1": {
+        "label": "Posición principal"
+      },
+      "pos2": {
+        "label": "Posición secundaria"
+      },
+      "pie": {
+        "label": "Pie dominante"
+      },
+      "equipo": {
+        "label": "Equipo actual",
+        "ph": "Nombre del club"
+      },
+      "liga": {
+        "label": "Liga o categoría",
+        "ph": "Ej. Liga TDP Sub-20"
+      },
+      "anios": {
+        "label": "Años practicando",
+        "ph": "8"
+      },
+      "nivel": {
+        "label": "Nivel más alto alcanzado"
+      },
+      "dt": {
+        "label": "Entrenador actual y contacto",
+        "ph": "Nombre y teléfono"
+      },
+      "clubes": {
+        "label": "Clubes anteriores",
+        "hint": "Opcional. Cuántos clubes y cuánto duraste en cada uno dice tanto como el actual."
+      },
+      "video": {
+        "label": "URL del video de highlights",
+        "ph": "YouTube, Vimeo o Drive público",
+        "hint": "Cinco a ocho minutos de juego real, no solo goles."
+      },
+      "premios": {
+        "label": "Premios y reconocimientos",
+        "ph": "Torneos, distinciones individuales, convocatorias"
+      },
+      "stats": {
+        "label": "Estadísticas recientes",
+        "ph": "Partidos, minutos, goles, asistencias de la última temporada"
+      },
+      "fortalezas": {
+        "label": "Tus tres fortalezas",
+        "ph": "Ej. cambio de ritmo, pase filtrado, presión tras pérdida"
+      },
+      "links": {
+        "label": "Enlaces adicionales",
+        "ph": "Perfil en plataformas de scouting, redes"
+      },
+      "vel": {
+        "label": "Velocidad 30 m (s)",
+        "ph": "4.1",
+        "hint": "Opcional"
+      },
+      "salto": {
+        "label": "Salto vertical (cm)",
+        "ph": "52",
+        "hint": "Opcional"
+      },
+      "yoyo": {
+        "label": "Test de resistencia (nivel)",
+        "ph": "Ej. Yo-Yo 19.5",
+        "hint": "Opcional"
+      },
+      "fuerza": {
+        "label": "Sentadilla máxima (kg)",
+        "ph": "95",
+        "hint": "Opcional"
+      },
+      "viaje": {
+        "label": "Disponibilidad para viajar"
+      },
+      "reubic": {
+        "label": "Disponibilidad para reubicarse"
+      },
+      "desde": {
+        "label": "Disponible desde"
+      },
+      "hasta": {
+        "label": "Disponible hasta"
+      },
+      "escolaridad": {
+        "label": "Escolaridad actual"
+      },
+      "estudia": {
+        "label": "¿Sigues estudiando?"
+      },
+      "turno": {
+        "label": "Turno",
+        "hint": "Determina si puedes entrenar por la mañana o por la tarde."
+      },
+      "escuela": {
+        "label": "Escuela o institución",
+        "ph": "Nombre del plantel"
+      },
+      "tutor": {
+        "label": "Nombre completo del tutor",
+        "ph": "Padre, madre o tutor legal"
+      },
+      "tutorTel": {
+        "label": "Teléfono del tutor",
+        "ph": "+52 55 0000 0000"
+      },
+      "parentesco": {
+        "label": "Parentesco"
+      },
+      "tutorEmail": {
+        "label": "Correo del tutor",
+        "ph": "correo@dominio.com",
+        "hint": "Le mandamos un enlace para que autorice la postulación."
+      },
+      "okPriv": {
+        "label": "",
+        "ph": "He leído y acepto el aviso de privacidad y el tratamiento de los datos deportivos aquí incluidos."
+      },
+      "okVerdad": {
+        "label": "",
+        "ph": "Declaro que la información y el video enviados son verídicos y de mi autoría o de mi tutor."
+      },
+      "okTutor": {
+        "label": "",
+        "ph": "Mi padre, madre o tutor legal conoce esta postulación y autoriza expresamente el tratamiento de mis datos."
+      }
+    },
+    "form": {
+      "recibidaTitulo": "Postulación recibida",
+      "recibidaTexto": "Un evaluador revisa el video en los próximos 15 días hábiles. Si avanza, recibirás una invitación a sesión presencial con fecha y sede.",
+      "folio": "FOLIO · AL-2026-{folio}",
+      "otraPostulacion": "Enviar otra postulación",
+      "seccion": "Sección {n} de {total}",
+      "avisoMenor": "Eres menor de edad, así que necesitamos los datos de tu padre, madre o tutor legal y su autorización expresa. Sin eso no podemos evaluar la postulación.",
+      "anterior": "← Anterior",
+      "enviando": "Enviando",
+      "enviar": "Enviar postulación",
+      "siguiente": "Siguiente →",
+      "elige": "Elige una opción",
+      "club": "Club",
+      "categoria": "Categoría",
+      "desde": "Desde",
+      "hasta": "Hasta",
+      "clubPh": "Nombre del club",
+      "desdePh": "2021",
+      "hastaPh": "2023",
+      "quitarClub": "Quitar el club {n}",
+      "anadirClub": "Añadir otro club"
+    },
+    "rubricaEyebrow": "Rúbrica de evaluación",
+    "rubricaTitulo": "Quince atributos, uno por uno"
   }
 }
